@@ -7,8 +7,12 @@ environment:
   sdk: ^3.11.0
 
 dependencies:
+  equatable: ^2.0.8
   flutter:
     sdk: flutter
+  flutter_bloc: ^9.1.1
+  flutter_svg:
+  google_fonts:
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +21,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
