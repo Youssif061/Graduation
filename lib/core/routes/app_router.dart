@@ -1,3 +1,4 @@
+import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../../features/auth/change_password_screen.dart';
@@ -10,7 +11,7 @@ class AppRouter {
     switch (settings.name) {
       case Routers.changePassword:
         return MaterialPageRoute(
-          builder: (_) => const ChangePasswordScreen(),
+          builder: (_) => const SplashScreen(),
           settings: settings,
         );
 
@@ -28,10 +29,6 @@ class _UnknownRouteScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Route not found'),
-      ),
-    );
+    return const Scaffold(body: Center(child: Text('Route not found')));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/painting.dart';
 
 abstract class AppColors {
-  //team colors
+  // Team Colors
   static const Color primaryColor = Color(0xFF2ECC71);
   static const Color secondaryColor = Color(0xFF006D37);
   static const Color backgroundColor = Color(0xFFFFFFFF);

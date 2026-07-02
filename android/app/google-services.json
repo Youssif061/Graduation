@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "720084397751",
+    "project_id": "expertisemarket-67626",
+    "storage_bucket": "expertisemarket-67626.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720084397751:android:efe85cb369c5611e3ee732",
+        "android_client_info": {
+          "package_name": "com.CraftMarket"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxIUKH_nTGUSwe_SBuig03ItqdPQxI6rY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

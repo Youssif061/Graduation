@@ -1,8 +1,8 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/styles/coloras.dart';
+import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/core/widget/custom_svg_picture.dart';
-import 'package:expertisemarket/core/widget/my%20body.dart';
+import 'package:expertisemarket/core/widgets/custom_svg_picture.dart';
+import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

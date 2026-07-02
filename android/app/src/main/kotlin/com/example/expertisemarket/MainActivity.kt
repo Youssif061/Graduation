@@ -1,4 +1,4 @@
-package com.example.expertisemarket
+package com.CraftMarket
 
 import io.flutter.embedding.android.FlutterActivity
 
