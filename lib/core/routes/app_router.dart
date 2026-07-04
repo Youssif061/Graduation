@@ -1,7 +1,5 @@
 import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:flutter/material.dart';
-
-import '../../features/auth/change_password_screen.dart';
 import 'routers.dart';
 
 class AppRouter {

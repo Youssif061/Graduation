@@ -1,8 +1,10 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
+import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/custom_svg_picture.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Welcome_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -14,6 +16,14 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    Future.delayed(Duration(seconds: 3), () {
+      PushReplacement(context, Welcome_Screen());
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,9 +2,9 @@ class AppValidations {
   const AppValidations._();
 
   static String? requiredPassword(
-      String? value, {
-        String fieldName = 'Password',
-      }) {
+    String? value, {
+    String fieldName = 'Password',
+  }) {
     final String password = value ?? '';
 
     if (password.trim().isEmpty) {
@@ -14,10 +14,7 @@ class AppValidations {
     return null;
   }
 
-  static String? newPassword(
-      String? value, {
-        required String currentPassword,
-      }) {
+  static String? newPassword(String? value, {required String currentPassword}) {
     final String password = value ?? '';
 
     if (password.trim().isEmpty) {
@@ -43,10 +40,7 @@ class AppValidations {
     return null;
   }
 
-  static String? confirmPassword(
-      String? value, {
-        required String newPassword,
-      }) {
+  static String? confirmPassword(String? value, {required String newPassword}) {
     final String confirmPassword = value ?? '';
 
     if (confirmPassword.trim().isEmpty) {
