@@ -43,15 +43,10 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          widget.label,
-          style: ExpertiseTextStyles.label,
-        ),
+        Text(widget.label, style: ExpertiseTextStyles.label),
         const SizedBox(height: AppSpacing.sm),
         ConstrainedBox(
-          constraints: const BoxConstraints(
-            minHeight: AppSpacing.inputHeight,
-          ),
+          constraints: const BoxConstraints(minHeight: AppSpacing.inputHeight),
           child: TextFormField(
             controller: widget.controller,
             validator: widget.validator,
@@ -86,9 +81,7 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
-                borderSide: const BorderSide(
-                  color: AppColors.inputBorderColor,
-                ),
+                borderSide: const BorderSide(color: AppColors.inputBorderColor),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
@@ -99,9 +92,7 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.inputRadius),
-                borderSide: const BorderSide(
-                  color: AppColors.errorColor,
-                ),
+                borderSide: const BorderSide(color: AppColors.errorColor),
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.inputRadius),

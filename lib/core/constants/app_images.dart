@@ -31,4 +31,5 @@ abstract class AppImages {
       'assets/images/success_hiring_job.svg';
   static const String Splash_Screen = 'assets/images/Splash Screen.png';
   static const String Background = 'assets/icons/Background.svg';
+  static const String Container = 'assets/icons/Container.svg';
 }
