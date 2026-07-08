@@ -1,5 +1,5 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'core/routes/app_router.dart';
 import 'core/routes/routers.dart';
@@ -7,7 +7,10 @@ import 'core/routes/routers.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp();
+  // Firebase removed for market demo — uncomment below to re-enable:
+  // try {
+  //   await Firebase.initializeApp();
+  // } catch (_) {}
 
   runApp(const MainApp());
 }
@@ -18,8 +21,17 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'ExpertiseMarket',
       debugShowCheckedModeBanner: false,
-      initialRoute: Routers.changePassword,
+      theme: ThemeData(
+        useMaterial3: true,
+        fontFamily: GoogleFonts.inter().fontFamily,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF00B074),
+          brightness: Brightness.light,
+        ),
+      ),
+      initialRoute: Routers.mainShell,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

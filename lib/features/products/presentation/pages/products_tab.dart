@@ -1,0 +1,108 @@
+import 'package:flutter/material.dart';
+import 'package:expertisemarket/core/styles/colors.dart';
+import 'package:expertisemarket/core/styles/text_styles.dart';
+import 'package:expertisemarket/features/products/data/dummy_data.dart';
+import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
+import 'package:expertisemarket/features/products/presentation/widgets/market_product_card.dart';
+import 'package:expertisemarket/features/products/presentation/widgets/market_search_bar.dart';
+import 'package:expertisemarket/features/products/presentation/widgets/category_chip.dart';
+import 'package:expertisemarket/features/products/presentation/pages/search_screen.dart';
+
+class ProductsTab extends StatefulWidget {
+  const ProductsTab({super.key});
+
+  @override
+  State<ProductsTab> createState() => _ProductsTabState();
+}
+
+class _ProductsTabState extends State<ProductsTab> {
+  int _selectedCategory = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: AppColors.marketBg,
+      appBar: const MarketAppBar(
+        showHeart: true,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children: [
+          const SizedBox(height: 16),
+          // Search bar (Tap navigates to search screen)
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const SearchScreen()),
+              );
+            },
+            child: const AbsorbPointer(
+              child: MarketSearchBar(readOnly: true),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Categories
+          SizedBox(
+            height: 38,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: DummyData.categories.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              itemBuilder: (_, i) => CategoryChip(
+                label: DummyData.categories[i],
+                isSelected: _selectedCategory == i,
+                onTap: () => setState(() => _selectedCategory = i),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          // Section header
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Featured Inventory', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 18, fontWeight: FontWeight.w800)),
+                  const SizedBox(height: 4),
+                  Text(
+                    'High performance hardware for professionals',
+                    style: MarketTextStyles.bodySmall.copyWith(color: AppColors.marketTextSub),
+                  ),
+                ],
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      'View all',
+                      style: MarketTextStyles.bodySmall.copyWith(
+                        color: AppColors.marketGreenDark,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 10,
+                      color: AppColors.marketGreenDark,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          // Product Cards
+          ...DummyData.featuredProducts
+              .where((p) => _selectedCategory == 0 || p.category == DummyData.categories[_selectedCategory])
+              .map((p) => MarketProductCard(product: p)),
+          const SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+}
