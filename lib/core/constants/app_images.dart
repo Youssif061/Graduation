@@ -32,4 +32,6 @@ abstract class AppImages {
   static const String Splash_Screen = 'assets/images/Splash Screen.png';
   static const String Background = 'assets/icons/Background.svg';
   static const String Container = 'assets/icons/Container.svg';
+  static const String Apple = 'assets/icons/Apple.svg';
+  static const String Client_Card = 'assets/icons/Client Card.svg';
 }
