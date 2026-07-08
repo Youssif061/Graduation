@@ -21,7 +21,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'ExpertiseMarket',
+      title: 'CraftMarket',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
       ),
-      initialRoute: Routers.mainShell,
+      initialRoute: Routers.splash,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

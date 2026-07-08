@@ -5,7 +5,8 @@ class Routers {
   static const String changePassword = '/change-password';
 
   // ── Market ─────────────────────────────────────────────────────
-  static const String mainShell = '/';
+  static const String splash = '/';
+  static const String mainShell = '/mainShell';
   static const String search = '/pros/search';
   static const String productDetails = '/pros/product-details';
   static const String wishlist = '/pros/wishlist';

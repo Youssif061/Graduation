@@ -5,6 +5,7 @@ import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/custom_svg_picture.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Welcome_Screen.dart';
+import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 4), () {
-      PushReplacement(context, Welcome_Screen());
+      PushReplacement(context, MainShell());
     });
     super.initState();
   }

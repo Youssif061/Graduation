@@ -1,3 +1,4 @@
+import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:expertisemarket/features/products/data/dummy_data.dart';
 import 'package:expertisemarket/features/products/presentation/pages/cart_screen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/checkout_screen.dart';
@@ -14,7 +15,13 @@ class AppRouter {
   const AppRouter._();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
+
     switch (settings.name) {
+       case Routers.splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashScreen(),
+          settings: settings,
+        );
       case Routers.mainShell:
         return MaterialPageRoute(
           builder: (_) => const MainShell(),
