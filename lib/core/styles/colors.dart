@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
 abstract class AppColors {
@@ -33,4 +34,26 @@ abstract class AppColors {
 
   static const Color cardShadowColor = Color(0x1A03192E);
   static const Color buttonShadowColor = Color(0x2E03192E);
+
+  // ─── Market (Light Theme - Figma) ───────────────────────────────
+  static const Color marketBg = Color(0xFFF4F6F8);
+  static const Color marketCard = Color(0xFFFFFFFF);
+  static const Color marketCardLight = Color(0xFFF8FAFC);
+  static const Color marketGreen = Color(0xFF00B074); // Vibrant green accent
+  static const Color marketGreenDark = Color(0xFF00875A); // Darker green for price/verified text
+  static const Color marketGreenBadge = Color(0xFFE6F7F0); // Light green bg for badges
+  static const Color marketText = Color(0xFF0F172A); // Dark slate primary text
+  static const Color marketTextSub = Color(0xFF475569); // Slate-600 description / secondary text
+  static const Color marketTextMuted = Color(0xFF94A3B8); // Slate-400 helper text
+  static const Color marketRed = Color(0xFFEF4444); // Error/delete/red badge
+  static const Color marketYellow = Color(0xFFF59E0B); // Amber stars rating
+  static const Color marketBorder = Color(0xFFE2E8F0); // Thin grey border
+  static const Color marketInputBg = Color(0xFFF0F3F6); // Grey/blue search bar bg
+  static const Color marketDivider = Color(0xFFE2E8F0); // Grey divider
+
+  // ─── Bottom Nav ────────────────────────────────────────────────
+  static const Color navBg = Color(0xFFFFFFFF);
+  static const Color navActive = Color(0xFF00B074);
+  static const Color navInactive = Color(0xFF94A3B8);
+  static const Color navActiveBg = Colors.transparent; // Disabled active pill background as per mockup
 }
