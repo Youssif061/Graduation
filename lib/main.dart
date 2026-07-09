@@ -1,3 +1,8 @@
+import 'dart:io';
+
+import 'package:craftmarket/core/routes/app_router.dart';
+import 'package:craftmarket/core/routes/routers.dart';
+import 'package:craftmarket/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +14,21 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: AppThemes.lightTheme,
+
+      initialRoute: Routes.main,
+
+      onGenerateRoute: AppRouter.generateRoute,
+
+      builder: (context, child) {
+        return SafeArea(
+          top: false,
+          bottom: Platform.isAndroid,
+          child: child ?? const SizedBox(),
+        );
+      },
     );
   }
 }
