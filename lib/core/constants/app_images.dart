@@ -36,4 +36,5 @@ abstract class AppImages {
   static const String Border = 'assets/images/Border.png';
   static const String Border_For_Offer = 'assets/images/Border_For_Offer.jpg';
   static const String Icon_back = 'assets/images/Icon_back.svg';
+  static const String User = 'assets/images/User.png';
 }
