@@ -1,3 +1,5 @@
+import 'package:expertisemarket/firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -6,12 +8,7 @@ import 'core/routes/routers.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Firebase removed for market demo — uncomment below to re-enable:
-  // try {
-  //   await Firebase.initializeApp();
-  // } catch (_) {}
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MainApp());
 }
 
@@ -33,6 +30,14 @@ class MainApp extends StatelessWidget {
       ),
       initialRoute: Routers.splash,
       onGenerateRoute: AppRouter.generateRoute,
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(
+            context,
+          ).copyWith(textScaler: TextScaler.linear(1.0)), // hit accessibility
+          child: child!,
+        );
+      },
     );
   }
 }

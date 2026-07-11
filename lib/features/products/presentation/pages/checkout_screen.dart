@@ -37,7 +37,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.marketText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('Checkout', style: MarketTextStyles.appBarTitle.copyWith(fontWeight: FontWeight.w800)),
+        title: Text(
+          'Checkout',
+          style: MarketTextStyles.appBarTitle.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
@@ -62,10 +67,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.marketBorder,
-            height: 1,
-          ),
+          child: Container(color: AppColors.marketBorder, height: 1),
         ),
       ),
       body: Column(
@@ -85,9 +87,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.location_on_outlined, color: AppColors.marketGreen, size: 18),
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: AppColors.marketGreen,
+                                size: 18,
+                              ),
                               const SizedBox(width: 6),
-                              Text('Delivery Address', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 14, fontWeight: FontWeight.w800)),
+                              Text(
+                                'Delivery Address',
+                                style: MarketTextStyles.sectionTitle.copyWith(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                             ],
                           ),
                           GestureDetector(
@@ -117,12 +129,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ),
                         child: TextField(
                           controller: _addressCtrl,
-                          style: MarketTextStyles.bodyMedium.copyWith(color: AppColors.marketText, fontSize: 13),
+                          style: MarketTextStyles.bodyMedium.copyWith(
+                            color: AppColors.marketText,
+                            fontSize: 13,
+                          ),
                           decoration: InputDecoration(
                             hintText: 'Enter your delivery address',
-                            hintStyle: MarketTextStyles.bodySmall.copyWith(fontSize: 13, color: AppColors.marketTextMuted),
+                            hintStyle: MarketTextStyles.bodySmall.copyWith(
+                              fontSize: 13,
+                              color: AppColors.marketTextMuted,
+                            ),
                             border: InputBorder.none,
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 14,
+                            ),
                           ),
                         ),
                       ),
@@ -138,7 +159,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           alignment: Alignment.center,
                           child: Text(
                             'Confirm Address',
-                            style: MarketTextStyles.buttonText.copyWith(color: Colors.white, fontWeight: FontWeight.w700),
+                            style: MarketTextStyles.buttonText.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                       ),
@@ -153,9 +177,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.inventory_2_outlined, color: AppColors.marketGreen, size: 18),
+                          const Icon(
+                            Icons.inventory_2_outlined,
+                            color: AppColors.marketGreen,
+                            size: 18,
+                          ),
                           const SizedBox(width: 6),
-                          Text('Order Review', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 14, fontWeight: FontWeight.w800)),
+                          Text(
+                            'Order Review',
+                            style: MarketTextStyles.sectionTitle.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -173,7 +207,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   child: Image.asset(
                                     item.imageAsset,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (_, __, ___) => const Icon(
+                                    errorBuilder: (_, _, _) => const Icon(
                                       Icons.inventory_2_outlined,
                                       color: Color(0xFFCBD5E1),
                                       size: 24,
@@ -188,19 +222,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   children: [
                                     Text(
                                       item.name,
-                                      style: MarketTextStyles.productTitle.copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                      style: MarketTextStyles.productTitle
+                                          .copyWith(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
-                                    Text('Qty: ${item.quantity}', style: MarketTextStyles.bodySmall.copyWith(color: AppColors.marketTextSub)),
+                                    Text(
+                                      'Qty: ${item.quantity}',
+                                      style: MarketTextStyles.bodySmall
+                                          .copyWith(
+                                            color: AppColors.marketTextSub,
+                                          ),
+                                    ),
                                   ],
                                 ),
                               ),
                               Text(
                                 '\$${item.price.toStringAsFixed(0)}',
-                                style: MarketTextStyles.price.copyWith(fontSize: 13, color: AppColors.marketGreenDark, fontWeight: FontWeight.w700),
+                                style: MarketTextStyles.price.copyWith(
+                                  fontSize: 13,
+                                  color: AppColors.marketGreenDark,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ],
                           ),
@@ -217,9 +262,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.payment, color: AppColors.marketGreen, size: 18),
+                          const Icon(
+                            Icons.payment,
+                            color: AppColors.marketGreen,
+                            size: 18,
+                          ),
                           const SizedBox(width: 6),
-                          Text('Payment Method', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 14, fontWeight: FontWeight.w800)),
+                          Text(
+                            'Payment Method',
+                            style: MarketTextStyles.sectionTitle.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 12),
@@ -248,7 +303,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   color: AppColors.marketGreen,
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: const Icon(Icons.delivery_dining, color: Colors.white, size: 22),
+                                child: const Icon(
+                                  Icons.delivery_dining,
+                                  color: Colors.white,
+                                  size: 22,
+                                ),
                               ),
                               const SizedBox(width: 12),
                               Expanded(
@@ -257,20 +316,28 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   children: [
                                     Text(
                                       'Cash on Delivery',
-                                      style: MarketTextStyles.productTitle.copyWith(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                      style: MarketTextStyles.productTitle
+                                          .copyWith(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
-                                    Text('Pay when your order arrives', style: MarketTextStyles.bodySmall.copyWith(color: AppColors.marketTextSub)),
+                                    Text(
+                                      'Pay when your order arrives',
+                                      style: MarketTextStyles.bodySmall
+                                          .copyWith(
+                                            color: AppColors.marketTextSub,
+                                          ),
+                                    ),
                                   ],
                                 ),
                               ),
                               Radio<int>(
                                 value: 0,
                                 groupValue: _selectedPayment,
-                                onChanged: (v) => setState(() => _selectedPayment = v!),
+                                onChanged: (v) =>
+                                    setState(() => _selectedPayment = v!),
                                 activeColor: AppColors.marketGreen,
                               ),
                             ],
@@ -281,12 +348,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.info_outline, color: AppColors.marketTextSub, size: 14),
+                          const Icon(
+                            Icons.info_outline,
+                            color: AppColors.marketTextSub,
+                            size: 14,
+                          ),
                           const SizedBox(width: 6),
                           Expanded(
                             child: Text(
                               'Please ensure you have the exact amount ready at the time of delivery to facilitate a smooth transaction.',
-                              style: MarketTextStyles.bodySmall.copyWith(fontSize: 11, color: AppColors.marketTextSub),
+                              style: MarketTextStyles.bodySmall.copyWith(
+                                fontSize: 11,
+                                color: AppColors.marketTextSub,
+                              ),
                             ),
                           ),
                         ],
@@ -300,9 +374,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: Column(
                     children: [
-                      _SummaryRow(label: 'Subtotal', value: '\$${_subtotal.toStringAsFixed(2)}'),
+                      _SummaryRow(
+                        label: 'Subtotal',
+                        value: '\$${_subtotal.toStringAsFixed(2)}',
+                      ),
                       const SizedBox(height: 8),
-                      _SummaryRow(label: 'Taxes', value: '\$${_taxes.toStringAsFixed(2)}'),
+                      _SummaryRow(
+                        label: 'Taxes',
+                        value: '\$${_taxes.toStringAsFixed(2)}',
+                      ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Divider(color: AppColors.marketBorder),
@@ -310,10 +390,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Total Amount', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 14, fontWeight: FontWeight.w800)),
+                          Text(
+                            'Total Amount',
+                            style: MarketTextStyles.sectionTitle.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
                           Text(
                             '\$${_total.toStringAsFixed(2)}',
-                            style: MarketTextStyles.grandTotal.copyWith(fontSize: 18, color: AppColors.marketText, fontWeight: FontWeight.w800),
+                            style: MarketTextStyles.grandTotal.copyWith(
+                              fontSize: 18,
+                              color: AppColors.marketText,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ],
                       ),
@@ -326,7 +416,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const OrderSuccessScreen()),
+                      MaterialPageRoute(
+                        builder: (_) => const OrderSuccessScreen(),
+                      ),
                     );
                   },
                   child: Container(
@@ -341,10 +433,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       children: [
                         Text(
                           'Confirm Order',
-                          style: MarketTextStyles.buttonText.copyWith(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w700),
+                          style: MarketTextStyles.buttonText.copyWith(
+                            fontSize: 15,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         const SizedBox(width: 6),
-                        const Icon(Icons.chevron_right, color: Colors.white, size: 20),
+                        const Icon(
+                          Icons.chevron_right,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ],
                     ),
                   ),
@@ -373,10 +473,7 @@ class _SectionCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.marketBorder),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.01),
-            blurRadius: 8,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.01), blurRadius: 8),
         ],
       ),
       child: child,
@@ -395,7 +492,12 @@ class _SummaryRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: MarketTextStyles.totalLabel.copyWith(color: AppColors.marketTextSub)),
+        Text(
+          label,
+          style: MarketTextStyles.totalLabel.copyWith(
+            color: AppColors.marketTextSub,
+          ),
+        ),
         Text(
           value,
           style: MarketTextStyles.totalValue.copyWith(

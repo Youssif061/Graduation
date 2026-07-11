@@ -4,8 +4,7 @@ import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/custom_svg_picture.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
-import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Welcome_Screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Pages/Welcome_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

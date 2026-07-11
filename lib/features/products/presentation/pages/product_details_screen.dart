@@ -61,10 +61,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.marketBorder,
-            height: 1,
-          ),
+          child: Container(color: AppColors.marketBorder, height: 1),
         ),
       ),
       body: Column(
@@ -82,7 +79,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     child: Image.asset(
                       p.imageAsset,
                       fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) => const Center(
+                      errorBuilder: (_, _, _) => const Center(
                         child: Icon(
                           Icons.inventory_2_outlined,
                           color: Color(0xFFCBD5E1),
@@ -112,7 +109,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
                                   color: _selectedThumb == i
-                                      ? AppColors.marketText // Active has a dark slate border
+                                      ? AppColors
+                                            .marketText // Active has a dark slate border
                                       : AppColors.marketBorder,
                                   width: 2,
                                 ),
@@ -122,7 +120,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                 child: Image.asset(
                                   p.thumbnails[i],
                                   fit: BoxFit.cover,
-                                  errorBuilder: (_, __, ___) => const Icon(
+                                  errorBuilder: (_, _, _) => const Icon(
                                     Icons.inventory_2_outlined,
                                     color: Color(0xFFCBD5E1),
                                     size: 28,
@@ -143,7 +141,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                                vertical: 4,
+                              ),
                               decoration: BoxDecoration(
                                 color: AppColors.marketGreenBadge,
                                 borderRadius: BorderRadius.circular(6),
@@ -197,7 +198,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               p.inStock ? 'In Stock' : 'Out of Stock',
                               style: MarketTextStyles.rating.copyWith(
                                 fontWeight: FontWeight.w700,
-                                color: p.inStock ? AppColors.marketGreenDark : AppColors.marketRed,
+                                color: p.inStock
+                                    ? AppColors.marketGreenDark
+                                    : AppColors.marketRed,
                               ),
                             ),
                           ],
@@ -232,7 +235,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                           width: double.infinity,
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFE0F2FE), // Light blue background
+                            color: const Color(
+                              0xFFE0F2FE,
+                            ), // Light blue background
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -275,18 +280,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                                   children: [
                                     Text(
                                       p.storeName,
-                                      style: MarketTextStyles.productTitle.copyWith(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                      style: MarketTextStyles.productTitle
+                                          .copyWith(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w700,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       'Elite Seller · 95% Positive Feedback',
-                                      style: MarketTextStyles.bodySmall.copyWith(
-                                        color: AppColors.marketTextSub,
-                                        fontSize: 11,
-                                      ),
+                                      style: MarketTextStyles.bodySmall
+                                          .copyWith(
+                                            color: AppColors.marketTextSub,
+                                            fontSize: 11,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -311,9 +318,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                             fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
-                          unselectedLabelStyle: MarketTextStyles.tabLabel.copyWith(
-                            fontSize: 14,
-                          ),
+                          unselectedLabelStyle: MarketTextStyles.tabLabel
+                              .copyWith(fontSize: 14),
                           dividerColor: AppColors.marketBorder,
                           tabs: const [
                             Tab(text: 'Description'),
@@ -406,37 +412,42 @@ class _DescriptionTab extends StatelessWidget {
         Expanded(
           child: ListView(
             physics: const NeverScrollableScrollPhysics(),
-            children: product.specs.entries.map(
-              (e) => Container(
-                margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.marketCardLight,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: AppColors.marketBorder),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      e.key.toUpperCase(),
-                      style: MarketTextStyles.specKey.copyWith(
-                        color: AppColors.marketTextMuted,
-                        fontWeight: FontWeight.w700,
-                      ),
+            children: product.specs.entries
+                .map(
+                  (e) => Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 12,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      e.value,
-                      style: MarketTextStyles.specValue.copyWith(
-                        color: AppColors.marketText,
-                        fontWeight: FontWeight.w700,
-                      ),
+                    decoration: BoxDecoration(
+                      color: AppColors.marketCardLight,
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(color: AppColors.marketBorder),
                     ),
-                  ],
-                ),
-              ),
-            ).toList(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.key.toUpperCase(),
+                          style: MarketTextStyles.specKey.copyWith(
+                            color: AppColors.marketTextMuted,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          e.value,
+                          style: MarketTextStyles.specValue.copyWith(
+                            color: AppColors.marketText,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],
@@ -452,37 +463,39 @@ class _SpecificationsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: product.specs.entries.map(
-        (e) => Container(
-          margin: const EdgeInsets.only(bottom: 8),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-          decoration: BoxDecoration(
-            color: AppColors.marketCardLight,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.marketBorder),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  e.key,
-                  style: MarketTextStyles.specKey.copyWith(
-                    color: AppColors.marketTextSub,
-                    fontWeight: FontWeight.w600,
+      children: product.specs.entries
+          .map(
+            (e) => Container(
+              margin: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+              decoration: BoxDecoration(
+                color: AppColors.marketCardLight,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: AppColors.marketBorder),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      e.key,
+                      style: MarketTextStyles.specKey.copyWith(
+                        color: AppColors.marketTextSub,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                   ),
-                ),
+                  Text(
+                    e.value,
+                    style: MarketTextStyles.specValue.copyWith(
+                      color: AppColors.marketText,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                e.value,
-                style: MarketTextStyles.specValue.copyWith(
-                  color: AppColors.marketText,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ).toList(),
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -496,11 +509,17 @@ class _ReviewsTab extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.rate_review_outlined, color: AppColors.marketTextSub, size: 40),
+          const Icon(
+            Icons.rate_review_outlined,
+            color: AppColors.marketTextSub,
+            size: 40,
+          ),
           const SizedBox(height: 10),
           Text(
             'Reviews coming soon',
-            style: MarketTextStyles.bodySmall.copyWith(color: AppColors.marketTextSub),
+            style: MarketTextStyles.bodySmall.copyWith(
+              color: AppColors.marketTextSub,
+            ),
           ),
         ],
       ),
@@ -519,7 +538,9 @@ class _BottomBar extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(top: BorderSide(color: AppColors.marketBorder, width: 1)),
+        border: Border(
+          top: BorderSide(color: AppColors.marketBorder, width: 1),
+        ),
       ),
       child: Row(
         children: [
@@ -542,7 +563,11 @@ class _BottomBar extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.shopping_cart_outlined, color: AppColors.marketText, size: 18),
+                    const Icon(
+                      Icons.shopping_cart_outlined,
+                      color: AppColors.marketText,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Add to Cart',
@@ -568,7 +593,8 @@ class _BottomBar extends StatelessWidget {
               child: Container(
                 height: 50,
                 decoration: BoxDecoration(
-                  color: AppColors.marketText, // Dark navy/slate "Buy Now" button
+                  color:
+                      AppColors.marketText, // Dark navy/slate "Buy Now" button
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,

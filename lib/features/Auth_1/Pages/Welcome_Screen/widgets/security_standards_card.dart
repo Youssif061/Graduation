@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../core/constants/app_icon_sizes.dart';
-import '../../../core/constants/app_icons.dart';
-import '../../../core/constants/app_spacing.dart';
-import '../../../core/styles/colors.dart';
-import '../../../core/styles/text_styles.dart';
+import '../../../../../core/constants/app_icon_sizes.dart';
+import '../../../../../core/constants/app_icons.dart';
+import '../../../../../core/constants/app_spacing.dart';
+import '../../../../../core/styles/colors.dart';
+import '../../../../../core/styles/text_styles.dart';
 
 class SecurityStandardsCard extends StatelessWidget {
   const SecurityStandardsCard({super.key});

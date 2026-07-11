@@ -22,9 +22,7 @@ class _ProductsTabState extends State<ProductsTab> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      appBar: const MarketAppBar(
-        showHeart: true,
-      ),
+      appBar: const MarketAppBar(showHeart: true),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
@@ -37,9 +35,7 @@ class _ProductsTabState extends State<ProductsTab> {
                 MaterialPageRoute(builder: (_) => const SearchScreen()),
               );
             },
-            child: const AbsorbPointer(
-              child: MarketSearchBar(readOnly: true),
-            ),
+            child: const AbsorbPointer(child: MarketSearchBar(readOnly: true)),
           ),
           const SizedBox(height: 16),
           // Categories
@@ -48,7 +44,7 @@ class _ProductsTabState extends State<ProductsTab> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: DummyData.categories.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 8),
+              separatorBuilder: (_, _) => const SizedBox(width: 8),
               itemBuilder: (_, i) => CategoryChip(
                 label: DummyData.categories[i],
                 isSelected: _selectedCategory == i,
@@ -65,11 +61,19 @@ class _ProductsTabState extends State<ProductsTab> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Featured Inventory', style: MarketTextStyles.sectionTitle.copyWith(fontSize: 18, fontWeight: FontWeight.w800)),
+                  Text(
+                    'Featured Inventory',
+                    style: MarketTextStyles.sectionTitle.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                   const SizedBox(height: 4),
                   Text(
                     'High performance hardware for professionals',
-                    style: MarketTextStyles.bodySmall.copyWith(color: AppColors.marketTextSub),
+                    style: MarketTextStyles.bodySmall.copyWith(
+                      color: AppColors.marketTextSub,
+                    ),
                   ),
                 ],
               ),
@@ -98,7 +102,11 @@ class _ProductsTabState extends State<ProductsTab> {
           const SizedBox(height: 16),
           // Product Cards
           ...DummyData.featuredProducts
-              .where((p) => _selectedCategory == 0 || p.category == DummyData.categories[_selectedCategory])
+              .where(
+                (p) =>
+                    _selectedCategory == 0 ||
+                    p.category == DummyData.categories[_selectedCategory],
+              )
               .map((p) => MarketProductCard(product: p)),
           const SizedBox(height: 20),
         ],

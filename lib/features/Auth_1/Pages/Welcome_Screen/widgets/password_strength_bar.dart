@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants/app_spacing.dart';
-import '../../../core/styles/colors.dart';
-import '../../../core/styles/text_styles.dart';
+import '../../../../../core/constants/app_spacing.dart';
+import '../../../../../core/styles/colors.dart';
+import '../../../../../core/styles/text_styles.dart';
 
 class PasswordStrengthBar extends StatelessWidget {
   const PasswordStrengthBar({super.key, required this.password});

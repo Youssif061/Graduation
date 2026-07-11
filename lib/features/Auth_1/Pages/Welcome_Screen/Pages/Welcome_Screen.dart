@@ -6,8 +6,8 @@ import 'package:expertisemarket/core/widgets/app_button.dart';
 import 'package:expertisemarket/core/widgets/custom_text_form_field.dart';
 import 'package:expertisemarket/core/widgets/custom_text_form_field_password.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
-import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Sign_Up.dart';
-import 'package:expertisemarket/features/Auth_1/widgets/login__with.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/SignUp/Main_SignUp.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/widgets/login__with.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -104,7 +104,7 @@ class _Welcome_ScreenState extends State<Welcome_Screen> {
                             ),
                             Text(
                               "Stay logged in for 30 days",
-                              style: TextStyles.body,
+                              style: TextStyles.caption1,
                             ),
                           ],
                         ),
@@ -152,7 +152,7 @@ class _Welcome_ScreenState extends State<Welcome_Screen> {
                     Text("Don't have an account?"),
                     TextButton(
                       onPressed: () {
-                        PushReplacement(context, Sign_up());
+                        pushTo(context, Sign_up());
                       },
                       child: Text(
                         "Sign Up",

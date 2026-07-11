@@ -43,7 +43,7 @@ class _SearchProductCardState extends State<SearchProductCard> {
           border: Border.all(color: AppColors.marketBorder, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.04),
+              color: Colors.black.withValues(alpha: 0.04),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -66,7 +66,7 @@ class _SearchProductCardState extends State<SearchProductCard> {
                     child: Image.asset(
                       widget.product.imageAsset,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => const Center(
+                      errorBuilder: (_, _, _) => const Center(
                         child: Icon(
                           Icons.inventory_2_outlined,
                           color: Color(0xFFCBD5E1),
@@ -125,15 +125,14 @@ class _SearchProductCardState extends State<SearchProductCard> {
                         color: Colors.white,
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                          ),
+                          BoxShadow(color: Colors.black12, blurRadius: 4),
                         ],
                       ),
                       child: Icon(
                         _isFav ? Icons.favorite : Icons.favorite_border,
-                        color: _isFav ? AppColors.marketRed : AppColors.marketTextSub,
+                        color: _isFav
+                            ? AppColors.marketRed
+                            : AppColors.marketTextSub,
                         size: 16,
                       ),
                     ),

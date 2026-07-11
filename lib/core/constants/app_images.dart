@@ -33,5 +33,7 @@ abstract class AppImages {
   static const String Background = 'assets/icons/Background.svg';
   static const String Container = 'assets/icons/Container.svg';
   static const String Apple = 'assets/icons/Apple.svg';
-  static const String Client_Card = 'assets/icons/Client Card.svg';
+  static const String Border = 'assets/images/Border.png';
+  static const String Border_For_Offer = 'assets/images/Border_For_Offer.jpg';
+  static const String Icon_back = 'assets/images/Icon_back.svg';
 }
