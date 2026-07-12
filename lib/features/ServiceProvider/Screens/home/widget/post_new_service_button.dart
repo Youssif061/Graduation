@@ -1,3 +1,4 @@
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/publish_service/page/publish_service_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +9,18 @@ class PostNewServiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(
-          context,
-        ).push(MaterialPageRoute(builder: (_) => const PublishServiceScreen()));
+        // Navigator.of(
+        //   context,
+        // ).push(MaterialPageRoute(builder: (_) => const PublishServiceScreen()));
+        // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (_) => RequestScreen(
+                  //       request: item,
+                  //     ),
+                  //   ),
+                  // );
+                  naviagationPush(context, PublishServiceScreen());
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(

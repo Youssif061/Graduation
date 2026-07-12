@@ -1,90 +1,113 @@
+// import 'package:flutter/material.dart';
+
+// class Navigation {
+//   Navigation._();
+
+//   static Future<dynamic> push(
+//     BuildContext context,
+//     Widget page,
+//   ) {
+//     return Navigator.push(
+//       context,
+//       MaterialPageRoute(
+//         builder: (_) => page,
+//       ),
+//     );
+//   }
+
+//   static Future<dynamic> pushReplacement(
+//     BuildContext context,
+//     Widget page,
+//   ) {
+//     return Navigator.pushReplacement(
+//       context,
+//       MaterialPageRoute(
+//         builder: (_) => page,
+//       ),
+//     );
+//   }
+
+//   static Future<dynamic> pushAndRemoveUntil(
+//     BuildContext context,
+//     Widget page,
+//   ) {
+//     return Navigator.pushAndRemoveUntil(
+//       context,
+//       MaterialPageRoute(
+//         builder: (_) => page,
+//         ),
+//       (route) => false,
+//     );
+//   }
+
+//   static void pop(BuildContext context) {
+//     Navigator.pop(context);
+//   }
+
+//   static void popWithResult(
+//     BuildContext context,
+//     dynamic result,
+//   ) {
+//     Navigator.pop(context, result);
+//   }
+
+//   static Future<dynamic> pushNamed(
+//     BuildContext context,
+//     String routeName, {
+//     Object? arguments,
+//   }) {
+//     return Navigator.pushNamed(
+//       context,
+//       routeName,
+//       arguments: arguments,
+//     );
+//   }
+
+//   static Future<dynamic> pushReplacementNamed(
+//     BuildContext context,
+//     String routeName, {
+//     Object? arguments,
+//   }) {
+//     return Navigator.pushReplacementNamed(
+//       context,
+//       routeName,
+//       arguments: arguments,
+//     );
+//   }
+
+//   static Future<dynamic> pushNamedAndRemoveUntil(
+//     BuildContext context,
+//     String routeName, {
+//     Object? arguments,
+//   }) {
+//     return Navigator.pushNamedAndRemoveUntil(
+//       context,
+//       routeName,
+//       (route) => false,
+//       arguments: arguments,
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 
-class Navigation {
-  Navigation._();
+void pushTo(BuildContext context, Widget newScreen) {
+  Navigator.push(context, MaterialPageRoute(builder: (context) => newScreen));
+}
 
-  static Future<dynamic> push(
-    BuildContext context,
-    Widget page,
-  ) {
-    return Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (_) => page,
-      ),
-    );
-  }
+void PushReplacement(BuildContext context, Widget screen) {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => screen),
+  );
+}
 
-  static Future<dynamic> pushReplacement(
-    BuildContext context,
-    Widget page,
-  ) {
-    return Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => page,
-      ),
-    );
-  }
+void navigationReplacement(BuildContext context, Widget newScreen) {
+  Navigator.of(
+    context,
+  ).pushReplacement(MaterialPageRoute(builder: (_) => newScreen));
+}
 
-  static Future<dynamic> pushAndRemoveUntil(
-    BuildContext context,
-    Widget page,
-  ) {
-    return Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => page,
-        ),
-      (route) => false,
-    );
-  }
-
-  static void pop(BuildContext context) {
-    Navigator.pop(context);
-  }
-
-  static void popWithResult(
-    BuildContext context,
-    dynamic result,
-  ) {
-    Navigator.pop(context, result);
-  }
-
-  static Future<dynamic> pushNamed(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushNamed(
-      context,
-      routeName,
-      arguments: arguments,
-    );
-  }
-
-  static Future<dynamic> pushReplacementNamed(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushReplacementNamed(
-      context,
-      routeName,
-      arguments: arguments,
-    );
-  }
-
-  static Future<dynamic> pushNamedAndRemoveUntil(
-    BuildContext context,
-    String routeName, {
-    Object? arguments,
-  }) {
-    return Navigator.pushNamedAndRemoveUntil(
-      context,
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
-  }
+void naviagationPush(BuildContext context, Widget newScreen) {
+  Navigator.of(context).push(MaterialPageRoute(builder: (_) => newScreen));
 }

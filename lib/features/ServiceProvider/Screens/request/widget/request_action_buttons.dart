@@ -1,3 +1,4 @@
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/publish_proposal/page/send_proposal_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -49,12 +50,13 @@ class RequestActionButtons extends StatelessWidget {
             height: 54,
             child: ElevatedButton.icon(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const SendProposalScreen(),
-                  ),
-                );
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (_) => const SendProposalScreen(),
+                //   ),
+                // );
+                naviagationPush(context, const SendProposalScreen());
               },
               icon: const Icon(
                 Icons.send_rounded,

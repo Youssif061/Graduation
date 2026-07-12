@@ -1,3 +1,4 @@
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/chat/page/chat_screen.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/home/page/home_screen.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/inventory/page/inventory_screen.dart';
@@ -90,9 +91,10 @@ class _MainAppScreenState extends State<MainAppScreen> {
               height: 26,
             ),
             onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const NotificationScreen()),
-              );
+              // Navigator.of(context).push(
+              //   MaterialPageRoute(builder: (_) => const NotificationScreen()),
+              // );
+                naviagationPush(context, const NotificationScreen());
             },
           ),
           const SizedBox(width: 8),

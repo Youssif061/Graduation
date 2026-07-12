@@ -1,4 +1,5 @@
 import 'package:craftmarket/core/constants/app_images.dart';
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/add_product/page/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -14,16 +15,13 @@ class ProductActionBottomSheet {
         return Container(
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.vertical(
-              top: Radius.circular(28),
-            ),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
           ),
           padding: const EdgeInsets.all(20),
           child: SafeArea(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 Container(
                   width: 45,
                   height: 5,
@@ -57,12 +55,13 @@ class ProductActionBottomSheet {
                   onTap: () {
                     Navigator.pop(context);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const EditProductScreen(),
-                      ),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const EditProductScreen(),
+                    //   ),
+                    // );
+                    naviagationPush(context, const EditProductScreen());
                   },
                 ),
 

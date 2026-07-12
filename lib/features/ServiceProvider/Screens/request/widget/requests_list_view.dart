@@ -1,3 +1,4 @@
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/request/model/request_model.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/request/page/request_screen.dart';
 import 'package:flutter/material.dart';
@@ -17,12 +18,13 @@ class RequestsListView extends StatelessWidget {
         return InkWell(
           borderRadius: BorderRadius.circular(18),
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => RequestScreen(request: request),
-              ),
-            );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (_) => RequestScreen(request: request),
+            //   ),
+            // );
+            naviagationPush(context, RequestScreen(request: request));
           },
           child: Container(
             margin: const EdgeInsets.only(bottom: 18),

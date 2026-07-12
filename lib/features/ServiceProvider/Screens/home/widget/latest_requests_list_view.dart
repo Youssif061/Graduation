@@ -1,4 +1,5 @@
 import 'package:craftmarket/core/constants/app_images.dart';
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/request/model/request_model.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/request/page/request_screen.dart';
 import 'package:flutter/material.dart';
@@ -160,14 +161,15 @@ class LatestRequestsListView extends StatelessWidget {
 
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => RequestScreen(
-                        request: item,
-                      ),
-                    ),
-                  );
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(
+                  //     builder: (_) => RequestScreen(
+                  //       request: item,
+                  //     ),
+                  //   ),
+                  // );
+                  naviagationPush(context, RequestScreen(request: item,),);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xff001A2C),

@@ -1,3 +1,4 @@
+import 'package:craftmarket/core/functions/navigations.dart';
 import 'package:craftmarket/features/ServiceProvider/Screens/add_product/page/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,21 +10,15 @@ class ProductOptionsBottomSheet {
       context: context,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(22),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(22)),
       ),
       builder: (_) {
         return SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 18,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-
                 Container(
                   width: 45,
                   height: 5,
@@ -42,29 +37,23 @@ class ProductOptionsBottomSheet {
                   ),
                   title: const Text(
                     "Edit Product",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.w600),
                   ),
                   onTap: () {
-
                     Navigator.pop(context);
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const EditProductScreen(),
-                      ),
-                    );
-
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (_) => const EditProductScreen(),
+                    //   ),
+                    // );
+                    naviagationPush(context, const EditProductScreen());
                   },
                 ),
 
                 ListTile(
-                  leading: const Icon(
-                    Icons.delete_outline,
-                    color: Colors.red,
-                  ),
+                  leading: const Icon(Icons.delete_outline, color: Colors.red),
                   title: const Text(
                     "Delete Product",
                     style: TextStyle(
@@ -73,16 +62,13 @@ class ProductOptionsBottomSheet {
                     ),
                   ),
                   onTap: () {
-
                     Navigator.pop(context);
 
                     DeleteProductDialog.show(context);
-
                   },
                 ),
 
                 const SizedBox(height: 12),
-
               ],
             ),
           ),
