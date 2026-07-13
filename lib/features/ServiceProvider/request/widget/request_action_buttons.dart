@@ -1,4 +1,3 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/publish_proposal/page/send_proposal_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -31,7 +30,9 @@ class RequestActionButtons extends StatelessWidget {
             ),
             style: OutlinedButton.styleFrom(
               backgroundColor: Colors.white,
-              side: const BorderSide(color: Color(0xffCBD5E1)),
+              side: const BorderSide(
+                color: Color(0xffCBD5E1),
+              ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(14),
               ),
@@ -48,13 +49,12 @@ class RequestActionButtons extends StatelessWidget {
             height: 54,
             child: ElevatedButton.icon(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) => const SendProposalScreen(),
-                //   ),
-                // );
-                naviagationPush(context, const SendProposalScreen());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SendProposalScreen(),
+                  ),
+                );
               },
               icon: const Icon(
                 Icons.send_rounded,
@@ -63,7 +63,10 @@ class RequestActionButtons extends StatelessWidget {
               ),
               label: const Text(
                 "Send Proposal",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff0C8A43),
@@ -91,9 +94,13 @@ class RequestActionButtons extends StatelessWidget {
           ),
           title: const Text(
             "Reject Request",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          content: const Text("Are you sure you want to reject this request?"),
+          content: const Text(
+            "Are you sure you want to reject this request?",
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -110,7 +117,9 @@ class RequestActionButtons extends StatelessWidget {
               },
               child: const Text(
                 "Reject",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ],

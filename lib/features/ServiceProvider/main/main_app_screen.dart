@@ -1,5 +1,4 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/features/ServiceProvider/chat/page/chat_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.dart';
@@ -91,10 +90,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
               height: 26,
             ),
             onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(builder: (_) => const NotificationScreen()),
-              // );
-              naviagationPush(context, const NotificationScreen());
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const NotificationScreen()),
+              );
             },
           ),
           const SizedBox(width: 8),

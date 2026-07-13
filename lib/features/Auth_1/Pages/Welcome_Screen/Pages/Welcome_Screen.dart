@@ -1,5 +1,4 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/app_button.dart';
@@ -152,7 +151,10 @@ class _Welcome_ScreenState extends State<Welcome_Screen> {
                     Text("Don't have an account?"),
                     TextButton(
                       onPressed: () {
-                        pushTo(context, Sign_up());
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const Sign_up()),
+                        );
                       },
                       child: Text(
                         "Sign Up",

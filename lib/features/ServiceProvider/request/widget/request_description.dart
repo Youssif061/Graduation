@@ -2,7 +2,10 @@ import 'package:expertisemarket/features/ServiceProvider/request/model/request_m
 import 'package:flutter/material.dart';
 
 class RequestDescription extends StatelessWidget {
-  const RequestDescription({super.key, required this.request});
+  const RequestDescription({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 

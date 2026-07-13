@@ -1,5 +1,4 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/my body.dart';
@@ -45,7 +44,10 @@ class Sign_up extends StatelessWidget {
                   Text_for_button: "Start As a User",
                   image: AppImages.Border,
                   ontap: () {
-                    pushTo(context, const SignUp_for_user());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SignUp_for_user()),
+                    );
                   },
                 ),
                 Gap(35),
@@ -58,7 +60,12 @@ class Sign_up extends StatelessWidget {
                   Text_for_button: "Start As a Worker",
                   Title: "I Offer Services",
                   ontap: () {
-                    pushTo(context, const SignUp_for_worker());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SignUp_for_worker(),
+                      ),
+                    );
                   },
                 ),
               ],

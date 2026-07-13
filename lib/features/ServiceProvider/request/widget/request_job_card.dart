@@ -6,7 +6,10 @@ import 'package:expertisemarket/features/ServiceProvider/request/widget/request_
 import 'package:flutter/material.dart';
 
 class RequestJobCard extends StatelessWidget {
-  const RequestJobCard({super.key, required this.request});
+  const RequestJobCard({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -20,21 +23,29 @@ class RequestJobCard extends StatelessWidget {
 
         borderRadius: BorderRadius.circular(20),
 
-        border: Border.all(color: const Color(0xffE5E7EB)),
+        border: Border.all(
+          color: const Color(0xffE5E7EB),
+        ),
       ),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClientHeader(request: request),
+          ClientHeader(
+            request: request,
+          ),
 
           const SizedBox(height: 24),
 
-          RequestDescription(request: request),
+          RequestDescription(
+            request: request,
+          ),
 
           const SizedBox(height: 24),
 
-          ProblemPhotos(images: request.problemPhotos),
+          ProblemPhotos(
+            images: request.problemPhotos,
+          ),
 
           const SizedBox(height: 30),
 

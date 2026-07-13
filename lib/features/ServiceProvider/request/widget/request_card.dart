@@ -1,10 +1,12 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/model/request_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/request_screen.dart';
 import 'package:flutter/material.dart';
 
 class RequestCard extends StatelessWidget {
-  const RequestCard({super.key, required this.request});
+  const RequestCard({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -14,15 +16,14 @@ class RequestCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
 
       onTap: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => RequestScreen(
-        //       request: request,
-        //     ),
-        //   ),
-        // );
-        naviagationPush(context, RequestScreen(request: request));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RequestScreen(
+              request: request,
+            ),
+          ),
+        );
       },
 
       child: Container(
@@ -31,11 +32,14 @@ class RequestCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xffE5E7EB)),
+          border: Border.all(
+            color: const Color(0xffE5E7EB),
+          ),
         ),
 
         child: Row(
           children: [
+
             Container(
               width: 56,
               height: 56,
@@ -44,9 +48,7 @@ class RequestCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
-                request.problemPhotos != null
-                    ? Icons.photo_library_rounded
-                    : Icons.description_rounded,
+                request.problemPhotos != null ? Icons.photo_library_rounded : Icons.description_rounded,
                 color: const Color(0xff001A2C),
               ),
             ),
@@ -57,8 +59,10 @@ class RequestCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   Row(
                     children: [
+
                       Expanded(
                         child: Text(
                           request.title,
@@ -97,7 +101,9 @@ class RequestCard extends StatelessWidget {
 
                   Text(
                     "Client: ${request.clientName}",
-                    style: const TextStyle(color: Color(0xff64748B)),
+                    style: const TextStyle(
+                      color: Color(0xff64748B),
+                    ),
                   ),
                 ],
               ),

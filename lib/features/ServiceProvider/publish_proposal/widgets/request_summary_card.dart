@@ -1,8 +1,7 @@
-import 'package:expertisemarket/features/ServiceProvider/request/model/request_model.dart';
 import 'package:flutter/material.dart';
 
 class RequestSummaryCard extends StatelessWidget {
-  const RequestSummaryCard({super.key, required RequestModel request});
+  const RequestSummaryCard({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +25,9 @@ class RequestSummaryCard extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -59,11 +60,7 @@ class RequestSummaryCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.monetization_on_rounded,
-                    size: 20,
-                    color: Color(0xff43474D),
-                  ),
+                  Icon(Icons.monetization_on_rounded, size: 20, color: Color(0xff43474D)),
                   const SizedBox(width: 6),
                   Text(
                     "Budget: \$1,500 - \$3,500",
@@ -75,16 +72,12 @@ class RequestSummaryCard extends StatelessWidget {
                   ),
                 ],
               ),
-
+              
               const SizedBox(height: 12),
 
               Row(
                 children: [
-                  Icon(
-                    Icons.access_time_rounded,
-                    size: 20,
-                    color: Color(0xff43474D),
-                  ),
+                  Icon(Icons.access_time_rounded, size: 20, color: Color(0xff43474D)),
                   const SizedBox(width: 6),
                   Text(
                     "Timeline: 14 days",
@@ -94,14 +87,10 @@ class RequestSummaryCard extends StatelessWidget {
                       fontWeight: FontWeight.w500,
                     ),
                   ),
-
+                  
                   const SizedBox(width: 24),
-
-                  Icon(
-                    Icons.location_on_rounded,
-                    size: 20,
-                    color: Color(0xff43474D),
-                  ),
+                  
+                  Icon(Icons.location_on_rounded, size: 20, color: Color(0xff43474D)),
                   const SizedBox(width: 4),
                   Text(
                     "Remote",

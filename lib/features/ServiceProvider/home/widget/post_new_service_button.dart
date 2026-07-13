@@ -1,4 +1,3 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/publish_service/page/publish_service_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -9,18 +8,9 @@ class PostNewServiceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // Navigator.of(
-        //   context,
-        // ).push(MaterialPageRoute(builder: (_) => const PublishServiceScreen()));
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (_) => RequestScreen(
-        //       request: item,
-        //     ),
-        //   ),
-        // );
-        naviagationPush(context, PublishServiceScreen());
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => const PublishServiceScreen()));
       },
       borderRadius: BorderRadius.circular(16),
       child: Container(

@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/app_button.dart';
@@ -193,7 +192,12 @@ class _SignUp_for_workerState extends State<SignUp_for_worker> {
                             child: AppButton(
                               title: "Continue to Step 2",
                               onPressed: () {
-                                pushTo(context, const MainShell());
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => const MainShell(),
+                                  ),
+                                );
                               },
                               backgroundColor: AppColors.marketGreen,
                             ),

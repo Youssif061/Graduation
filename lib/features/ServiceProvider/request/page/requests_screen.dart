@@ -31,18 +31,23 @@ class RequestsScreen extends StatelessWidget {
 
         isNew: true,
 
-        problemPhotos: [AppImages.User, AppImages.User],
+        problemPhotos: [
+          AppImages.User,
+          AppImages.User,
+        ],
       ),
 
       RequestModel(
         title: "Corporate Brand Identity & Guidelines",
-        summary: "Creative designer specialized in startup branding.",
+        summary:
+            "Creative designer specialized in startup branding.",
 
         clientName: "Sarah Jenkins",
         clientImage: AppImages.User,
         reviews: "215 Reviews",
 
-        description: "Top-rated agency expertise at a solo consultant rate.",
+        description:
+            "Top-rated agency expertise at a solo consultant rate.",
 
         budget: "\$2,000 - \$4,000",
         timeline: "10 Days",
@@ -51,7 +56,10 @@ class RequestsScreen extends StatelessWidget {
 
         timeAgo: "5 hours ago",
 
-        problemPhotos: [AppImages.User, AppImages.User],
+        problemPhotos: [
+          AppImages.User,
+          AppImages.User,
+        ],
       ),
     ];
 
@@ -73,7 +81,11 @@ class RequestsScreen extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            Expanded(child: RequestsListView(requests: requests)),
+            Expanded(
+              child: RequestsListView(
+                requests: requests,
+              ),
+            ),
           ],
         ),
       ),

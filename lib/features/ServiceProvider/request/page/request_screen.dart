@@ -1,7 +1,7 @@
-import 'package:expertisemarket/features/ServiceProvider/publish_proposal/widgets/request_summary_card.dart';
+import 'package:flutter/material.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/model/request_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/widget/request_job_card.dart';
-import 'package:flutter/material.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/widget/request_summary_card.dart';
 
 class RequestScreen extends StatelessWidget {
   const RequestScreen({super.key, required this.request});

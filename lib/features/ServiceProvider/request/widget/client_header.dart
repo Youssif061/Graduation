@@ -2,7 +2,10 @@ import 'package:expertisemarket/features/ServiceProvider/request/model/request_m
 import 'package:flutter/material.dart';
 
 class ClientHeader extends StatelessWidget {
-  const ClientHeader({super.key, required this.request});
+  const ClientHeader({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -17,11 +20,16 @@ class ClientHeader extends StatelessWidget {
             height: 64,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xffE2E8F0)),
+              border: Border.all(
+                color: const Color(0xffE2E8F0),
+              ),
             ),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15),
-              child: Image.asset(request.clientImage, fit: BoxFit.cover),
+              child: Image.asset(
+                request.clientImage,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
         ),
@@ -67,7 +75,10 @@ class ClientHeader extends StatelessWidget {
         ),
 
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           decoration: BoxDecoration(
             color: const Color(0xffDCFCE7),
             borderRadius: BorderRadius.circular(12),

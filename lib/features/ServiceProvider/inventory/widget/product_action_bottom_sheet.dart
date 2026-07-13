@@ -1,5 +1,4 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -55,13 +54,12 @@ class ProductActionBottomSheet {
                   onTap: () {
                     Navigator.pop(context);
 
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const EditProductScreen(),
-                    //   ),
-                    // );
-                    naviagationPush(context, const EditProductScreen());
+                    Navigator.push(
+                       context,
+                       MaterialPageRoute(
+                        builder: (_) => const EditProductScreen(),
+                       ),
+                     );
                   },
                 ),
 

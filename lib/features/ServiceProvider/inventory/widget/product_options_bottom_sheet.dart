@@ -1,4 +1,3 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/edit_product_screen.dart';
 import 'package:flutter/material.dart';
 import 'delete_product_dialog.dart';
@@ -41,13 +40,12 @@ class ProductOptionsBottomSheet {
                   onTap: () {
                     Navigator.pop(context);
 
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => const EditProductScreen(),
-                    //   ),
-                    // );
-                    naviagationPush(context, const EditProductScreen());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const EditProductScreen(),
+                      ),
+                    );
                   },
                 ),
 
