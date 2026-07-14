@@ -5,7 +5,7 @@ import 'package:expertisemarket/features/products/presentation/pages/checkout_sc
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:expertisemarket/features/products/presentation/pages/order_success_screen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/product_details_screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
+import 'package:expertisemarket/features/profile/presentation/pages/profile_page.dart';
 import 'package:expertisemarket/features/products/presentation/pages/search_screen.dart';
 import 'package:expertisemarket/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
@@ -15,9 +15,8 @@ class AppRouter {
   const AppRouter._();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
-
     switch (settings.name) {
-       case Routers.splash:
+      case Routers.splash:
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
           settings: settings,
@@ -34,9 +33,8 @@ class AppRouter {
         );
       case Routers.productDetails:
         return MaterialPageRoute(
-          builder: (_) => ProductDetailsScreen(
-            product: DummyData.mechanicToolkit,
-          ),
+          builder: (_) =>
+              ProductDetailsScreen(product: DummyData.mechanicToolkit),
           settings: settings,
         );
       case Routers.wishlist:
@@ -61,7 +59,7 @@ class AppRouter {
         );
       case Routers.profile:
         return MaterialPageRoute(
-          builder: (_) => const ProfileScreen(),
+          builder: (_) => const ProfilePage(),
           settings: settings,
         );
       default:
