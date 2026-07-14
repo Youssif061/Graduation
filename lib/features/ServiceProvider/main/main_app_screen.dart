@@ -6,7 +6,7 @@ import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.d
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
+import 'package:expertisemarket/features/profile/presentation/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -25,7 +25,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     const RequestsScreen(),
     const InventoryScreen(),
     const ChatScreen(),
-    const ProfileScreen(),
+    const ProfilePage(embedded: true),
   ];
 
   @override
@@ -117,7 +117,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.06),
+              color: Colors.black.withValues(alpha: 0.06),
               blurRadius: 10,
               offset: const Offset(0, -2),
             ),
