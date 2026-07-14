@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProblemPhotos extends StatelessWidget {
-  const ProblemPhotos({
-    super.key,
-    required this.images,
-  });
+  const ProblemPhotos({super.key, required this.images});
 
   final List<String> images;
 
@@ -29,7 +26,7 @@ class ProblemPhotos extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, _) => const SizedBox(width: 12),
             itemBuilder: (context, index) {
               return ClipRRect(
                 borderRadius: BorderRadius.circular(16),

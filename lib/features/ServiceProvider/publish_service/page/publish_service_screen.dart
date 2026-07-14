@@ -344,7 +344,7 @@ class PublishServiceScreen extends StatelessWidget {
                         Switch(
                           value: false, // يمكنك تحويلها لـ Variable لاحقاً
                           onChanged: (val) {},
-                          activeColor: Colors.white,
+                          activeThumbColor: Colors.white,
                           activeTrackColor: const Color(
                             0xFF006C3F,
                           ), // اللون الأخضر عند التفعيل
@@ -376,7 +376,7 @@ class PublishServiceScreen extends StatelessWidget {
                         Switch(
                           value: false,
                           onChanged: (val) {},
-                          activeColor: Colors.white,
+                          activeThumbColor: Colors.white,
                           activeTrackColor: const Color(0xFF006C3F),
                           inactiveThumbColor: Colors.white,
                           inactiveTrackColor: const Color(0xFFCBD5E1),

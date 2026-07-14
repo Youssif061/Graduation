@@ -18,7 +18,7 @@ class DurationDropdown extends StatelessWidget {
         color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: const Color(0xffCBD5E1).withOpacity(0.5),
+          color: const Color(0xffCBD5E1).withValues(alpha: 0.5),
           width: 1.2,
         ),
       ),

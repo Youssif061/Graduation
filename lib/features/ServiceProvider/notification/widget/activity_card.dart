@@ -45,7 +45,7 @@ class ActivityCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF000000).withOpacity(0.04),
+            color: const Color(0xFF000000).withValues(alpha: 0.04),
             blurRadius: 14,
             spreadRadius: 0,
             offset: const Offset(0, 6),

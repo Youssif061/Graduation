@@ -39,7 +39,7 @@ class _ProposalFormState extends State<ProposalForm> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -79,7 +79,7 @@ class _ProposalFormState extends State<ProposalForm> {
 
           Text(
             'Client will see the total amount inclusive ofplatform fees.',
-            style: TextStyle(fontSize: 16, color: Color(0xff43474DB2)),
+            style: TextStyle(fontSize: 16, color: Color(0xff43474db2)),
           ),
 
           const SizedBox(height: 20),
@@ -133,7 +133,7 @@ class _ProposalFormState extends State<ProposalForm> {
               Text(
                 "Min. 100 characters",
                 style: TextStyle(
-                  color: Color(0xff43474DB2),
+                  color: Color(0xff43474db2),
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),
@@ -141,7 +141,7 @@ class _ProposalFormState extends State<ProposalForm> {
               Text(
                 "${messageController.text.length} / 5000",
                 style: TextStyle(
-                  color: Color(0xff43474DB2),
+                  color: Color(0xff43474db2),
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
                 ),

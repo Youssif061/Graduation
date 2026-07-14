@@ -1,3 +1,4 @@
+import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/App_Email.dart';
 import 'package:expertisemarket/core/widgets/custom_text_form_field.dart';
@@ -30,13 +31,16 @@ class Field_Signup extends StatelessWidget {
         CustomTextFormField(
           text: Description,
           prefixIcon: Icon(icon),
+          Text_Styles: AppColors.cardShadowColor,
+          fill_color: AppColors.backgroundColor,
+
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Phone number is required";
+            if (value == null || value.trim().isEmpty) {
+              return "Please enter your Email";
             }
 
-            if (!App_Email.isEmailValid(value)) {
-              return "Please enter a valid Egyptian phone number";
+            if (!App_Email.isEmailValid(value.trim())) {
+              return "Invalid Email";
             }
 
             return null;

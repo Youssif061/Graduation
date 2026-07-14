@@ -44,9 +44,7 @@ class RequestCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(
-                request.problemPhotos != null
-                    ? Icons.photo_library_rounded
-                    : Icons.description_rounded,
+                Icons.photo_library_rounded,
                 color: const Color(0xff001A2C),
               ),
             ),
