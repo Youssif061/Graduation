@@ -13,7 +13,7 @@ abstract class AppImages {
   static const String inventoryServiceProviderSvg =
       'assets/icons/inventory_ServiceProvider.svg';
   static const String notificationsSvg = 'assets/icons/Notifications.svg';
-  static const String productsUserSvg = 'assets/icons/products_user.svg';
+  static const String productsUserSvg = 'assets/icons/poducts_user.svg';
   static const String profileSvg = 'assets/icons/profile.svg';
   static const String prosUserSvg = 'assets/icons/pros_user.svg';
   static const String requestUserSvg = 'assets/icons/request_user.svg';
