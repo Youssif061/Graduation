@@ -4,11 +4,14 @@ import 'package:expertisemarket/features/home/presentation/pages/home_page.dart'
 import 'package:expertisemarket/features/pros/presentation/pages/pros_page.dart';
 import 'package:expertisemarket/features/products/presentation/pages/products_tab.dart';
 import 'package:expertisemarket/features/request/presentation/pages/request_page.dart';
-import 'package:expertisemarket/features/chats/presentation/pages/chats_page.dart';
+import 'package:expertisemarket/features/chat/presentation/pages/conversations_page.dart';
 
 class MainShell extends StatefulWidget {
   final int initialIndex;
-  const MainShell({super.key, this.initialIndex = 2}); // Start on Products tab as requested!
+  const MainShell({
+    super.key,
+    this.initialIndex = 2,
+  }); // Start on Products tab as requested!
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -28,17 +31,14 @@ class _MainShellState extends State<MainShell> {
     ProsPage(),
     ProductsTab(),
     RequestPage(),
-    ChatsPage(),
+    ConversationsPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _tabs,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _tabs),
       bottomNavigationBar: _buildBottomNav(),
     );
   }
