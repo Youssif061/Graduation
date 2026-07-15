@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     this.prefixIcon,
     this.keyboardType,
     this.validator,
+    this.controller,
   });
 
   final String? text;
@@ -21,12 +22,14 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? prefixIcon;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       onTapOutside: (event) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
+      controller: controller,
       keyboardType: keyboardType,
       decoration: InputDecoration(
         // prefixIcon: Icon(Icons.email),
@@ -46,25 +49,3 @@ class CustomTextFormField extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
- // enabledBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(10),
-        //   borderSide: BorderSide(color: AppColors.graykcolor),
-        // ),
-        // focusedBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(10),
-        //   borderSide: BorderSide.none,
-        // ),
-        // focusedErrorBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(10),
-        //   borderSide: BorderSide.none,
-        // ),
-        // errorBorder: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(10),
-        //   borderSide: BorderSide.none,
-        // ),

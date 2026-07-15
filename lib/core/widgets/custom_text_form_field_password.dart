@@ -9,7 +9,7 @@ class CustomTextFormFieldPassword extends StatefulWidget {
     this.fill_color,
     this.suffix_Icon,
     this.prefixIcon,
-
+    this.controller,
     this.validator,
     this.width,
     this.height,
@@ -23,6 +23,7 @@ class CustomTextFormFieldPassword extends StatefulWidget {
   final Widget? suffix_Icon;
   final Widget? prefixIcon;
   final String? Function(String?)? validator;
+  final TextEditingController? controller;
   @override
   State<CustomTextFormFieldPassword> createState() =>
       _CustomTextFormFieldPasswordState();
@@ -38,6 +39,7 @@ class _CustomTextFormFieldPasswordState
       onTapOutside: (even) {
         FocusManager.instance.primaryFocus?.unfocus();
       },
+      controller: widget.controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         hintStyle: widget.Styles?.copyWith(color: widget.Text_Color),
