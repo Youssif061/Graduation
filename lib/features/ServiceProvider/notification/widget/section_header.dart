@@ -22,7 +22,7 @@ class SectionHeader extends StatelessWidget {
         Expanded(
           child: Container(
             height: 1,
-            color: AppColors.greyColor.withValues(alpha: 0.3),
+            color: AppColors.greyColor.withOpacity(0.3),
           ),
         ),
       ],

@@ -1,5 +1,4 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/custom_svg_picture.dart';
@@ -19,7 +18,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(Duration(seconds: 4), () {
-      PushReplacement(context, Welcome_Screen());
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const Welcome_Screen()),
+      );
     });
     super.initState();
   }

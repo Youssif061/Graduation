@@ -1,4 +1,4 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/App_Email.dart';
@@ -8,7 +8,6 @@ import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker_3.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Widgets/Trust_Matters.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:gap/gap.dart';
 
 class SignUp_for_worker_2 extends StatefulWidget {
@@ -189,9 +188,12 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                                 title: "Continue to Step 3",
                                 onPressed: () {
                                   if (_formKey.currentState!.validate()) {
-                                    pushTo(
+                                    Navigator.push(
                                       context,
-                                      const SignUp_for_worker_3(),
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SignUp_for_worker_3(),
+                                      ),
                                     );
                                   }
                                 },

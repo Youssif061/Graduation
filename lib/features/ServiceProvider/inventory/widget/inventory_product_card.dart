@@ -1,83 +1,59 @@
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/widget/product_action_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class InventoryProductCard extends StatelessWidget {
   const InventoryProductCard({
     super.key,
-    required this.image,
-    required this.title,
-    required this.description,
-    required this.stock,
-    required this.price,
-    required this.active,
-    this.topSeller = false,
+    required this.product,
   });
 
-  final String image;
-  final String title;
-  final String description;
-  final int stock;
-  final String price;
-  final bool active;
-  final bool topSeller;
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
+    final bool active = product.stock > 0;
+
     return Container(
       margin: const EdgeInsets.only(bottom: 18),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xffE2E8F0)),
+        border: Border.all(
+          color: const Color(0xffE2E8F0),
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
-            Stack(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(image, fit: BoxFit.cover),
-                    ),
-                  ),
-                ),
-
-                if (topSeller)
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 4,
-                      ),
-                      decoration: BoxDecoration(
-                        color: const Color(0xff22C55E),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Text(
-                        "TOP Rated",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10,
+            ClipRRect(
+              borderRadius:
+                  BorderRadius.circular(14),
+              child: AspectRatio(
+                aspectRatio: 1,
+                child: product.images.isNotEmpty
+                    ? Image.network(
+                        product.images.first,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        color: Colors.grey.shade200,
+                        child: const Icon(
+                          Icons.image_not_supported,
+                          size: 70,
+                          color: Colors.grey,
                         ),
                       ),
-                    ),
-                  ),
-              ],
+              ),
             ),
 
             const SizedBox(height: 16),
 
             Text(
-              title,
+              product.name,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -88,11 +64,12 @@ class InventoryProductCard extends StatelessWidget {
             const SizedBox(height: 8),
 
             Text(
-              description,
+              product.description,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 14,
-                height: 1.5,
                 color: Color(0xff64748B),
+                height: 1.5,
               ),
             ),
 
@@ -101,22 +78,18 @@ class InventoryProductCard extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "STOCK: $stock units",
+                  "Stock : ${product.stock}",
                   style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 13,
-                    color: Color(0xff64748B),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
 
                 const Spacer(),
 
                 Text(
-                  "PRICE: $price",
+                  "\$${product.price}",
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 13,
-                    color: Color(0xff64748B),
                   ),
                 ),
               ],
@@ -127,33 +100,47 @@ class InventoryProductCard extends StatelessWidget {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
+                  padding:
+                      const EdgeInsets.symmetric(
                     horizontal: 12,
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
                     color: active
-                        ? const Color(0xffDCFCE7)
-                        : const Color(0xffF1F5F9),
-                    borderRadius: BorderRadius.circular(20),
+                        ? const Color(
+                            0xffDCFCE7)
+                        : const Color(
+                            0xffFEE2E2),
+                    borderRadius:
+                        BorderRadius.circular(20),
                   ),
                   child: Text(
-                    active ? "Active" : "Inactive",
+                    active
+                        ? "Active"
+                        : "Out Of Stock",
                     style: TextStyle(
-                      color: active ? const Color(0xff15803D) : Colors.grey,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 12,
+                      color: active
+                          ? const Color(
+                              0xff15803D)
+                          : Colors.red,
+                      fontWeight:
+                          FontWeight.w600,
                     ),
                   ),
                 ),
 
                 const Spacer(),
 
-                GestureDetector(
-                  onTap: () {
-                    ProductActionBottomSheet.show(context);
+                IconButton(
+                  onPressed: () {
+                    ProductActionBottomSheet.show(
+                      context,
+                      product,
+                    );
                   },
-                  child: const Icon(Icons.more_vert, color: Color(0xff94A3B8)),
+                  icon: const Icon(
+                    Icons.more_vert,
+                  ),
                 ),
               ],
             ),

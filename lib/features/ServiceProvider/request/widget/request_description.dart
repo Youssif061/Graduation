@@ -2,7 +2,10 @@ import 'package:expertisemarket/features/ServiceProvider/request/model/request_m
 import 'package:flutter/material.dart';
 
 class RequestDescription extends StatelessWidget {
-  const RequestDescription({super.key, required this.request});
+  const RequestDescription({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -14,20 +17,20 @@ class RequestDescription extends StatelessWidget {
         const Text(
           "Project Description",
           style: TextStyle(
+            fontSize: 18,
             fontWeight: FontWeight.bold,
-            fontSize: 17,
             color: Color(0xff001A2C),
           ),
         ),
 
-        const SizedBox(height: 10),
+        const SizedBox(height: 12),
 
         Text(
           request.description,
           style: const TextStyle(
             fontSize: 15,
-            color: Color(0xff64748B),
             height: 1.7,
+            color: Color(0xff64748B),
           ),
         ),
       ],

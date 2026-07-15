@@ -1,39 +1,41 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/ServiceProvider/publish_proposal/page/send_proposal_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/model/request_model.dart';
 import 'package:flutter/material.dart';
 
 class RequestActionButtons extends StatelessWidget {
-  const RequestActionButtons({super.key});
+  const RequestActionButtons({super.key, required this.request});
+
+  final RequestModel request;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        /// Reject
-        SizedBox(
-          height: 54,
-          child: OutlinedButton.icon(
-            onPressed: () {
-              _showRejectDialog(context);
-            },
-            icon: const Icon(
-              Icons.close_rounded,
-              size: 18,
-              color: Color(0xff001A2C),
-            ),
-            label: const Text(
-              "Reject",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 15,
+        /// Reject Button
+        Expanded(
+          child: SizedBox(
+            height: 54,
+            child: OutlinedButton.icon(
+              onPressed: () => _showRejectDialog(context),
+              icon: const Icon(
+                Icons.close_rounded,
+                size: 18,
                 color: Color(0xff001A2C),
               ),
-            ),
-            style: OutlinedButton.styleFrom(
-              backgroundColor: Colors.white,
-              side: const BorderSide(color: Color(0xffCBD5E1)),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+              label: const Text(
+                "Reject",
+                style: TextStyle(
+                  color: Color(0xff001A2C),
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              style: OutlinedButton.styleFrom(
+                backgroundColor: Colors.white,
+                side: const BorderSide(color: Color(0xffCBD5E1)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
               ),
             ),
           ),
@@ -41,20 +43,19 @@ class RequestActionButtons extends StatelessWidget {
 
         const SizedBox(width: 12),
 
-        /// Send Proposal
+        /// Send Proposal Button
         Expanded(
           flex: 2,
           child: SizedBox(
             height: 54,
             child: ElevatedButton.icon(
               onPressed: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (_) => const SendProposalScreen(),
-                //   ),
-                // );
-                naviagationPush(context, const SendProposalScreen());
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => SendProposalScreen(request: request),
+                  ),
+                );
               },
               icon: const Icon(
                 Icons.send_rounded,
@@ -63,13 +64,12 @@ class RequestActionButtons extends StatelessWidget {
               ),
               label: const Text(
                 "Send Proposal",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xff0C8A43),
                 foregroundColor: Colors.white,
-                elevation: 2,
-                shadowColor: const Color(0xff0C8A43),
+                elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14),
                 ),
@@ -81,13 +81,13 @@ class RequestActionButtons extends StatelessWidget {
     );
   }
 
-  static void _showRejectDialog(BuildContext context) {
+  void _showRejectDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (_) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(18),
           ),
           title: const Text(
             "Reject Request",
@@ -100,13 +100,11 @@ class RequestActionButtons extends StatelessWidget {
               child: const Text("Cancel"),
             ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff001A2C),
-              ),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () {
                 Navigator.pop(context);
 
-                // TODO: Reject Request
+                /// سيتم ربطها بالـ Cubit لاحقاً
               },
               child: const Text(
                 "Reject",

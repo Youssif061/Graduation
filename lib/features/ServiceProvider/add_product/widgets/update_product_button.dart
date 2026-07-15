@@ -1,46 +1,27 @@
+import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/widgets/main_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UpdateProductButton extends StatelessWidget {
   const UpdateProductButton({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 58,
-      child: ElevatedButton.icon(
-        onPressed: () {
+    return BlocBuilder<AddProductCubit, AddProductState>(
+      builder: (context, state) {
+        final isLoading = state is AddProductLoading;
 
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text("Product Updated Successfully"),
-            ),
-          );
-
-        },
-
-        icon: const Icon(
-          Icons.edit,
-          color: Colors.white,
-        ),
-
-        label: const Text(
-          "Update Product",
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xff001A2C),
-          foregroundColor: Colors.white,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-        ),
-      ),
+        return MainButton(
+          text: "Update Product",
+          background: const Color(0xff001A2C),
+          icon: const Icon(Icons.edit, color: Colors.white),
+          isLoading: isLoading,
+          onPress: () {
+            context.read<AddProductCubit>().updateProduct();
+          },
+        );
+      },
     );
   }
 }

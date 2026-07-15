@@ -1,54 +1,85 @@
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 import 'package:flutter/material.dart';
+
 import 'stat_card.dart';
 
 class InventoryStatsGrid extends StatelessWidget {
-  const InventoryStatsGrid({super.key});
+  const InventoryStatsGrid({
+    super.key,
+    required this.products,
+  });
+
+  final List<ProductModel> products;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    final totalProducts = products.length;
+
+    final activeProducts = products
+        .where((e) => e.stock > 0)
+        .length;
+
+    final lowStock = products
+        .where((e) => e.stock > 0 && e.stock <= 5)
+        .length;
+
+    double revenue = 0;
+
+    for (final product in products) {
+      revenue +=
+          product.price * product.stock;
+    }
+
+    return Column(
       children: [
         Row(
           children: [
             Expanded(
               child: StatCard(
                 title: "TOTAL ITEMS",
-                value: "124",
-                valueColor: Color(0xff001A2C),
+                value:
+                    totalProducts.toString(),
+                valueColor:
+                    const Color(0xff001A2C),
               ),
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             Expanded(
               child: StatCard(
                 title: "ACTIVE",
-                value: "98",
-                valueColor: Color(0xff16A34A),
+                value:
+                    activeProducts.toString(),
+                valueColor:
+                    const Color(0xff16A34A),
               ),
             ),
           ],
         ),
 
-        SizedBox(height: 12),
+        const SizedBox(height: 12),
 
         Row(
           children: [
             Expanded(
               child: StatCard(
                 title: "LOW STOCK",
-                value: "12",
-                valueColor: Color(0xffDC2626),
+                value: lowStock.toString(),
+                valueColor:
+                    Colors.red,
               ),
             ),
 
-            SizedBox(width: 12),
+            const SizedBox(width: 12),
 
             Expanded(
               child: StatCard(
-                title: "REVENUE (MTD)",
-                value: "\$12.4k",
-                valueColor: Color(0xff001A2C),
+                title: "TOTAL VALUE",
+                value:
+                    "\$${revenue.toStringAsFixed(0)}",
+                valueColor:
+                    const Color(0xff001A2C),
               ),
             ),
           ],
