@@ -16,18 +16,15 @@ class RequestJobCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(22),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(20),
-
         border: Border.all(
-          color: const Color(0xffE5E7EB),
+          color: const Color(0xffE2E8F0),
         ),
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -41,15 +38,19 @@ class RequestJobCard extends StatelessWidget {
             request: request,
           ),
 
-          const SizedBox(height: 24),
+          if (request.problemPhotos.isNotEmpty) ...[
+            const SizedBox(height: 24),
 
-          ProblemPhotos(
-            images: request.problemPhotos,
-          ),
+            ProblemPhotos(
+              images: request.problemPhotos,
+            ),
+          ],
 
           const SizedBox(height: 30),
 
-          const RequestActionButtons(),
+          RequestActionButtons(
+            request: request,
+          ),
         ],
       ),
     );

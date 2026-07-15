@@ -1,3 +1,4 @@
+import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/custom_text_form_field_password.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,8 @@ class Field_Password_SignUP extends StatelessWidget {
         CustomTextFormFieldPassword(
           text: "••••••••",
           prefixIcon: Icon(Icons.lock_outline),
+          Text_Color: AppColors.darkColor,
+          fill_color: AppColors.backgroundColor,
         ),
       ],
     );

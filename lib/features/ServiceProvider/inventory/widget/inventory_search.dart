@@ -1,35 +1,47 @@
+import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InventorySearch extends StatelessWidget {
-  const InventorySearch({super.key});
+  const InventorySearch({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 48,
       child: TextField(
+        onChanged: (value) {
+          context
+              .read<InventoryCubit>()
+              .search(value);
+        },
+
         decoration: InputDecoration(
-          hintText: 'Search inventory...',
-          hintStyle: const TextStyle(color: Color(0xff94A3B8), fontSize: 14),
+          hintText: "Search Products",
+
           prefixIcon: const Icon(
             Icons.search,
-            color: Color(0xff94A3B8),
-            size: 22,
           ),
+
           filled: true,
+
           fillColor: Colors.white,
-          contentPadding: EdgeInsets.zero,
+
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+            borderRadius:
+                BorderRadius.circular(14),
           ),
+
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+            borderRadius:
+                BorderRadius.circular(14),
           ),
+
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xffCBD5E1), width: 1.4),
+            borderRadius:
+                BorderRadius.circular(14),
           ),
         ),
       ),

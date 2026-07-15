@@ -6,7 +6,7 @@ import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/app_button.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/field__password__sign_u_p.dart';
-import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/field__signup.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/field__signup_To_Email.dart';
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
