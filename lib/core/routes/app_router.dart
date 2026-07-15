@@ -77,7 +77,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const CartScreen());
 
       case Routers.welcomeScreen:
-        return MaterialPageRoute(builder: (_) => const Welcome_Screen());
+        return MaterialPageRoute(builder: (_) => const WelcomeScreen());
 
       default:
         return MaterialPageRoute(
