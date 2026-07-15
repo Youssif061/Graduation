@@ -1,6 +1,6 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
-import 'package:expertisemarket/features/ServiceProvider/chat/page/chat_screen.dart';
+import 'package:expertisemarket/features/chat/presentation/pages/conversations_page.dart';
 import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
@@ -9,7 +9,7 @@ import 'package:expertisemarket/features/products/presentation/pages/profile_scr
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-// استيرادات الـ Bloc والـ Cubits الأساسية للتبويبات (Tabs) فقط
+// Ø§Ø³ØªÙŠØ±Ø§Ø¯Ø§Øª Ø§Ù„Ù€ Bloc ÙˆØ§Ù„Ù€ Cubits Ø§Ù„Ø£Ø³Ø§Ø³ÙŠØ© Ù„Ù„ØªØ¨ÙˆÙŠØ¨Ø§Øª (Tabs) ÙÙ‚Ø·
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expertisemarket/features/ServiceProvider/home/cubit/home_cubit.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
@@ -29,7 +29,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     const HomeScreen(),
     const RequestsScreen(),
     const InventoryScreen(),
-    const ChatScreen(),
+    const ConversationsPage(showAppHeader: false),
     const ProfileScreen(),
   ];
 
@@ -76,9 +76,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
             children: [
               Text(
                 'CraftMarket',
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
               ),
               const Text(
                 'PREMIUM SELLER',
@@ -110,10 +110,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             child: Container(height: 1, color: Colors.grey.shade200),
           ),
         ),
-        body: IndexedStack(
-          index: currentIndex,
-          children: screens,
-        ),
+        body: IndexedStack(index: currentIndex, children: screens),
         bottomNavigationBar: Container(
           height: 85,
           decoration: BoxDecoration(
