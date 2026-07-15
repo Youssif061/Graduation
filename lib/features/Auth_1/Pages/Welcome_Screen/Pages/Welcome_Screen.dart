@@ -1,207 +1,3 @@
-// import 'package:expertisemarket/core/constants/app_images.dart';
-// import 'package:expertisemarket/core/styles/colors.dart';
-// import 'package:expertisemarket/core/styles/text_styles.dart';
-// import 'package:expertisemarket/core/widgets/app_button.dart';
-// import 'package:expertisemarket/core/widgets/custom_text_form_field.dart';
-// import 'package:expertisemarket/core/widgets/custom_text_form_field_password.dart';
-// import 'package:expertisemarket/core/widgets/my%20body.dart';
-// import 'package:expertisemarket/features/Auth_1/Pages/SignUp/Main_SignUp.dart';
-// import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/widgets/login__with.dart';
-// import 'package:expertisemarket/features/Auth_1/cubit/cubit_Auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:gap/gap.dart';
-
-// class Welcome_Screen extends StatefulWidget {
-//   const Welcome_Screen({super.key});
-
-//   @override
-//   State<Welcome_Screen> createState() => _Welcome_ScreenState();
-// }
-
-// class _Welcome_ScreenState extends State<Welcome_Screen> {
-//   final _formKey = GlobalKey<FormState>();
-//   bool stayLogged = false;
-//   final emailController = TextEditingController();
-//   final passwordController = TextEditingController();
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: AppColors.strengthTrackColor,
-//       body: MyBodyView(
-//         child: Center(
-//           child: SingleChildScrollView(
-//             child: Form(
-//               key: _formKey,
-
-//               child: Column(
-//                 mainAxisAlignment: MainAxisAlignment.center,
-//                 children: [
-//                   Gap(60),
-//                   Text(
-//                     "ExpertiseMarket",
-//                     style: TextStyles.headline.copyWith(
-//                       fontWeight: FontWeight.w800,
-//                     ),
-//                   ),
-//                   Gap(10),
-
-//                   Text(
-//                     "Welcome back",
-//                     style: TextStyles.title.copyWith(
-//                       fontWeight: FontWeight.w500,
-//                     ),
-//                   ),
-//                   Text(
-//                     "Access your professional marketplace dashboard",
-//                     textAlign: TextAlign.center,
-//                     style: TextStyles.subtitle1,
-//                   ),
-//                   Container(
-//                     height: 595,
-//                     width: 350,
-//                     decoration: BoxDecoration(
-//                       borderRadius: BorderRadius.circular(15),
-//                       border: Border.all(color: AppColors.navyColor),
-//                     ),
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(32),
-//                       child: Column(
-//                         crossAxisAlignment: CrossAxisAlignment.start,
-//                         children: [
-//                           Text("Email Address"),
-//                           Gap(10),
-//                           CustomTextFormField(
-//                             prefixIcon: Icon(Icons.email),
-//                             text: "name@company.com",
-//                             controller: emailController,
-//                             validator: (value) {
-//                               if (value == null || value.isEmpty) {
-//                                 return "Enter your email";
-//                               }
-
-//                               return null;
-//                             },
-//                           ),
-//                           Gap(20),
-
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Text("Password"),
-//                               TextButton(
-//                                 onPressed: () {},
-//                                 child: Text("Forgot Password?"),
-//                               ),
-//                             ],
-//                           ),
-//                           CustomTextFormFieldPassword(
-//                             prefixIcon: Icon(Icons.lock),
-//                             text: "••••••••••••",
-//                             controller: passwordController,
-//                             validator: (value) {
-//                               if (value == null || value.isEmpty) {
-//                                 return "Enter your password";
-//                               }
-
-//                               if (value.length < 6) {
-//                                 return "Password must be at least 6 characters";
-//                               }
-
-//                               return null;
-//                             },
-//                           ),
-//                           Gap(25),
-
-//                           Row(
-//                             children: [
-//                               Checkbox(
-//                                 value: stayLogged,
-//                                 activeColor: AppColors.marketGreen,
-//                                 onChanged: (bool? value) {
-//                                   setState(() {
-//                                     stayLogged = value ?? false;
-//                                   });
-//                                 },
-//                               ),
-//                               Text(
-//                                 "Stay logged in for 30 days",
-//                                 style: TextStyles.caption1,
-//                               ),
-//                             ],
-//                           ),
-//                           Gap(25),
-//                           AppButton(
-//                             title: "LogIn",
-//                             onPressed: () async {
-//                               await login(
-//                                 _formKey,
-//                                 context,
-//                                 emailController,
-//                                 passwordController,
-//                               );
-//                             },
-//                             backgroundColor: AppColors.primaryColor,
-//                           ),
-//                           Gap(15),
-//                           Row(
-//                             mainAxisAlignment: MainAxisAlignment.center,
-//                             children: [
-//                               Expanded(child: Divider()),
-//                               Gap(15),
-//                               Text(
-//                                 "OR CONTINUE WITH",
-//                                 style: TextStyles.caption1,
-//                               ),
-//                               Gap(15),
-
-//                               Expanded(child: Divider()),
-//                             ],
-//                           ),
-//                           Gap(15),
-//                           Login_With(
-//                             Image: AppImages.googleSvg,
-//                             label: "Continue with Google",
-//                             ontap: () {},
-//                           ),
-//                           Gap(15),
-//                           Login_With(
-//                             Image: AppImages.Apple,
-//                             label: "Continue with Apple",
-//                             ontap: () {},
-//                           ),
-//                         ],
-//                       ),
-//                     ),
-//                   ),
-//                   Gap(30),
-//                   Row(
-//                     mainAxisAlignment: MainAxisAlignment.center,
-//                     children: [
-//                       Text("Don't have an account?"),
-//                       TextButton(
-//                         onPressed: () {
-//                           Navigator.push(
-//                             context,
-//                             MaterialPageRoute(builder: (context) => Sign_up()),
-//                           );
-//                         },
-//                         child: Text(
-//                           "Sign Up",
-//                           style: TextStyle(color: AppColors.emeraldColor),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 import 'package:expertisemarket/core/constants/app_images.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
@@ -255,7 +51,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const Gap(10),
+                  Gap(10),
+
                   Text(
                     "Welcome back",
                     style: TextStyles.title.copyWith(
@@ -281,7 +78,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text("Email Address"),
-                          const Gap(10),
+
+                          Gap(10),
+
                           CustomTextFormField(
                             prefixIcon: const Icon(Icons.email),
                             text: "name@company.com",
@@ -389,7 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const Sign_up()), // تم التعديل إلى SignUp
+                            MaterialPageRoute(builder: (context) => Sign_up()),
                           );
                         },
                         child: const Text(
