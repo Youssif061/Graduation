@@ -1,3 +1,5 @@
+import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/category_dropdown.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/description_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/price_field.dart';
@@ -6,73 +8,121 @@ import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/sto
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/update_product_button.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/upload_image_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditProductScreen extends StatelessWidget {
-  const EditProductScreen({super.key});
+  const EditProductScreen({
+    super.key,
+    required this.product,
+  });
+
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+    return BlocProvider(
+      create: (_) => AddProductCubit()..loadProduct(product),
+      child: BlocListener<AddProductCubit, AddProductState>(
+        listener: (context, state) {
+          if (state is UpdateProductSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Product Updated Successfully",
+                ),
+              ),
+            );
 
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xff001A2C),
-        surfaceTintColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        centerTitle: true,
+            Navigator.pop(context);
+          }
 
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new),
-          onPressed: () => Navigator.pop(context),
-        ),
+          if (state is AddProductFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+        },
+        child: Scaffold(
+          backgroundColor: const Color(0xffF8FAFC),
 
-        title: const Text(
-          "Edit Product",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
-        ),
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            foregroundColor: const Color(0xff001A2C),
+            surfaceTintColor: Colors.white,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            centerTitle: true,
 
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xffE2E8F0)),
-        ),
-      ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new),
+              onPressed: () => Navigator.pop(context),
+            ),
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              UploadImageCard(),
+            title: const Text(
+              "Edit Product",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+            ),
 
-              SizedBox(height: 24),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Container(
+                height: 1,
+                color: const Color(0xffE2E8F0),
+              ),
+            ),
+          ),
 
-              ProductNameField(),
+          body: SafeArea(
+            child: BlocBuilder<AddProductCubit, AddProductState>(
+              builder: (context, state) {
+                final cubit = context.read<AddProductCubit>();
 
-              SizedBox(height: 20),
+                return Form(
+                  key: cubit.formKey,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
 
-              CategoryDropdown(),
+                        UploadImageCard(),
 
-              SizedBox(height: 20),
+                        SizedBox(height: 24),
 
-              DescriptionField(),
+                        ProductNameField(),
 
-              SizedBox(height: 20),
+                        SizedBox(height: 20),
 
-              PriceField(),
+                        CategoryDropdown(),
 
-              SizedBox(height: 20),
+                        SizedBox(height: 20),
 
-              StockField(),
+                        DescriptionField(),
 
-              SizedBox(height: 32),
+                        SizedBox(height: 20),
 
-              UpdateProductButton(),
+                        PriceField(),
 
-              SizedBox(height: 30),
-            ],
+                        SizedBox(height: 20),
+
+                        StockField(),
+
+                        SizedBox(height: 32),
+
+                        UpdateProductButton(),
+
+                        SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

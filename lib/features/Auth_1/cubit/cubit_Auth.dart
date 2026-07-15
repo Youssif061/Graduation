@@ -1,4 +1,3 @@
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +16,9 @@ Future<void> login(
       password: passwordController.text.trim(),
     );
 
-    navigationReplacement(context, const MainShell());
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => const MainShell()));
   } on FirebaseAuthException catch (e) {
     String message;
 

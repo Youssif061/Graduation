@@ -6,7 +6,6 @@ import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.d
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
-import 'package:expertisemarket/features/ServiceProvider/publish_proposal/page/send_proposal_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/publish_service/page/publish_service_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
@@ -14,6 +13,11 @@ import 'package:expertisemarket/features/products/presentation/pages/cart_screen
 import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
 import 'package:expertisemarket/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
+
+// استيراد الـ Bloc والـ Cubits لحقنها في الـ Routes المناسبة
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/cubit/publish_service_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
 
 import 'routers.dart';
 
@@ -48,13 +52,23 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const NotificationScreen());
 
       case Routers.publishService:
-        return MaterialPageRoute(builder: (_) => const PublishServiceScreen());
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => PublishServiceCubit(),
+            child: const PublishServiceScreen(),
+          ),
+        );
 
-      case Routers.publishProposal:
-        return MaterialPageRoute(builder: (_) => const SendProposalScreen());
+      // case Routers.publishProposal:
+      //   return MaterialPageRoute(builder: (_) => const SendProposalScreen());
 
       case Routers.addProduct:
-        return MaterialPageRoute(builder: (_) => const AddProductScreen()); 
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => AddProductCubit(),
+            child: const AddProductScreen(),
+          ),
+        ); 
 
       case Routers.wishlist:
         return MaterialPageRoute(builder: (_) => const WishlistPage());

@@ -47,8 +47,16 @@ import 'package:expertisemarket/core/routes/routers.dart';
 import 'package:expertisemarket/core/routes/app_router.dart';
 import 'package:expertisemarket/core/styles/themes.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart'; // 1. استيراد فايربيز
+import 'firebase_options.dart'; // 2. استيراد ملف الـ options الخاص بمشروعك
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // 3. تأمين التهيئة قبل استدعاء أي كود native
+  
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, // 4. تهيئة فايربيز
+  );
+
   runApp(const MainApp());
 }
 
@@ -60,11 +68,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
-
       initialRoute: Routers.main,
-
       onGenerateRoute: AppRouter.generateRoute,
-
       builder: (context, child) {
         return SafeArea(
           top: false,
