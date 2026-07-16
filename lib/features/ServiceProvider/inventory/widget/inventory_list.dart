@@ -1,4 +1,4 @@
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_product_card.dart';
 import 'package:flutter/material.dart';
 

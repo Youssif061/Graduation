@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/features/products/presentation/pages/product_details_screen.dart';
+import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+
 
 class WishlistProductCard extends StatefulWidget {
   final WishlistItemModel item;
@@ -82,17 +86,29 @@ class _WishlistProductCardState extends State<WishlistProductCard> {
                     height: 180,
                     width: double.infinity,
                     color: const Color(0xFFF8FAFC),
-                    child: Image.asset(
-                      widget.item.imageAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => const Center(
-                        child: Icon(
-                          Icons.inventory_2_outlined,
-                          color: Color(0xFFCBD5E1),
-                          size: 60,
-                        ),
-                      ),
-                    ),
+                    child: widget.item.imageAsset.startsWith('http')
+                        ? Image.network(
+                            widget.item.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 60,
+                              ),
+                            ),
+                          )
+                        : Image.asset(
+                            widget.item.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, _, _) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 60,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 // Left badge
@@ -124,7 +140,9 @@ class _WishlistProductCardState extends State<WishlistProductCard> {
                   top: 12,
                   right: 12,
                   child: GestureDetector(
-                    onTap: () => setState(() => _isFav = !_isFav),
+                    onTap: () {
+                      context.read<WishlistCubit>().removeFromWishlist(widget.item.id);
+                    },
                     child: Container(
                       width: 32,
                       height: 32,
@@ -183,7 +201,21 @@ class _WishlistProductCardState extends State<WishlistProductCard> {
                         ),
                       ),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          context.read<CartCubit>().addItem(
+                            CartItemModel(
+                              id: widget.item.id,
+                              name: widget.item.name,
+                              variant: 'Default',
+                              imageAsset: widget.item.imageAsset,
+                              price: widget.item.price,
+                              quantity: 1,
+                            ),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Added to Cart!')),
+                          );
+                        },
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 14,
@@ -228,6 +260,7 @@ class _WishlistProductCardState extends State<WishlistProductCard> {
   ProductModel _toProductModel(WishlistItemModel item) {
     return ProductModel(
       id: item.id,
+      providerId: 'expert_dummy',
       name: item.name,
       category: 'Tools',
       description: item.description,
@@ -252,6 +285,7 @@ class _WishlistProductCardState extends State<WishlistProductCard> {
         'Weight': '14.5 kg / 32 lbs',
         'Certifications': 'ANSI/ASME, DIN',
       },
+      createdAt: DateTime.now(),
     );
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/models/product_model.dart';
@@ -14,7 +17,13 @@ class SearchProductCard extends StatefulWidget {
 }
 
 class _SearchProductCardState extends State<SearchProductCard> {
-  bool _isFav = false;
+  late bool _isFav;
+
+  @override
+  void initState() {
+    super.initState();
+    _isFav = context.read<WishlistCubit>().isInWishlist(widget.product.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,17 +72,29 @@ class _SearchProductCardState extends State<SearchProductCard> {
                     height: 180,
                     width: double.infinity,
                     color: const Color(0xFFF8FAFC),
-                    child: Image.asset(
-                      widget.product.imageAsset,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => const Center(
-                        child: Icon(
-                          Icons.inventory_2_outlined,
-                          color: Color(0xFFCBD5E1),
-                          size: 50,
-                        ),
-                      ),
-                    ),
+                    child: widget.product.imageAsset.startsWith('http')
+                        ? Image.network(
+                            widget.product.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 50,
+                              ),
+                            ),
+                          )
+                        : Image.asset(
+                            widget.product.imageAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 50,
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 // Verified badge
@@ -117,7 +138,18 @@ class _SearchProductCardState extends State<SearchProductCard> {
                   top: 12,
                   right: 12,
                   child: GestureDetector(
-                    onTap: () => setState(() => _isFav = !_isFav),
+                    onTap: () {
+                      final wishlistItem = WishlistItemModel(
+                        id: widget.product.id,
+                        name: widget.product.name,
+                        description: widget.product.description,
+                        imageAsset: widget.product.imageAsset,
+                        price: widget.product.price,
+                        isFavourite: !_isFav,
+                      );
+                      context.read<WishlistCubit>().toggleFavorite(wishlistItem);
+                      setState(() => _isFav = !_isFav);
+                    },
                     child: Container(
                       width: 32,
                       height: 32,
@@ -173,17 +205,37 @@ class _SearchProductCardState extends State<SearchProductCard> {
                   ),
                   const SizedBox(width: 10),
                   // Dark Navy Cart Button per mockup
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: AppColors.marketText, // Dark navy
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Icon(
-                      Icons.shopping_cart_outlined,
-                      color: Colors.white,
-                      size: 18,
+                  GestureDetector(
+                    onTap: () {
+                      context.read<CartCubit>().addItem(
+                        CartItemModel(
+                          id: widget.product.id,
+                          name: widget.product.name,
+                          variant: widget.product.category,
+                          imageAsset: widget.product.imageAsset,
+                          price: widget.product.price,
+                          quantity: 1,
+                        ),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('${widget.product.name} added to cart'),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: AppColors.marketText, // Dark navy
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.shopping_cart_outlined,
+                        color: Colors.white,
+                        size: 18,
+                      ),
                     ),
                   ),
                 ],

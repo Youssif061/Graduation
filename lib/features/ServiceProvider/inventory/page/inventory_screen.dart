@@ -7,6 +7,7 @@ import 'package:expertisemarket/features/ServiceProvider/inventory/widget/invent
 import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_stats_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({
@@ -24,8 +25,9 @@ class _InventoryScreenState
   void initState() {
     super.initState();
 
+    final providerId = FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
     context.read<InventoryCubit>().loadInventory(
-          providerId: "providerId",
+          providerId: providerId,
         );
   }
 
@@ -105,14 +107,20 @@ class _InventoryScreenState
         child: FloatingActionButton(
           backgroundColor:
               const Color(0xff001A2C),
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (_) =>
                     const AddProductScreen(),
               ),
             );
+            if (context.mounted) {
+              final providerId = FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
+              context.read<InventoryCubit>().loadInventory(
+                    providerId: providerId,
+                  );
+            }
           },
           child: const Icon(
             Icons.add,

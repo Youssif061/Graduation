@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/models/product_model.dart';
@@ -24,6 +27,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _isLiked = context.read<WishlistCubit>().isInWishlist(widget.product.id);
   }
 
   @override
@@ -56,7 +60,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
               _isLiked ? Icons.favorite : Icons.favorite_border,
               color: _isLiked ? AppColors.marketRed : AppColors.marketTextSub,
             ),
-            onPressed: () => setState(() => _isLiked = !_isLiked),
+            onPressed: () {
+              final wishlistItem = WishlistItemModel(
+                id: widget.product.id,
+                name: widget.product.name,
+                description: widget.product.description,
+                imageAsset: widget.product.imageAsset,
+                price: widget.product.price,
+                isFavourite: !_isLiked,
+              );
+              context.read<WishlistCubit>().toggleFavorite(wishlistItem);
+              setState(() => _isLiked = !_isLiked);
+            },
           ),
         ],
         bottom: PreferredSize(
@@ -76,17 +91,29 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                     height: 280,
                     width: double.infinity,
                     color: const Color(0xFFF8FAFC), // Light image background
-                    child: Image.asset(
-                      p.imageAsset,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, _, _) => const Center(
-                        child: Icon(
-                          Icons.inventory_2_outlined,
-                          color: Color(0xFFCBD5E1),
-                          size: 80,
-                        ),
-                      ),
-                    ),
+                    child: p.imageAsset.startsWith('http')
+                        ? Image.network(
+                            p.imageAsset,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 80,
+                              ),
+                            ),
+                          )
+                        : Image.asset(
+                            p.imageAsset,
+                            fit: BoxFit.contain,
+                            errorBuilder: (_, __, ___) => const Center(
+                              child: Icon(
+                                Icons.inventory_2_outlined,
+                                color: Color(0xFFCBD5E1),
+                                size: 80,
+                              ),
+                            ),
+                          ),
                   ),
                   // Thumbnails row
                   if (p.thumbnails.isNotEmpty)
@@ -117,15 +144,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen>
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.asset(
-                                  p.thumbnails[i],
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (_, _, _) => const Icon(
-                                    Icons.inventory_2_outlined,
-                                    color: Color(0xFFCBD5E1),
-                                    size: 28,
-                                  ),
-                                ),
+                                child: p.thumbnails[i].startsWith('http')
+                                    ? Image.network(
+                                        p.thumbnails[i],
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.inventory_2_outlined,
+                                          color: Color(0xFFCBD5E1),
+                                          size: 28,
+                                        ),
+                                      )
+                                    : Image.asset(
+                                        p.thumbnails[i],
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => const Icon(
+                                          Icons.inventory_2_outlined,
+                                          color: Color(0xFFCBD5E1),
+                                          size: 28,
+                                        ),
+                                      ),
                               ),
                             ),
                           ),
@@ -547,9 +584,30 @@ class _BottomBar extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const CartScreen()),
+                context.read<CartCubit>().addItem(
+                  CartItemModel(
+                    id: product.id,
+                    name: product.name,
+                    variant: product.category,
+                    imageAsset: product.imageAsset,
+                    price: product.price,
+                    quantity: 1,
+                  ),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('${product.name} added to cart'),
+                    duration: const Duration(seconds: 2),
+                    action: SnackBarAction(
+                      label: 'View Cart',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => const CartScreen()),
+                        );
+                      },
+                    ),
+                  ),
                 );
               },
               child: Container(
@@ -585,6 +643,16 @@ class _BottomBar extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
+                context.read<CartCubit>().addItem(
+                  CartItemModel(
+                    id: product.id,
+                    name: product.name,
+                    variant: product.category,
+                    imageAsset: product.imageAsset,
+                    price: product.price,
+                    quantity: 1,
+                  ),
+                );
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (_) => const CheckoutScreen()),

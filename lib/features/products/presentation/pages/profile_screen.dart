@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:expertisemarket/core/routes/routers.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -24,7 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      appBar: const MarketAppBar(showHeart: true),
+      //appBar: const MarketAppBar(showHeart: true),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
@@ -192,10 +194,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          // Logout Section
           _SettingsCard(
             child: GestureDetector(
-              onTap: () {},
+              onTap: () async {
+                await FirebaseAuth.instance.signOut();
+                if (context.mounted) {
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                    Routers.welcomeScreen,
+                    (route) => false,
+                  );
+                }
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

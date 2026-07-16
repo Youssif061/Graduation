@@ -1,6 +1,9 @@
 import 'dart:io';
 
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -38,6 +41,16 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   /// المنتج الحالي أثناء التعديل
   ProductModel? currentProduct;
+
+  ///================ Firebase ====================///
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
+  String get _providerId =>
+      FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
+
+  bool _isSubmitting = false;
 
   ///================ Load Product =================///
 
@@ -103,28 +116,64 @@ class AddProductCubit extends Cubit<AddProductState> {
     emit(ProductImagesChanged(List.from(images)));
   }
 
+  ///================ Upload Images ==================///
+
+  Future<List<String>> _uploadImages(List<File> files) async {
+    List<String> urls = [];
+    for (int i = 0; i < files.length; i++) {
+      final file = files[i];
+      final ref = _storage.ref().child(
+            'products/$_providerId/${DateTime.now().millisecondsSinceEpoch}_$i.jpg',
+          );
+      await ref.putFile(file);
+      final url = await ref.getDownloadURL();
+      urls.add(url);
+    }
+    return urls;
+  }
+
   ///================ Publish Product ===============///
 
   Future<void> publishProduct() async {
     try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
+      if (_isSubmitting) return;
+      if (!formKey.currentState!.validate()) return;
 
+      _isSubmitting = true;
       emit(const AddProductLoading());
 
-      /// Upload Images To Firebase Storage
+      // Upload Images To Firebase Storage
+      List<String> imageUrls = [];
+      if (images.isNotEmpty) {
+        imageUrls = await _uploadImages(images);
+      }
 
-      /// Get Images Urls
+      // Save Product To Firestore
+      final docRef = _firestore.collection('products').doc();
 
-      /// Save Product To Firestore
-
-      await Future.delayed(
-        const Duration(seconds: 1),
+      final product = ProductModel(
+        id: docRef.id,
+        providerId: _providerId,
+        name: nameController.text.trim(),
+        category: categoryController.text.trim(),
+        description: descriptionController.text.trim(),
+        imageAsset: imageUrls.isNotEmpty ? imageUrls.first : '',
+        price: double.tryParse(priceController.text.trim()) ?? 0.0,
+        stock: int.tryParse(stockController.text.trim()) ?? 0,
+        images: imageUrls,
+        thumbnails: imageUrls,
+        createdAt: DateTime.now(),
+        status: 'active',
+        inStock: (int.tryParse(stockController.text.trim()) ?? 0) > 0,
+        isNew: true,
       );
 
+      await docRef.set(product.toJson());
+
+      _isSubmitting = false;
       emit(const AddProductSuccess());
     } catch (e) {
+      _isSubmitting = false;
       emit(AddProductFailure(e.toString()));
     }
   }
@@ -133,24 +182,39 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   Future<void> updateProduct() async {
     try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
+      if (_isSubmitting) return;
+      if (!formKey.currentState!.validate()) return;
 
+      _isSubmitting = true;
       emit(const AddProductLoading());
 
-      /// Upload New Images
+      // Upload New Images
+      List<String> newImageUrls = [];
+      if (images.isNotEmpty) {
+        newImageUrls = await _uploadImages(images);
+      }
 
-      /// Merge Existing Images + New Images
+      // Merge Existing Images + New Images
+      final allImages = [...existingImages, ...newImageUrls];
 
-      /// Update Firestore Document
+      // Update Firestore Document
+      final productId = currentProduct!.id;
+      await _firestore.collection('products').doc(productId).update({
+        'name': nameController.text.trim(),
+        'category': categoryController.text.trim(),
+        'description': descriptionController.text.trim(),
+        'price': double.tryParse(priceController.text.trim()) ?? 0.0,
+        'stock': int.tryParse(stockController.text.trim()) ?? 0,
+        'images': allImages,
+        'imageAsset': allImages.isNotEmpty ? allImages.first : '',
+        'thumbnails': allImages,
+        'inStock': (int.tryParse(stockController.text.trim()) ?? 0) > 0,
+      });
 
-      await Future.delayed(
-        const Duration(seconds: 1),
-      );
-
+      _isSubmitting = false;
       emit(const UpdateProductSuccess());
     } catch (e) {
+      _isSubmitting = false;
       emit(AddProductFailure(e.toString()));
     }
   }

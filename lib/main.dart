@@ -49,6 +49,11 @@ import 'package:expertisemarket/core/styles/themes.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart'; // 1. استيراد فايربيز
 import 'firebase_options.dart'; // 2. استيراد ملف الـ options الخاص بمشروعك
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/product_cubit.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/order_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized(); // 3. تأمين التهيئة قبل استدعاء أي كود native
@@ -57,7 +62,17 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform, // 4. تهيئة فايربيز
   );
 
-  runApp(const MainApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductCubit>(create: (_) => ProductCubit()),
+        BlocProvider<CartCubit>(create: (_) => CartCubit()..loadCart()),
+        BlocProvider<WishlistCubit>(create: (_) => WishlistCubit()..loadWishlist()),
+        BlocProvider<OrderCubit>(create: (_) => OrderCubit()),
+      ],
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -68,7 +83,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: AppThemes.lightTheme,
-      initialRoute: Routers.main,
+      initialRoute: Routers.splash,
       onGenerateRoute: AppRouter.generateRoute,
       builder: (context, child) {
         return SafeArea(

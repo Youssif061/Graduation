@@ -4,6 +4,7 @@ import 'package:expertisemarket/features/ServiceProvider/home/widget/dashboard_c
 import 'package:expertisemarket/features/ServiceProvider/home/widget/latest_requests_list_view.dart';
 import 'package:expertisemarket/features/ServiceProvider/home/widget/post_new_service_button.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -24,8 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_isDataLoaded) {
       _isDataLoaded = true;
 
-      /// سيتم استبدال providerId بالـ uid الحقيقي بعد ربط Firebase
-      context.read<HomeCubit>().loadHomeData(providerId: "providerId");
+      final uid = FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
+      context.read<HomeCubit>().loadHomeData(providerId: uid);
 
       /// تحميل آخر الطلبات
       context.read<RequestCubit>().loadRequests();

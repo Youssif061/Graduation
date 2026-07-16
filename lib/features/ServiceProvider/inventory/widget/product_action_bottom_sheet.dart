@@ -1,6 +1,9 @@
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/edit_product_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
 
 import 'delete_product_dialog.dart';
 
@@ -48,10 +51,10 @@ class ProductActionBottomSheet {
                     "Edit Product",
                   ),
 
-                  onTap: () {
+                  onTap: () async {
                     Navigator.pop(context);
 
-                    Navigator.push(
+                    await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (_) =>
@@ -60,6 +63,12 @@ class ProductActionBottomSheet {
                         ),
                       ),
                     );
+                    if (context.mounted) {
+                      final providerId = FirebaseAuth.instance.currentUser?.uid ?? 'unknown';
+                      context.read<InventoryCubit>().loadInventory(
+                            providerId: providerId,
+                          );
+                    }
                   },
                 ),
 

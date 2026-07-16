@@ -2,12 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
+import 'package:expertisemarket/features/products/models/order_model.dart';
+import 'package:expertisemarket/features/products/presentation/pages/track_order_screen.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
-  const OrderSuccessScreen({super.key});
+  final OrderModel order;
+
+  const OrderSuccessScreen({super.key, required this.order});
 
   @override
   Widget build(BuildContext context) {
+    final idSuffix = order.id.length > 8
+        ? order.id.substring(0, 8).toUpperCase()
+        : order.id.toUpperCase();
+    final itemsCount = order.items.length;
+    final totalPaid = order.total.toStringAsFixed(2);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -110,7 +120,7 @@ class OrderSuccessScreen extends StatelessWidget {
                   // Order ID
                   _InfoRow(
                     label: 'ORDER ID',
-                    value: '#EM-94021',
+                    value: '#EM-$idSuffix',
                     valueColor: AppColors.marketGreenDark,
                   ),
                   const Padding(
@@ -120,7 +130,7 @@ class OrderSuccessScreen extends StatelessWidget {
                   // Summary
                   _InfoRow(
                     label: 'SUMMARY',
-                    value: 'Items: 2  |  Total: \$1,941.84',
+                    value: 'Items: $itemsCount  |  Total: \$$totalPaid',
                     valueColor: AppColors.marketText,
                   ),
                 ],
@@ -129,7 +139,17 @@ class OrderSuccessScreen extends StatelessWidget {
             const SizedBox(height: 32),
             // Track Order button
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => TrackOrderScreen(
+                      orderId: order.id,
+                      initialOrder: order,
+                    ),
+                  ),
+                );
+              },
               child: Container(
                 height: 52,
                 width: double.infinity,

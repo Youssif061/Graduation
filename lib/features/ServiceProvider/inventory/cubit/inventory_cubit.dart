@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'inventory_state.dart';

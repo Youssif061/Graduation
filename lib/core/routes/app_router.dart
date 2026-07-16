@@ -10,6 +10,7 @@ import 'package:expertisemarket/features/ServiceProvider/publish_service/page/pu
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/cart_screen.dart';
+import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
 import 'package:expertisemarket/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
@@ -74,6 +75,9 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const WishlistPage());
 
       case Routers.products:
+        return MaterialPageRoute(builder: (_) => const MainShell());
+
+      case Routers.cart:
         return MaterialPageRoute(builder: (_) => const CartScreen());
 
       case Routers.welcomeScreen:

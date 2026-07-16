@@ -1,5 +1,5 @@
 import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/category_dropdown.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/description_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/price_field.dart';
