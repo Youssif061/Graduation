@@ -34,7 +34,7 @@ class MarketProductCard extends StatelessWidget {
         border: Border.all(color: AppColors.marketBorder, width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -53,11 +53,13 @@ class MarketProductCard extends StatelessWidget {
                 child: Container(
                   height: 200,
                   width: double.infinity,
-                  color: const Color(0xFFF8FAFC), // Light image container background
+                  color: const Color(
+                    0xFFF8FAFC,
+                  ), // Light image container background
                   child: Image.asset(
                     product.imageAsset,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => _buildImagePlaceholder(),
+                    errorBuilder: (_, _, _) => _buildImagePlaceholder(),
                   ),
                 ),
               ),
@@ -142,9 +144,8 @@ class MarketProductCard extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (_) => ProductDetailsScreen(
-                                product: product,
-                              ),
+                              builder: (_) =>
+                                  ProductDetailsScreen(product: product),
                             ),
                           );
                         },
@@ -194,7 +195,11 @@ class MarketProductCard extends StatelessWidget {
     return Container(
       color: const Color(0xFFF1F5F9),
       child: const Center(
-        child: Icon(Icons.inventory_2_outlined, color: Color(0xFFCBD5E1), size: 60),
+        child: Icon(
+          Icons.inventory_2_outlined,
+          color: Color(0xFFCBD5E1),
+          size: 60,
+        ),
       ),
     );
   }

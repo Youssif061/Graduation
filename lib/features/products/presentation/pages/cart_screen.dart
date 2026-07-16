@@ -21,8 +21,7 @@ class _CartScreenState extends State<CartScreen> {
     _items = List.from(DummyData.cartItems);
   }
 
-  double get _subtotal =>
-      _items.fold(0, (s, i) => s + i.price * i.quantity);
+  double get _subtotal => _items.fold(0, (s, i) => s + i.price * i.quantity);
   double get _tax => _subtotal * 0.05;
   double get _total => _subtotal + _tax;
 
@@ -38,7 +37,12 @@ class _CartScreenState extends State<CartScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.marketText),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text('EliteMarket', style: MarketTextStyles.appBarTitle.copyWith(fontWeight: FontWeight.w800)),
+        title: Text(
+          'EliteMarket',
+          style: MarketTextStyles.appBarTitle.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
+        ),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 16),
@@ -58,10 +62,7 @@ class _CartScreenState extends State<CartScreen> {
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.marketBorder,
-            height: 1,
-          ),
+          child: Container(color: AppColors.marketBorder, height: 1),
         ),
       ),
       body: Column(
@@ -80,7 +81,10 @@ class _CartScreenState extends State<CartScreen> {
                 ),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.marketCard,
                     borderRadius: BorderRadius.circular(100),
@@ -88,7 +92,10 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                   child: Text(
                     '${_items.length} Items',
-                    style: MarketTextStyles.bodySmall.copyWith(fontSize: 12, fontWeight: FontWeight.w700),
+                    style: MarketTextStyles.bodySmall.copyWith(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ],
@@ -99,14 +106,18 @@ class _CartScreenState extends State<CartScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               children: [
                 // Cart items
-                ..._items.asMap().entries.map((e) => _CartItemRow(
-                  item: e.value,
-                  onDelete: () => setState(() => _items.removeAt(e.key)),
-                  onIncrement: () => setState(() => e.value.quantity++),
-                  onDecrement: () {
-                    if (e.value.quantity > 1) setState(() => e.value.quantity--);
-                  },
-                )),
+                ..._items.asMap().entries.map(
+                  (e) => _CartItemRow(
+                    item: e.value,
+                    onDelete: () => setState(() => _items.removeAt(e.key)),
+                    onIncrement: () => setState(() => e.value.quantity++),
+                    onDecrement: () {
+                      if (e.value.quantity > 1) {
+                        setState(() => e.value.quantity--);
+                      }
+                    },
+                  ),
+                ),
                 const SizedBox(height: 16),
                 // Order Summary Card
                 Container(
@@ -117,7 +128,7 @@ class _CartScreenState extends State<CartScreen> {
                     border: Border.all(color: AppColors.marketBorder),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.02),
+                        color: Colors.black.withValues(alpha: 0.02),
                         blurRadius: 10,
                       ),
                     ],
@@ -133,11 +144,21 @@ class _CartScreenState extends State<CartScreen> {
                         ),
                       ),
                       const SizedBox(height: 14),
-                      _SummaryRow(label: 'Subtotal', value: '\$${_subtotal.toStringAsFixed(2)}'),
+                      _SummaryRow(
+                        label: 'Subtotal',
+                        value: '\$${_subtotal.toStringAsFixed(2)}',
+                      ),
                       const SizedBox(height: 8),
-                      _SummaryRow(label: 'Shipping', value: 'Free', valueColor: AppColors.marketGreenDark),
+                      _SummaryRow(
+                        label: 'Shipping',
+                        value: 'Free',
+                        valueColor: AppColors.marketGreenDark,
+                      ),
                       const SizedBox(height: 8),
-                      _SummaryRow(label: 'Tax (Estimated)', value: '\$${_tax.toStringAsFixed(2)}'),
+                      _SummaryRow(
+                        label: 'Tax (Estimated)',
+                        value: '\$${_tax.toStringAsFixed(2)}',
+                      ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 12),
                         child: Divider(color: AppColors.marketBorder),
@@ -192,7 +213,11 @@ class _CartScreenState extends State<CartScreen> {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                        const Icon(
+                          Icons.arrow_forward,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ],
                     ),
                   ),
@@ -201,7 +226,11 @@ class _CartScreenState extends State<CartScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.lock_outline, color: AppColors.marketTextSub, size: 13),
+                    const Icon(
+                      Icons.lock_outline,
+                      color: AppColors.marketTextSub,
+                      size: 13,
+                    ),
                     const SizedBox(width: 4),
                     Text(
                       'Secure Checkout Powered by ElitePay',
@@ -245,10 +274,7 @@ class _CartItemRow extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.marketBorder),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.01),
-            blurRadius: 8,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.01), blurRadius: 8),
         ],
       ),
       child: Row(
@@ -263,7 +289,7 @@ class _CartItemRow extends StatelessWidget {
               child: Image.asset(
                 item.imageAsset,
                 fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => const Icon(
+                errorBuilder: (_, _, _) => const Icon(
                   Icons.inventory_2_outlined,
                   color: Color(0xFFCBD5E1),
                   size: 32,
@@ -287,7 +313,10 @@ class _CartItemRow extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.marketBg,
                     borderRadius: BorderRadius.circular(4),
@@ -319,7 +348,11 @@ class _CartItemRow extends StatelessWidget {
                               width: 28,
                               height: 28,
                               alignment: Alignment.center,
-                              child: const Icon(Icons.remove, color: AppColors.marketText, size: 14),
+                              child: const Icon(
+                                Icons.remove,
+                                color: AppColors.marketText,
+                                size: 14,
+                              ),
                             ),
                           ),
                           Padding(
@@ -338,7 +371,11 @@ class _CartItemRow extends StatelessWidget {
                               width: 28,
                               height: 28,
                               alignment: Alignment.center,
-                              child: const Icon(Icons.add, color: AppColors.marketText, size: 14),
+                              child: const Icon(
+                                Icons.add,
+                                color: AppColors.marketText,
+                                size: 14,
+                              ),
                             ),
                           ),
                         ],
@@ -355,7 +392,11 @@ class _CartItemRow extends StatelessWidget {
             children: [
               GestureDetector(
                 onTap: onDelete,
-                child: const Icon(Icons.delete_outline, color: AppColors.marketRed, size: 20),
+                child: const Icon(
+                  Icons.delete_outline,
+                  color: AppColors.marketRed,
+                  size: 20,
+                ),
               ),
               const SizedBox(height: 20),
               Text(
@@ -379,14 +420,23 @@ class _SummaryRow extends StatelessWidget {
   final String value;
   final Color? valueColor;
 
-  const _SummaryRow({required this.label, required this.value, this.valueColor});
+  const _SummaryRow({
+    required this.label,
+    required this.value,
+    this.valueColor,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: MarketTextStyles.totalLabel.copyWith(color: AppColors.marketTextSub)),
+        Text(
+          label,
+          style: MarketTextStyles.totalLabel.copyWith(
+            color: AppColors.marketTextSub,
+          ),
+        ),
         Text(
           value,
           style: MarketTextStyles.totalValue.copyWith(

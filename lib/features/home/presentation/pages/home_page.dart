@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -10,16 +9,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.home_outlined, color: AppColors.marketGreen, size: 60),
+            const Icon(
+              Icons.home_outlined,
+              color: AppColors.marketGreen,
+              size: 60,
+            ),
             const SizedBox(height: 16),
             Text('Home', style: MarketTextStyles.sectionTitle),
             const SizedBox(height: 8),
-            Text('Welcome to ExpertiseMarket', style: MarketTextStyles.bodySmall),
+            Text(
+              'Welcome to ExpertiseMarket',
+              style: MarketTextStyles.bodySmall,
+            ),
           ],
         ),
       ),

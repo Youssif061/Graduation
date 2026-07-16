@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
 
 class ProsPage extends StatelessWidget {
   const ProsPage({super.key});
@@ -14,11 +13,18 @@ class ProsPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.work_outline, color: AppColors.marketGreen, size: 60),
+            const Icon(
+              Icons.work_outline,
+              color: AppColors.marketGreen,
+              size: 60,
+            ),
             const SizedBox(height: 16),
             Text('Pros', style: MarketTextStyles.sectionTitle),
             const SizedBox(height: 8),
-            Text('Professional service providers', style: MarketTextStyles.bodySmall),
+            Text(
+              'Professional service providers',
+              style: MarketTextStyles.bodySmall,
+            ),
           ],
         ),
       ),

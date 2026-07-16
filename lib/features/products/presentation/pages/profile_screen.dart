@@ -24,9 +24,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      appBar: const MarketAppBar(
-        showHeart: true,
-      ),
+      appBar: const MarketAppBar(showHeart: true),
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         children: [
@@ -54,9 +52,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       decoration: BoxDecoration(
                         color: AppColors.marketCardLight,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.marketBorder, width: 2),
+                        border: Border.all(
+                          color: AppColors.marketBorder,
+                          width: 2,
+                        ),
                       ),
-                      child: const Icon(Icons.person, color: AppColors.marketTextSub, size: 48),
+                      child: const Icon(
+                        Icons.person,
+                        color: AppColors.marketTextSub,
+                        size: 48,
+                      ),
                     ),
                     Positioned(
                       bottom: 2,
@@ -68,7 +73,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: AppColors.marketGreen,
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.camera_alt, color: Colors.white, size: 12),
+                        child: const Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 12,
+                        ),
                       ),
                     ),
                   ],
@@ -138,7 +147,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           color: AppColors.marketText,
                         ),
                       ),
-                      const Icon(Icons.chevron_right, color: AppColors.marketTextSub, size: 20),
+                      const Icon(
+                        Icons.chevron_right,
+                        color: AppColors.marketTextSub,
+                        size: 20,
+                      ),
                     ],
                   ),
                 ),
@@ -173,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   onChanged: (val) {
                     setState(() => _darkMode = val);
                   },
-                  activeColor: AppColors.marketGreen,
+                  activeThumbColor: AppColors.marketGreen,
                 ),
               ],
             ),
@@ -194,7 +207,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       color: AppColors.marketRed,
                     ),
                   ),
-                  const Icon(Icons.chevron_right, color: AppColors.marketRed, size: 20),
+                  const Icon(
+                    Icons.chevron_right,
+                    color: AppColors.marketRed,
+                    size: 20,
+                  ),
                 ],
               ),
             ),
@@ -220,10 +237,7 @@ class _SettingsCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         border: Border.all(color: AppColors.marketBorder),
         boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.01),
-            blurRadius: 8,
-          ),
+          BoxShadow(color: Colors.black.withValues(alpha: 0.01), blurRadius: 8),
         ],
       ),
       child: child,
