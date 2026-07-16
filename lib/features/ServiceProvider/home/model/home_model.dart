@@ -9,15 +9,23 @@ class HomeStatsModel {
     required this.reviews,
   });
 
-  factory HomeStatsModel.fromJson(Map<String, dynamic> json) {
-    return HomeStatsModel(
-      totalJobs: (json['totalJobs'] ?? 0) as int,
-      rating: (json['rating'] ?? 0).toDouble(),
-      reviews: (json['reviews'] ?? 0) as int,
+  factory HomeStatsModel.empty() {
+    return const HomeStatsModel(
+      totalJobs: 0,
+      rating: 0,
+      reviews: 0,
     );
   }
 
-  Map<String, dynamic> toJson() {
+  factory HomeStatsModel.fromMap(Map<String, dynamic> map) {
+    return HomeStatsModel(
+      totalJobs: (map['totalJobs'] ?? 0) as int,
+      rating: (map['rating'] ?? 0).toDouble(),
+      reviews: (map['reviews'] ?? 0) as int,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
     return {
       'totalJobs': totalJobs,
       'rating': rating,

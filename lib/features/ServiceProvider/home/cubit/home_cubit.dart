@@ -1,86 +1,69 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../repository/home_repository.dart';
 import '../model/home_model.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(const HomeInitial());
+  HomeCubit(this._repository) : super(const HomeInitial());
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final HomeRepository _repository;
 
-  Future<void> loadHomeData({
-    required String providerId,
-  }) async {
+  HomeStatsModel? _stats;
+
+  HomeStatsModel? get stats => _stats;
+
+  /// ===========================
+  /// Load Home Data
+  /// ===========================
+  Future<void> loadHomeData() async {
     try {
       emit(const HomeLoading());
 
-      final provider = await _firestore
-          .collection('serviceProviders')
-          .doc(providerId)
-          .get();
+      final data = await _repository.getHomeStats();
 
-      /// إذا لم يوجد مقدم الخدمة بعد
-      /// اعرض الصفحة بالقيم الافتراضية
-      if (!provider.exists) {
-        emit(
-          HomeLoaded(
-            HomeStatsModel(
-              totalJobs: 0,
-              rating: 0,
-              reviews: 0,
-            ),
-          ),
-        );
-        return;
-      }
+      _stats = data;
 
-      final data = provider.data();
-
-      if (data == null) {
-        emit(
-          HomeLoaded(
-            HomeStatsModel(
-              totalJobs: 0,
-              rating: 0,
-              reviews: 0,
-            ),
-          ),
-        );
-        return;
-      }
-
-      final stats = HomeStatsModel.fromJson(data);
-
-      emit(HomeLoaded(stats));
-    } on FirebaseException {
-      /// في حالة حدوث أي خطأ في Firebase
-      /// لا تجعل الصفحة فارغة
-      emit(
-        HomeLoaded(
-          HomeStatsModel(
-            totalJobs: 0,
-            rating: 0,
-            reviews: 0,
-          ),
-        ),
-      );
-    } catch (_) {
-      emit(
-        HomeLoaded(
-          HomeStatsModel(
-            totalJobs: 0,
-            rating: 0,
-            reviews: 0,
-          ),
-        ),
-      );
+      emit(HomeLoaded(data));
+    } catch (e) {
+      emit(HomeFailure(e.toString()));
     }
   }
 
-  Future<void> refresh(String providerId) async {
-    await loadHomeData(
-      providerId: providerId,
+  /// ===========================
+  /// Refresh
+  /// ===========================
+  Future<void> refresh() async {
+    await loadHomeData();
+  }
+
+  /// ===========================
+  /// Update Rating
+  /// ===========================
+  Future<void> updateRating({
+    required double rating,
+    required int reviews,
+  }) async {
+    if (_stats == null) return;
+
+    _stats = _stats!.copyWith(
+      rating: rating,
+      reviews: reviews,
     );
+
+    emit(HomeLoaded(_stats!));
+  }
+
+  /// ===========================
+  /// Update Total Jobs
+  /// ===========================
+  Future<void> updateTotalJobs(int totalJobs) async {
+    if (_stats == null) return;
+
+    _stats = _stats!.copyWith(
+      totalJobs: totalJobs,
+    );
+
+    emit(HomeLoaded(_stats!));
   }
 }

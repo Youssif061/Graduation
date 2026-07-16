@@ -13,18 +13,14 @@ class UploadImageCard extends StatelessWidget {
       builder: (context, state) {
         final cubit = context.read<AddProductCubit>();
 
-        final hasImages =
-            cubit.images.isNotEmpty ||
-            cubit.existingImages.isNotEmpty;
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
               "Product Images",
               style: TextStyle(
-                fontSize: 16,
                 fontWeight: FontWeight.w600,
+                fontSize: 16,
                 color: Color(0xff001A2C),
               ),
             ),
@@ -32,187 +28,210 @@ class UploadImageCard extends StatelessWidget {
             const SizedBox(height: 12),
 
             InkWell(
-              onTap: cubit.pickImages,
               borderRadius: BorderRadius.circular(16),
+              onTap: cubit.pickImages,
               child: Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: const Color(0xffEEF5FF),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: const Color(0xffCBD5E1),
-                    width: 1.5,
                   ),
                 ),
-                child: !hasImages
-                    ? SizedBox(
-                        height: 170,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const Icon(
-                              Icons.cloud_upload_outlined,
-                              size: 46,
-                              color: Color(0xff64748B),
-                            ),
-
-                            const SizedBox(height: 12),
-
-                            const Text(
-                              "Upload Product Images",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 17,
-                                color: Color(0xff001A2C),
-                              ),
-                            ),
-
-                            const SizedBox(height: 6),
-
-                            Text(
-                              "JPG, PNG or WEBP",
-                              style: TextStyle(
-                                color: Colors.grey.shade600,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            children: [
-
-                              /// Existing Images
-                              ...List.generate(
-                                cubit.existingImages.length,
-                                (index) {
-                                  return Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
-                                        child: Image.network(
-                                          cubit.existingImages[index],
-                                          width: 120,
-                                          height: 120,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: InkWell(
-                                          onTap: () {
-                                            cubit.removeExistingImage(index);
-                                          },
-                                          child: Container(
-                                            padding:
-                                                const EdgeInsets.all(4),
-                                            decoration:
-                                                const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-
-                              /// New Images
-                              ...List.generate(
-                                cubit.images.length,
-                                (index) {
-                                  final File image =
-                                      cubit.images[index];
-
-                                  return Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
-                                        child: Image.file(
-                                          image,
-                                          width: 120,
-                                          height: 120,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: InkWell(
-                                          onTap: () {
-                                            cubit.removeImage(index);
-                                          },
-                                          child: Container(
-                                            padding:
-                                                const EdgeInsets.all(4),
-                                            decoration:
-                                                const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle,
-                                            ),
-                                            child: const Icon(
-                                              Icons.close,
-                                              color: Colors.white,
-                                              size: 16,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              ),
-
-                              InkWell(
-                                onTap: cubit.pickImages,
-                                borderRadius:
-                                    BorderRadius.circular(12),
-                                child: Container(
-                                  width: 120,
-                                  height: 120,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color:
-                                          const Color(0xffCBD5E1),
-                                    ),
-                                  ),
-                                  child: const Icon(
-                                    Icons.add_a_photo,
-                                    size: 36,
-                                    color: Color(0xff001A2C),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                child: _buildContent(cubit),
               ),
             ),
           ],
         );
       },
+    );
+  }
+
+  Widget _buildContent(AddProductCubit cubit) {
+    final hasImages =
+        cubit.images.isNotEmpty || cubit.existingImages.isNotEmpty;
+
+    if (!hasImages) {
+      return SizedBox(
+        height: 180,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(
+              Icons.cloud_upload_outlined,
+              size: 50,
+              color: Color(0xff64748B),
+            ),
+
+            const SizedBox(height: 14),
+
+            const Text(
+              "Upload Product Images",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 17,
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            Text(
+              "PNG, JPG or WEBP",
+              style: TextStyle(
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+
+        /// Existing Images
+        ...List.generate(
+          cubit.existingImages.length,
+          (index) {
+            return _NetworkImage(
+              image: cubit.existingImages[index],
+              onDelete: () {
+                cubit.removeExistingImage(index);
+              },
+            );
+          },
+        ),
+
+        /// New Images
+        ...List.generate(
+          cubit.images.length,
+          (index) {
+            return _LocalImage(
+              image: cubit.images[index],
+              onDelete: () {
+                cubit.removeImage(index);
+              },
+            );
+          },
+        ),
+
+        InkWell(
+          onTap: cubit.pickImages,
+          child: Container(
+            width: 120,
+            height: 120,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: const Color(0xffCBD5E1),
+              ),
+            ),
+            child: const Icon(
+              Icons.add_a_photo,
+              size: 38,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NetworkImage extends StatelessWidget {
+  const _NetworkImage({
+    required this.image,
+    required this.onDelete,
+  });
+
+  final String image;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.network(
+            image,
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        Positioned(
+          right: 4,
+          top: 4,
+          child: GestureDetector(
+            onTap: onDelete,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(4),
+              child: const Icon(
+                Icons.close,
+                size: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _LocalImage extends StatelessWidget {
+  const _LocalImage({
+    required this.image,
+    required this.onDelete,
+  });
+
+  final File image;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: Image.file(
+            image,
+            width: 120,
+            height: 120,
+            fit: BoxFit.cover,
+          ),
+        ),
+
+        Positioned(
+          right: 4,
+          top: 4,
+          child: GestureDetector(
+            onTap: onDelete,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+              ),
+              padding: const EdgeInsets.all(4),
+              child: const Icon(
+                Icons.close,
+                size: 16,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

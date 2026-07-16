@@ -22,6 +22,20 @@ class ClientHeader extends StatelessWidget {
               width: 64,
               height: 64,
               fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) {
+                return Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF1F5F9),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Color(0xff64748B),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -56,8 +70,8 @@ class ClientHeader extends StatelessWidget {
                   Text(
                     request.reviews,
                     style: const TextStyle(
-                      color: Color(0xff64748B),
                       fontSize: 14,
+                      color: Color(0xff64748B),
                     ),
                   ),
                 ],
@@ -79,8 +93,8 @@ class ClientHeader extends StatelessWidget {
             request.formattedPrice,
             style: const TextStyle(
               color: Color(0xff15803D),
-              fontWeight: FontWeight.bold,
               fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

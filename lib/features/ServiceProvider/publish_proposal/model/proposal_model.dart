@@ -1,13 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ProposalModel {
   final String id;
 
-  /// الطلب الذي تم إرسال العرض عليه
+  /// الطلب
   final String requestId;
 
   /// مقدم الخدمة
   final String providerId;
 
-  /// صاحب الطلب (العميل)
+  /// صاحب الطلب
   final String clientId;
 
   final double price;
@@ -33,6 +35,38 @@ class ProposalModel {
     required this.createdAt,
   });
 
+  factory ProposalModel.fromJson(
+    Map<String, dynamic> json,
+    String documentId,
+  ) {
+    return ProposalModel(
+      id: documentId,
+      requestId: json['requestId'] ?? '',
+      providerId: json['providerId'] ?? '',
+      clientId: json['clientId'] ?? '',
+      price: (json['price'] ?? 0).toDouble(),
+      duration: json['duration'] ?? '',
+      message: json['message'] ?? '',
+      status: json['status'] ?? 'pending',
+      createdAt: json['createdAt'] is Timestamp
+          ? (json['createdAt'] as Timestamp).toDate()
+          : DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'requestId': requestId,
+      'providerId': providerId,
+      'clientId': clientId,
+      'price': price,
+      'duration': duration,
+      'message': message,
+      'status': status,
+      'createdAt': Timestamp.fromDate(createdAt),
+    };
+  }
+
   ProposalModel copyWith({
     String? id,
     String? requestId,
@@ -54,36 +88,6 @@ class ProposalModel {
       message: message ?? this.message,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'requestId': requestId,
-      'providerId': providerId,
-      'clientId': clientId,
-      'price': price,
-      'duration': duration,
-      'message': message,
-      'status': status,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-    };
-  }
-
-  factory ProposalModel.fromMap(Map<String, dynamic> map) {
-    return ProposalModel(
-      id: map['id'] ?? '',
-      requestId: map['requestId'] ?? '',
-      providerId: map['providerId'] ?? '',
-      clientId: map['clientId'] ?? '',
-      price: (map['price'] ?? 0).toDouble(),
-      duration: map['duration'] ?? '',
-      message: map['message'] ?? '',
-      status: map['status'] ?? 'pending',
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        map['createdAt'] ?? 0,
-      ),
     );
   }
 }

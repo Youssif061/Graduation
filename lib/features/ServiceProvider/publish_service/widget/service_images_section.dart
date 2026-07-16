@@ -7,32 +7,48 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'publish_section_card.dart';
 
 class ServiceImagesSection extends StatelessWidget {
-  const ServiceImagesSection({super.key});
+  const ServiceImagesSection({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return PublishSectionCard(
-      title: 'Attach Photos',
-      child: BlocBuilder<PublishServiceCubit, PublishServiceState>(
+      title: "Attach Photos",
+
+      child: BlocBuilder<
+          PublishServiceCubit,
+          PublishServiceState>(
         builder: (context, state) {
-          final cubit = context.read<PublishServiceCubit>();
+          final cubit =
+              context.read<PublishServiceCubit>();
 
           return Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
+
               InkWell(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius:
+                    BorderRadius.circular(16),
                 onTap: cubit.pickImages,
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
+                  padding:
+                      const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 30,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8FAFC),
-                    borderRadius: BorderRadius.circular(16),
+                    color: const Color(
+                      0xffF8FAFC,
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(16),
                     border: Border.all(
-                      color: const Color(0xFFCBD5E1),
+                      color: const Color(
+                        0xffCBD5E1,
+                      ),
                     ),
                   ),
                   child: const Column(
@@ -40,76 +56,114 @@ class ServiceImagesSection extends StatelessWidget {
                       Icon(
                         Icons.add_a_photo_outlined,
                         size: 36,
-                        color: Color(0xFF64748B),
+                        color: Color(
+                          0xff64748B,
+                        ),
                       ),
+
                       SizedBox(height: 12),
+
                       Text(
-                        'Click to upload images',
+                        "Click to upload images",
                         style: TextStyle(
-                          fontWeight: FontWeight.bold,
+                          fontWeight:
+                              FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
-                      SizedBox(height: 5),
+
+                      SizedBox(height: 6),
+
                       Text(
-                        'Show your best previous work',
-                        textAlign: TextAlign.center,
+                        "Upload images that represent your service.",
+                        textAlign:
+                            TextAlign.center,
+                        style: TextStyle(
+                          color: Color(
+                            0xff64748B,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
 
-              const SizedBox(height: 16),
+              if (cubit.images.isNotEmpty) ...[
+                const SizedBox(height: 18),
 
-              if (cubit.images.isNotEmpty)
                 SizedBox(
-                  height: 95,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: cubit.images.length,
-                    itemBuilder: (_, index) {
-                      final File image = cubit.images[index];
+                  height: 100,
 
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 10),
-                        child: Stack(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                image,
-                                width: 90,
-                                height: 90,
-                                fit: BoxFit.cover,
-                              ),
+                  child: ListView.separated(
+                    scrollDirection:
+                        Axis.horizontal,
+
+                    itemCount:
+                        cubit.images.length,
+
+                    separatorBuilder:
+                        (_, __) =>
+                            const SizedBox(
+                              width: 10,
                             ),
-                            Positioned(
-                              right: 0,
-                              child: InkWell(
-                                onTap: () {
-                                  cubit.removeImage(index);
-                                },
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    color: Colors.red,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  padding: const EdgeInsets.all(4),
-                                  child: const Icon(
-                                    Icons.close,
-                                    size: 15,
-                                    color: Colors.white,
-                                  ),
+
+                    itemBuilder:
+                        (context, index) {
+                      final File image =
+                          cubit.images[index];
+
+                      return Stack(
+                        children: [
+
+                          ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(
+                              14,
+                            ),
+                            child: Image.file(
+                              image,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          Positioned(
+                            top: 4,
+                            right: 4,
+                            child: InkWell(
+                              onTap: () {
+                                cubit.removeImage(
+                                  index,
+                                );
+                              },
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.all(
+                                  4,
+                                ),
+                                decoration:
+                                    const BoxDecoration(
+                                  color: Colors.red,
+                                  shape:
+                                      BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.close,
+                                  size: 16,
+                                  color:
+                                      Colors.white,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       );
                     },
                   ),
                 ),
+              ],
             ],
           );
         },

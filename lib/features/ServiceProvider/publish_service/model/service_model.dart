@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ServiceModel {
   final String id;
 
@@ -35,6 +37,50 @@ class ServiceModel {
     required this.createdAt,
   });
 
+  factory ServiceModel.fromMap(
+    Map<String, dynamic> map,
+    String documentId,
+  ) {
+    return ServiceModel(
+      id: documentId,
+      providerId: map["providerId"] ?? "",
+      title: map["title"] ?? "",
+      description: map["description"] ?? "",
+      images: List<String>.from(
+        map["images"] ?? [],
+      ),
+      price: (map["price"] ?? 0).toDouble(),
+      delivery: map["delivery"] ?? "",
+      transportation:
+          map["transportation"] ?? false,
+      negotiate:
+          map["negotiate"] ?? false,
+      active: map["active"] ?? true,
+      createdAt:
+          map["createdAt"] is Timestamp
+              ? (map["createdAt"] as Timestamp)
+                  .toDate()
+              : DateTime.now(),
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      "providerId": providerId,
+      "title": title,
+      "description": description,
+      "images": images,
+      "price": price,
+      "delivery": delivery,
+      "transportation": transportation,
+      "negotiate": negotiate,
+      "active": active,
+      "createdAt": Timestamp.fromDate(
+        createdAt,
+      ),
+    };
+  }
+
   ServiceModel copyWith({
     String? id,
     String? providerId,
@@ -50,50 +96,21 @@ class ServiceModel {
   }) {
     return ServiceModel(
       id: id ?? this.id,
-      providerId: providerId ?? this.providerId,
+      providerId:
+          providerId ?? this.providerId,
       title: title ?? this.title,
-      description: description ?? this.description,
+      description:
+          description ?? this.description,
       images: images ?? this.images,
       price: price ?? this.price,
       delivery: delivery ?? this.delivery,
-      transportation: transportation ?? this.transportation,
-      negotiate: negotiate ?? this.negotiate,
+      transportation:
+          transportation ?? this.transportation,
+      negotiate:
+          negotiate ?? this.negotiate,
       active: active ?? this.active,
-      createdAt: createdAt ?? this.createdAt,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      "id": id,
-      "providerId": providerId,
-      "title": title,
-      "description": description,
-      "images": images,
-      "price": price,
-      "delivery": delivery,
-      "transportation": transportation,
-      "negotiate": negotiate,
-      "active": active,
-      "createdAt": createdAt.millisecondsSinceEpoch,
-    };
-  }
-
-  factory ServiceModel.fromMap(Map<String, dynamic> map) {
-    return ServiceModel(
-      id: map["id"] ?? "",
-      providerId: map["providerId"] ?? "",
-      title: map["title"] ?? "",
-      description: map["description"] ?? "",
-      images: List<String>.from(map["images"] ?? []),
-      price: (map["price"] ?? 0).toDouble(),
-      delivery: map["delivery"] ?? "",
-      transportation: map["transportation"] ?? false,
-      negotiate: map["negotiate"] ?? false,
-      active: map["active"] ?? true,
-      createdAt: DateTime.fromMillisecondsSinceEpoch(
-        map["createdAt"] ?? 0,
-      ),
+      createdAt:
+          createdAt ?? this.createdAt,
     );
   }
 }

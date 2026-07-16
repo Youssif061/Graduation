@@ -15,131 +15,157 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isDataLoaded = false;
+  bool _loaded = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (!_isDataLoaded) {
-      _isDataLoaded = true;
+    if (_loaded) return;
 
-      /// سيتم استبدال providerId بالـ uid الحقيقي بعد ربط Firebase
-      context.read<HomeCubit>().loadHomeData(providerId: "providerId");
+    _loaded = true;
 
-      /// تحميل آخر الطلبات
-      context.read<RequestCubit>().loadRequests();
-    }
+    context.read<HomeCubit>().loadHomeData();
+
+    context.read<RequestCubit>().loadRequests();
+  }
+
+  Future<void> _refresh() async {
+    await Future.wait([
+      context.read<HomeCubit>().refresh(),
+      context.read<RequestCubit>().refreshRequests(),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<HomeCubit, HomeState>(
-        builder: (context, state) {
-          if (state is HomeLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      backgroundColor: const Color(0xffF8FAFC),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: BlocBuilder<HomeCubit, HomeState>(
+          builder: (context, state) {
+            if (state is HomeLoading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
 
-          if (state is HomeFailure) {
-            return Center(
-              child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red, fontSize: 16),
-              ),
-            );
-          }
+            if (state is HomeFailure) {
+              return ListView(
+                children: [
+                  const SizedBox(height: 180),
+                  Center(
+                    child: Column(
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 60,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          state.message,
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 20),
+                        ElevatedButton(
+                          onPressed: () {
+                            context.read<HomeCubit>().loadHomeData();
+                          },
+                          child: const Text("Retry"),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
 
-          if (state is HomeLoaded) {
-            final stats = state.stats;
+            if (state is HomeLoaded) {
+              final stats = state.stats;
 
-            return SingleChildScrollView(
-              child: Padding(
+              return ListView(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 24,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Welcome back",
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF001A2C),
+                children: [
+                  const Text(
+                    "Welcome back",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff001A2C),
+                    ),
+                  ),
+
+                  const SizedBox(height: 6),
+
+                  const Text(
+                    "Here's your professional overview for today.",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  DashboardCard(
+                    title: "TOTAL JOBS",
+                    value: stats.totalJobs.toString(),
+                    backgroundColor: const Color(0xffEBF5FF),
+                    topLeftWidget: const SizedBox(),
+                    isCentered: true,
+                  ),
+
+                  const SizedBox(height: 18),
+
+                  DashboardCard(
+                    title: "Rating",
+                    value: stats.rating.toStringAsFixed(1),
+                    backgroundColor: Colors.white,
+                    topLeftWidget: const Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                      size: 32,
+                    ),
+                    topRightWidget: const SizedBox(),
+                    bottomSubtitle: Text(
+                      "/5.0 (${stats.reviews} Reviews)",
+                      style: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
                       ),
                     ),
+                  ),
 
-                    const SizedBox(height: 6),
+                  const SizedBox(height: 30),
 
-                    const Text(
-                      "Here's your professional overview for today.",
-                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                  const Text(
+                    "Latest Client Requests",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff001A2C),
                     ),
+                  ),
 
-                    const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
-                    DashboardCard(
-                      backgroundColor: const Color(0xFFEBF5FF),
-                      title: "TOTAL JOBS",
-                      value: stats.totalJobs.toString(),
-                      topLeftWidget: const SizedBox(),
-                      isCentered: true,
-                    ),
+                  const LatestRequestsListView(),
 
-                    const SizedBox(height: 16),
+                  const SizedBox(height: 28),
 
-                    DashboardCard(
-                      backgroundColor: Colors.white,
-                      title: "Rating",
-                      value: stats.rating.toStringAsFixed(1),
-                      topLeftWidget: const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 32,
-                      ),
-                      bottomSubtitle: Text(
-                        "/5.0 (${stats.reviews} Reviews)",
-                        style: const TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey,
-                        ),
-                      ),
-                      topRightWidget: const SizedBox(),
-                    ),
+                  const PostNewServiceButton(),
+                ],
+              );
+            }
 
-                    const SizedBox(height: 30),
-
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Latest Client Requests",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF001A2C),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    const LatestRequestsListView(),
-
-                    const SizedBox(height: 24),
-
-                    const PostNewServiceButton(),
-                  ],
-                ),
-              ),
-            );
-          }
-
-          return const SizedBox.shrink();
-        },
+            return const SizedBox.shrink();
+          },
+        ),
       ),
     );
   }

@@ -1,109 +1,159 @@
+import 'package:expertisemarket/features/ServiceProvider/publish_service/cubit/publish_service_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/delivery_time_section.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/publish_service_button.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/service_description_field.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/service_images_section.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/service_price_section.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/widget/service_title_field.dart';
 import 'package:flutter/material.dart';
-
-import 'delivery_time_section.dart';
-import 'publish_service_button.dart';
-import 'service_description_field.dart';
-import 'service_images_section.dart';
-import 'service_price_section.dart';
-import 'service_title_field.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PublishServiceForm extends StatefulWidget {
-  const PublishServiceForm({super.key});
+  const PublishServiceForm({
+    super.key,
+  });
 
   @override
-  State<PublishServiceForm> createState() => _PublishServiceFormState();
+  State<PublishServiceForm> createState() =>
+      _PublishServiceFormState();
 }
 
-class _PublishServiceFormState extends State<PublishServiceForm> {
-  final titleController = TextEditingController();
+class _PublishServiceFormState
+    extends State<PublishServiceForm> {
+  final _formKey = GlobalKey<FormState>();
 
-  final descriptionController = TextEditingController();
+  late final TextEditingController
+      _titleController;
 
-  final priceController = TextEditingController();
+  late final TextEditingController
+      _descriptionController;
 
-  String delivery = 'Standard';
+  late final TextEditingController
+      _priceController;
 
-  bool transportation = false;
+  String _delivery = "Standard";
 
-  bool negotiate = false;
+  bool _transportation = false;
+
+  bool _negotiate = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _titleController =
+        TextEditingController();
+
+    _descriptionController =
+        TextEditingController();
+
+    _priceController =
+        TextEditingController();
+  }
 
   @override
   void dispose() {
-    titleController.dispose();
-    descriptionController.dispose();
-    priceController.dispose();
+    _titleController.dispose();
+
+    _descriptionController.dispose();
+
+    _priceController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 20,
-        vertical: 24,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Showcase your expertise and start\nreceiving bookings from clients.',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500,
-              color: Color(0xFF334E68),
-              height: 1.4,
+    return BlocBuilder<
+        PublishServiceCubit,
+        PublishServiceState>(
+      builder: (context, state) {
+        return Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            padding:
+                const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 24,
+            ),
+            child: Column(
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Showcase your expertise and start\nreceiving bookings from clients.",
+                  style: TextStyle(
+                    fontSize: 20,
+                    height: 1.4,
+                    color: Color(0xff334E68),
+                  ),
+                ),
+
+                const SizedBox(height: 24),
+
+                ServiceTitleField(
+                  controller:
+                      _titleController,
+                ),
+
+                ServiceDescriptionField(
+                  controller:
+                      _descriptionController,
+                ),
+
+                const ServiceImagesSection(),
+
+                DeliveryTimeSection(
+                  selected: _delivery,
+                  onChanged: (value) {
+                    setState(() {
+                      _delivery = value;
+                    });
+                  },
+                ),
+
+                ServicePriceSection(
+                  controller:
+                      _priceController,
+                  transportation:
+                      _transportation,
+                  negotiate:
+                      _negotiate,
+                  onTransportationChanged:
+                      (value) {
+                    setState(() {
+                      _transportation =
+                          value;
+                    });
+                  },
+                  onNegotiateChanged:
+                      (value) {
+                    setState(() {
+                      _negotiate = value;
+                    });
+                  },
+                ),
+
+                const SizedBox(height: 10),
+
+                PublishServiceButton(
+                  titleController:
+                      _titleController,
+                  descriptionController:
+                      _descriptionController,
+                  priceController:
+                      _priceController,
+                  delivery: _delivery,
+                  transportation:
+                      _transportation,
+                  negotiate:
+                      _negotiate,
+                ),
+              ],
             ),
           ),
-
-          const SizedBox(height: 24),
-
-          ServiceTitleField(
-            controller: titleController,
-          ),
-
-          ServiceDescriptionField(
-            controller: descriptionController,
-          ),
-
-          const ServiceImagesSection(),
-
-          DeliveryTimeSection(
-            selected: delivery,
-            onChanged: (value) {
-              setState(() {
-                delivery = value;
-              });
-            },
-          ),
-
-          ServicePriceSection(
-            controller: priceController,
-            transportation: transportation,
-            negotiate: negotiate,
-            onTransportationChanged: (value) {
-              setState(() {
-                transportation = value;
-              });
-            },
-            onNegotiateChanged: (value) {
-              setState(() {
-                negotiate = value;
-              });
-            },
-          ),
-
-          const SizedBox(height: 10),
-
-          PublishServiceButton(
-            titleController: titleController,
-            descriptionController: descriptionController,
-            priceController: priceController,
-            delivery: delivery,
-            transportation: transportation,
-            negotiate: negotiate,
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

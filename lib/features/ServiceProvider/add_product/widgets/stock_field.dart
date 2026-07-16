@@ -25,13 +25,11 @@ class StockField extends StatelessWidget {
 
         TextFormField(
           controller: cubit.stockController,
-
           keyboardType: TextInputType.number,
-
           textInputAction: TextInputAction.done,
 
           decoration: InputDecoration(
-            hintText: "0",
+            hintText: "Available Quantity",
 
             prefixIcon: const Icon(
               Icons.inventory_2_outlined,
@@ -70,11 +68,11 @@ class StockField extends StatelessWidget {
             final stock = int.tryParse(value);
 
             if (stock == null) {
-              return "Invalid stock quantity";
+              return "Invalid quantity";
             }
 
             if (stock < 0) {
-              return "Stock cannot be negative";
+              return "Quantity cannot be negative";
             }
 
             return null;

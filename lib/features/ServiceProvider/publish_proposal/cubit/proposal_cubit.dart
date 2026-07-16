@@ -1,12 +1,17 @@
 import 'package:expertisemarket/features/ServiceProvider/publish_proposal/model/proposal_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_proposal/repository/proposal_repository.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_proposal/repository/proposal_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'proposal_state.dart';
 
 class ProposalCubit extends Cubit<ProposalState> {
-  ProposalCubit() : super(const ProposalInitial());
+  ProposalCubit()
+      : repository = ProposalRepositoryImpl(),
+        super(const ProposalInitial());
 
-  /// إرسال عرض جديد
+  final ProposalRepository repository;
+
   Future<void> sendProposal({
     required String requestId,
     required String price,
@@ -27,16 +32,8 @@ class ProposalCubit extends Cubit<ProposalState> {
         createdAt: DateTime.now(),
       );
 
-      /// ======================================
-      /// Firebase Firestore
-      ///
-      /// await FirebaseFirestore.instance
-      ///     .collection('proposals')
-      ///     .add(proposal.toMap());
-      /// ======================================
-
-      await Future.delayed(
-        const Duration(seconds: 1),
+      await repository.sendProposal(
+        proposal,
       );
 
       emit(const ProposalSuccess());

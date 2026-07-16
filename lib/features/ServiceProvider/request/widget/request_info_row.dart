@@ -18,20 +18,22 @@ class RequestInfoRow extends StatelessWidget {
       children: [
         Icon(
           icon,
-          color: const Color(0xff64748B),
           size: 20,
+          color: const Color(0xff64748B),
         ),
 
         const SizedBox(width: 10),
 
         Text(
-          "$title: ",
+          '$title:',
           style: const TextStyle(
             fontSize: 15,
             fontWeight: FontWeight.w600,
             color: Color(0xff001A2C),
           ),
         ),
+
+        const SizedBox(width: 4),
 
         Expanded(
           child: Text(

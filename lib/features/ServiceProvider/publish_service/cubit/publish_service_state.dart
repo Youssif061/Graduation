@@ -4,24 +4,36 @@ sealed class PublishServiceState {
   const PublishServiceState();
 }
 
-final class PublishServiceInitial extends PublishServiceState {
+/// الحالة الابتدائية
+final class PublishServiceInitial
+    extends PublishServiceState {
   const PublishServiceInitial();
 }
 
-final class PublishServiceLoading extends PublishServiceState {
+/// أثناء رفع الصور أو نشر الخدمة
+final class PublishServiceLoading
+    extends PublishServiceState {
   const PublishServiceLoading();
 }
 
-final class PublishServiceImagesChanged extends PublishServiceState {
+/// عند تغيير الصور
+final class PublishServiceImagesChanged
+    extends PublishServiceState {
   const PublishServiceImagesChanged();
 }
 
-final class PublishServiceSuccess extends PublishServiceState {
+/// عند نجاح النشر
+final class PublishServiceSuccess
+    extends PublishServiceState {
   const PublishServiceSuccess();
 }
 
-final class PublishServiceFailure extends PublishServiceState {
+/// عند حدوث خطأ
+final class PublishServiceFailure
+    extends PublishServiceState {
   final String message;
 
-  const PublishServiceFailure(this.message);
+  const PublishServiceFailure(
+    this.message,
+  );
 }

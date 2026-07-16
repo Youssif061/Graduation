@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:expertisemarket/features/ServiceProvider/add_product/data/add_product_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +11,9 @@ part 'add_product_state.dart';
 class AddProductCubit extends Cubit<AddProductState> {
   AddProductCubit() : super(const AddProductInitial());
 
-  ///================ Controllers ================///
+  final AddProductRepository repository = AddProductRepository();
+
+  //================ Controllers =================//
 
   final nameController = TextEditingController();
 
@@ -22,24 +25,21 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   final stockController = TextEditingController();
 
-  ///================ Form =======================///
+  //================ Form =================//
 
   final formKey = GlobalKey<FormState>();
 
-  ///================ Images =====================///
+  //================ Images =================//
 
-  final ImagePicker _picker = ImagePicker();
+  final ImagePicker picker = ImagePicker();
 
-  /// الصور الجديدة المختارة من الجهاز
   final List<File> images = [];
 
-  /// الصور القديمة الموجودة على Firebase
   final List<String> existingImages = [];
 
-  /// المنتج الحالي أثناء التعديل
   ProductModel? currentProduct;
 
-  ///================ Load Product =================///
+  //================ Load Product =================//
 
   void loadProduct(ProductModel product) {
     currentProduct = product;
@@ -63,17 +63,17 @@ class AddProductCubit extends Cubit<AddProductState> {
     emit(ProductImagesChanged(List.from(images)));
   }
 
-  ///================ Pick Images =================///
+  //================ Pick Images =================//
 
   Future<void> pickImages() async {
     try {
-      final pickedImages = await _picker.pickMultiImage();
+      final picked = await picker.pickMultiImage();
 
-      if (pickedImages.isEmpty) return;
+      if (picked.isEmpty) return;
 
       images.addAll(
-        pickedImages.map(
-          (image) => File(image.path),
+        picked.map(
+          (e) => File(e.path),
         ),
       );
 
@@ -83,45 +83,46 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  ///================ Remove New Image ===============///
+  //================ Remove Image =================//
 
   void removeImage(int index) {
-    if (index < 0 || index >= images.length) return;
-
     images.removeAt(index);
 
     emit(ProductImagesChanged(List.from(images)));
   }
 
-  ///================ Remove Existing Image =========///
-
   void removeExistingImage(int index) {
-    if (index < 0 || index >= existingImages.length) return;
-
     existingImages.removeAt(index);
 
     emit(ProductImagesChanged(List.from(images)));
   }
 
-  ///================ Publish Product ===============///
+  //================ Add Product =================//
 
   Future<void> publishProduct() async {
-    try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
+    if (!formKey.currentState!.validate()) return;
 
+    try {
       emit(const AddProductLoading());
 
-      /// Upload Images To Firebase Storage
+      final imageUrls =
+          await repository.uploadImages(images);
 
-      /// Get Images Urls
-
-      /// Save Product To Firestore
-
-      await Future.delayed(
-        const Duration(seconds: 1),
+      final product = ProductModel(
+        id: "",
+        providerId: repository.providerId,
+        name: nameController.text.trim(),
+        category: categoryController.text.trim(),
+        description: descriptionController.text.trim(),
+        price: double.parse(priceController.text),
+        stock: int.parse(stockController.text),
+        images: imageUrls,
+        createdAt: DateTime.now(),
       );
+
+      await repository.addProduct(product);
+
+      clearForm();
 
       emit(const AddProductSuccess());
     } catch (e) {
@@ -129,25 +130,36 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  ///================ Update Product ===============///
+  //================ Update Product =================//
 
   Future<void> updateProduct() async {
-    try {
-      if (!formKey.currentState!.validate()) {
-        return;
-      }
+    if (!formKey.currentState!.validate()) return;
 
+    if (currentProduct == null) return;
+
+    try {
       emit(const AddProductLoading());
 
-      /// Upload New Images
+      List<String> imageUrls = List.from(existingImages);
 
-      /// Merge Existing Images + New Images
+      if (images.isNotEmpty) {
+        final uploaded =
+            await repository.uploadImages(images);
 
-      /// Update Firestore Document
+        imageUrls.addAll(uploaded);
+      }
 
-      await Future.delayed(
-        const Duration(seconds: 1),
+      final product = currentProduct!.copyWith(
+        providerId: repository.providerId,
+        name: nameController.text.trim(),
+        category: categoryController.text.trim(),
+        description: descriptionController.text.trim(),
+        price: double.parse(priceController.text),
+        stock: int.parse(stockController.text),
+        images: imageUrls,
       );
+
+      await repository.updateProduct(product);
 
       emit(const UpdateProductSuccess());
     } catch (e) {
@@ -155,7 +167,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  ///================ Clear Form ===================///
+  //================ Clear =================//
 
   void clearForm() {
     currentProduct = null;
@@ -173,8 +185,6 @@ class AddProductCubit extends Cubit<AddProductState> {
     images.clear();
 
     existingImages.clear();
-
-    emit(const AddProductInitial());
   }
 
   @override

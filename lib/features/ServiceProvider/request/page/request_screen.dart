@@ -17,17 +17,20 @@ class RequestScreen extends StatelessWidget {
       backgroundColor: const Color(0xffF8FAFC),
 
       appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        elevation: 0,
         scrolledUnderElevation: 0,
 
         leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
           icon: const Icon(
             Icons.arrow_back_ios_new,
             color: Color(0xff001A2C),
           ),
-          onPressed: () => Navigator.pop(context),
         ),
 
         title: const Text(
@@ -37,21 +40,22 @@ class RequestScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-
-        centerTitle: true,
       ),
 
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
               RequestSummaryCard(
                 request: request,
               ),
 
-              const SizedBox(height: 28),
+              const SizedBox(
+                height: 28,
+              ),
 
               const Text(
                 "Client Proposal",
@@ -62,7 +66,9 @@ class RequestScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 20),
+              const SizedBox(
+                height: 20,
+              ),
 
               RequestJobCard(
                 request: request,

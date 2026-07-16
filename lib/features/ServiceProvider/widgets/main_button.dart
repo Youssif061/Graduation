@@ -10,73 +10,107 @@ class MainButton extends StatelessWidget {
     this.height = 60,
     this.onPress,
     this.background = AppColors.primaryColor,
+    this.foreground = Colors.white,
     this.textStyle,
     this.child,
     this.icon,
     this.isLoading = false,
+    this.borderRadius = 20,
+    this.elevation = 0,
   });
 
   final String text;
 
   final double width;
-
   final double height;
 
-  /// يصبح null عند تعطيل الزر
   final VoidCallback? onPress;
 
   final Color background;
+  final Color foreground;
 
   final TextStyle? textStyle;
 
   final Widget? child;
-
-  /// أيقونة اختيارية
   final Widget? icon;
 
-  /// لإظهار مؤشر التحميل
   final bool isLoading;
+
+  final double borderRadius;
+  final double elevation;
 
   @override
   Widget build(BuildContext context) {
+    final bool enabled =
+        onPress != null && !isLoading;
+
     return SizedBox(
       width: width,
       height: height,
       child: ElevatedButton(
-        onPressed: isLoading ? null : onPress,
+        onPressed: enabled ? onPress : null,
         style: ElevatedButton.styleFrom(
-          elevation: 0,
+          elevation: elevation,
           backgroundColor: background,
-          disabledBackgroundColor: background.withOpacity(.5),
-          disabledForegroundColor: Colors.white,
+          foregroundColor: foreground,
+          disabledBackgroundColor:
+              background.withOpacity(.55),
+          disabledForegroundColor:
+              foreground.withOpacity(.8),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(
+              borderRadius,
+            ),
           ),
         ),
-        child: isLoading
-            ? const SizedBox(
-                width: 24,
-                height: 24,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2.5,
-                  color: Colors.white,
-                ),
-              )
-            : child ??
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (icon != null) ...[
-                      icon!,
-                      const SizedBox(width: 8),
-                    ],
-                    Text(
-                      text,
-                      style: textStyle ?? TextStyles.body,
+        child: AnimatedSwitcher(
+          duration: const Duration(
+            milliseconds: 250,
+          ),
+          child: isLoading
+              ? SizedBox(
+                  key: const ValueKey(
+                    'loading',
+                  ),
+                  width: 24,
+                  height: 24,
+                  child:
+                      CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: foreground,
+                  ),
+                )
+              : child ??
+                  Row(
+                    key: const ValueKey(
+                      'content',
                     ),
-                  ],
-                ),
+                    mainAxisSize:
+                        MainAxisSize.min,
+                    mainAxisAlignment:
+                        MainAxisAlignment
+                            .center,
+                    children: [
+                      if (icon != null) ...[
+                        icon!,
+                        const SizedBox(
+                          width: 8,
+                        ),
+                      ],
+                      Flexible(
+                        child: Text(
+                          text,
+                          overflow:
+                              TextOverflow
+                                  .ellipsis,
+                          style:
+                              textStyle ??
+                                  TextStyles.body,
+                        ),
+                      ),
+                    ],
+                  ),
+        ),
       ),
     );
   }

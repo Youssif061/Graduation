@@ -37,47 +37,33 @@ class ProductModel {
   ) {
     return ProductModel(
       id: documentId,
-
       providerId: json["providerId"] ?? "",
-
       name: json["name"] ?? "",
-
       category: json["category"] ?? "",
-
       description: json["description"] ?? "",
-
       price: (json["price"] ?? 0).toDouble(),
-
-      stock: json["stock"] ?? 0,
-
+      stock: (json["stock"] ?? 0) as int,
       images: List<String>.from(
         json["images"] ?? const [],
       ),
-
-      createdAt:
-          json["createdAt"] is Timestamp
-              ? (json["createdAt"] as Timestamp).toDate()
-              : DateTime.now(),
+      createdAt: json["createdAt"] is Timestamp
+          ? (json["createdAt"] as Timestamp)
+              .toDate()
+          : DateTime.now(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       "providerId": providerId,
-
       "name": name,
-
       "category": category,
-
       "description": description,
-
       "price": price,
-
       "stock": stock,
-
       "images": images,
-
-      "createdAt": Timestamp.fromDate(createdAt),
+      "createdAt":
+          Timestamp.fromDate(createdAt),
     };
   }
 
@@ -94,22 +80,43 @@ class ProductModel {
   }) {
     return ProductModel(
       id: id ?? this.id,
-
-      providerId: providerId ?? this.providerId,
-
+      providerId:
+          providerId ?? this.providerId,
       name: name ?? this.name,
-
-      category: category ?? this.category,
-
-      description: description ?? this.description,
-
+      category:
+          category ?? this.category,
+      description:
+          description ?? this.description,
       price: price ?? this.price,
-
       stock: stock ?? this.stock,
-
       images: images ?? this.images,
-
-      createdAt: createdAt ?? this.createdAt,
+      createdAt:
+          createdAt ?? this.createdAt,
     );
   }
+
+  @override
+  String toString() {
+    return '''
+ProductModel(
+  id: $id,
+  providerId: $providerId,
+  name: $name,
+  category: $category,
+  price: $price,
+  stock: $stock
+)
+''';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is ProductModel &&
+            runtimeType == other.runtimeType &&
+            id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

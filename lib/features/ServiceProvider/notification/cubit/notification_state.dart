@@ -4,31 +4,55 @@ sealed class NotificationState {
   const NotificationState();
 }
 
-/// الحالة الابتدائية
-final class NotificationInitial extends NotificationState {
+//==========================================
+// Initial
+//==========================================
+
+final class NotificationInitial
+    extends NotificationState {
   const NotificationInitial();
 }
 
-/// أثناء تحميل الإشعارات
-final class NotificationLoading extends NotificationState {
+//==========================================
+// Loading
+//==========================================
+
+final class NotificationLoading
+    extends NotificationState {
   const NotificationLoading();
 }
 
-/// أثناء التحديث (حذف أو Mark All As Read)
-final class NotificationUpdating extends NotificationState {
+//==========================================
+// Updating
+//==========================================
+
+final class NotificationUpdating
+    extends NotificationState {
   const NotificationUpdating();
 }
 
-/// عند نجاح تحميل البيانات
-final class NotificationLoaded extends NotificationState {
-  final List<NotificationModel> notifications;
+//==========================================
+// Loaded
+//==========================================
 
-  const NotificationLoaded(this.notifications);
+final class NotificationLoaded
+    extends NotificationState {
+  const NotificationLoaded({
+    required this.notifications,
+  });
+
+  final List<NotificationModel> notifications;
 }
 
-/// عند حدوث خطأ
-final class NotificationFailure extends NotificationState {
-  final String message;
+//==========================================
+// Failure
+//==========================================
 
-  const NotificationFailure(this.message);
+final class NotificationFailure
+    extends NotificationState {
+  const NotificationFailure(
+    this.message,
+  );
+
+  final String message;
 }

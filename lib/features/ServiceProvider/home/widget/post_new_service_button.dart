@@ -2,7 +2,9 @@ import 'package:expertisemarket/features/ServiceProvider/publish_service/page/pu
 import 'package:flutter/material.dart';
 
 class PostNewServiceButton extends StatelessWidget {
-  const PostNewServiceButton({super.key});
+  const PostNewServiceButton({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +42,7 @@ class PostNewServiceButton extends StatelessWidget {
                 color: Color(0xFF001A2C),
               ),
             ),
-
             const SizedBox(width: 12),
-
             const Text(
               "Post New Service",
               style: TextStyle(

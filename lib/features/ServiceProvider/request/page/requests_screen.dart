@@ -1,22 +1,33 @@
 import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/repository/request_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/widget/job_requests_header.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/widget/requests_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RequestsScreen extends StatefulWidget {
+class RequestsScreen extends StatelessWidget {
   const RequestsScreen({super.key});
 
   @override
-  State<RequestsScreen> createState() => _RequestsScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => RequestCubit(
+        repository: RequestRepository(),
+      )..loadRequests(),
+      child: const _RequestsView(),
+    );
+  }
 }
 
-class _RequestsScreenState extends State<RequestsScreen> {
-  @override
-  void initState() {
-    super.initState();
+class _RequestsView extends StatelessWidget {
+  const _RequestsView();
 
-    context.read<RequestCubit>().loadRequests();
+  Future<void> _refresh(
+    BuildContext context,
+  ) async {
+    await context
+        .read<RequestCubit>()
+        .refreshRequests();
   }
 
   @override
@@ -26,9 +37,9 @@ class _RequestsScreenState extends State<RequestsScreen> {
 
       appBar: AppBar(
         centerTitle: true,
+        elevation: 0,
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
-        elevation: 0,
         scrolledUnderElevation: 0,
         title: const Text(
           "Job Requests",
@@ -39,53 +50,126 @@ class _RequestsScreenState extends State<RequestsScreen> {
         ),
       ),
 
-      body: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const JobRequestsHeader(),
+      body: BlocBuilder<RequestCubit, RequestState>(
+        builder: (context, state) {
+          //------------------------------------------
+          // Loading
+          //------------------------------------------
 
-            const SizedBox(height: 20),
+          if (state is RequestLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-            Expanded(
-              child: BlocBuilder<RequestCubit, RequestState>(
-                builder: (context, state) {
-                  if (state is RequestLoading) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
+          //------------------------------------------
+          // Failure
+          //------------------------------------------
 
-                  if (state is RequestFailure) {
-                    return Center(
-                      child: Text(state.message),
-                    );
-                  }
+          if (state is RequestFailure) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(
+                  24,
+                ),
+                child: Column(
+                  mainAxisAlignment:
+                      MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 70,
+                    ),
 
-                  if (state is RequestLoaded) {
-                    if (state.requests.isEmpty) {
-                      return const Center(
-                        child: Text(
-                          "No Requests Yet",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      );
-                    }
+                    const SizedBox(
+                      height: 16,
+                    ),
 
-                    return RequestsListView(
-                      requests: state.requests,
-                    );
-                  }
+                    Text(
+                      state.message,
+                      textAlign:
+                          TextAlign.center,
+                    ),
 
-                  return const SizedBox();
-                },
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    ElevatedButton(
+                      onPressed: () {
+                        context
+                            .read<RequestCubit>()
+                            .loadRequests();
+                      },
+                      child: const Text(
+                        "Retry",
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            );
+          }
+
+          //------------------------------------------
+          // Loaded
+          //------------------------------------------
+
+          if (state is RequestLoaded) {
+            return RefreshIndicator(
+              onRefresh: () =>
+                  _refresh(context),
+              child: Padding(
+                padding:
+                    const EdgeInsets.all(20),
+                child: Column(
+                  children: [
+                    JobRequestsHeader(
+                      totalRequests:
+                          state.requests.length,
+                    ),
+
+                    const SizedBox(
+                      height: 20,
+                    ),
+
+                    Expanded(
+                      child:
+                          state.requests.isEmpty
+                              ? ListView(
+                                  children: const [
+                                    SizedBox(
+                                      height: 180,
+                                    ),
+                                    Center(
+                                      child: Text(
+                                        "No Requests Yet",
+                                        style:
+                                            TextStyle(
+                                          fontSize:
+                                              18,
+                                          color: Colors
+                                              .grey,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : RequestsListView(
+                                  requests:
+                                      state
+                                          .requests,
+                                ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return const SizedBox();
+        },
       ),
     );
   }

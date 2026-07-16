@@ -5,11 +5,11 @@ class InventoryHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: const [
         Text(
-          "Inventory Management",
+          "Inventory",
           style: TextStyle(
             fontSize: 30,
             fontWeight: FontWeight.bold,
@@ -17,13 +17,13 @@ class InventoryHeader extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 6),
+        SizedBox(height: 8),
 
         Text(
-          "Track, update, and manage your professional\nproduct offerings.",
+          "Manage your products, monitor stock levels, search, filter and update your inventory.",
           style: TextStyle(
             fontSize: 15,
-            height: 1.45,
+            height: 1.5,
             color: Color(0xff64748B),
           ),
         ),
