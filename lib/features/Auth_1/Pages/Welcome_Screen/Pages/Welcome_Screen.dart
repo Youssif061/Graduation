@@ -176,7 +176,7 @@ class _Welcome_ScreenState extends State<WelcomeScreen> {
                             Image: AppImages.googleSvg,
                             label: "Continue with Google",
                             ontap:
-                                () {}, // تم إبقاء اسم الخاصية كما هو معرف في الـ Widget لديك
+                                () {}, 
                           ),
                           const Gap(15),
                           Login_With(

@@ -147,14 +147,18 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
+      print("hallo");
       final GoogleSignIn googleSignIn = GoogleSignIn();
+      print("hallo1");
 
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      print("hallo2");
 
       if (googleUser == null) {
         emit(AuthInitial());
         return null;
       }
+      print("hallo3");
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
