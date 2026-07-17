@@ -1,4 +1,5 @@
-import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/category_dropdown.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/category_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/description_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/price_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/product_name_field.dart';
@@ -6,78 +7,149 @@ import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/sav
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/stock_field.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/widgets/upload_image_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddProductScreen extends StatelessWidget {
-  const AddProductScreen({super.key});
+  const AddProductScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+    return BlocProvider(
+      create: (_) => AddProductCubit(),
+      child: BlocListener<
+          AddProductCubit,
+          AddProductState>(
+        listener: (context, state) {
+          if (state is AddProductSuccess) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(
+              const SnackBar(
+                content: Text(
+                  "Product added successfully.",
+                ),
+              ),
+            );
 
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        foregroundColor: const Color(0xff001A2C),
+            if (context.mounted) {
+              Navigator.pop(
+                context,
+                true,
+              );
+            }
+          }
 
-        leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back_ios_new),
-        ),
+          if (state is AddProductFailure) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(
+              SnackBar(
+                content: Text(
+                  state.message,
+                ),
+              ),
+            );
+          }
+        },
+        child: Scaffold(
+          backgroundColor:
+              const Color(0xffF8FAFC),
 
-        centerTitle: true,
+          appBar: AppBar(
+            elevation: 0,
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            foregroundColor:
+                const Color(0xff001A2C),
+            surfaceTintColor: Colors.white,
+            scrolledUnderElevation: 0,
 
-        title: const Text(
-          "Add New Product",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-            color: Color(0xff001A2C),
+            title: const Text(
+              "Add New Product",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight:
+                    FontWeight.bold,
+              ),
+            ),
           ),
-        ),
 
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(height: 1, color: const Color(0xffE2E8F0)),
-        ),
-      ),
+          body: SafeArea(
+            child: BlocBuilder<
+                AddProductCubit,
+                AddProductState>(
+              builder: (
+                context,
+                state,
+              ) {
+                final cubit =
+                    context.read<
+                        AddProductCubit>();
 
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              UploadImageCard(),
+                return Form(
+                  key: cubit.formKey,
+                  child:
+                      SingleChildScrollView(
+                    padding:
+                        const EdgeInsets.all(
+                      20,
+                    ),
+                    child: Column(
+                      children: [
+                        const UploadImageCard(),
 
-              SizedBox(height: 24),
+                        const SizedBox(
+                          height: 24,
+                        ),
 
-              ProductNameField(),
+                        const ProductNameField(),
 
-              SizedBox(height: 20),
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-              CategoryDropdown(),
+                        const CategoryField(),
 
-              SizedBox(height: 20),
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-              DescriptionField(),
+                        const DescriptionField(),
 
-              SizedBox(height: 20),
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-              PriceField(),
+                        const PriceField(),
 
-              SizedBox(height: 20),
+                        const SizedBox(
+                          height: 20,
+                        ),
 
-              StockField(),
+                        const StockField(),
 
-              SizedBox(height: 32),
+                        const SizedBox(
+                          height: 30,
+                        ),
 
-              SaveProductButton(),
+                        if (state
+                            is AddProductLoading)
+                          const Center(
+                            child:
+                                CircularProgressIndicator(),
+                          )
+                        else
+                          const SaveProductButton(),
 
-              SizedBox(height: 30),
-            ],
+                        const SizedBox(
+                          height: 30,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),

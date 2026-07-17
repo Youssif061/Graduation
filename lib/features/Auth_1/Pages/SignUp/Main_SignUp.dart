@@ -1,17 +1,15 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/my body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_user/Pages/SignUp_for_user.dart';
-import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker_1.dart';
+import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/container__sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class Sign_up extends StatelessWidget {
   const Sign_up({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +43,10 @@ class Sign_up extends StatelessWidget {
                   Text_for_button: "Start As a User",
                   image: AppImages.Border,
                   ontap: () {
-                    pushTo(context, const SignUp_for_user());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => SignUp_for_user()),
+                    );
                   },
                 ),
                 Gap(35),
@@ -58,8 +59,17 @@ class Sign_up extends StatelessWidget {
                   Text_for_button: "Start As a Worker",
                   Title: "I Offer Services",
                   ontap: () {
+<<<<<<< HEAD
                     pushTo(context, const SignUp_for_worker_1());
                    
+=======
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SignUp_for_worker(),
+                      ),
+                    );
+>>>>>>> origin/main
                   },
                 ),
               ],

@@ -1,5 +1,8 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
+<<<<<<< HEAD
 import 'package:expertisemarket/core/functions/navigations.dart';
+=======
+>>>>>>> origin/main
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/App_Email.dart';
@@ -11,7 +14,10 @@ import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/W
 import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'package:flutter_bloc/flutter_bloc.dart';
+=======
+>>>>>>> origin/main
 import 'package:gap/gap.dart';
 
 class SignUp_for_worker_2 extends StatefulWidget {
@@ -219,6 +225,7 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                                   }
 
                                   if (_formKey.currentState!.validate()) {
+<<<<<<< HEAD
                                     if (selectedValue == null) {
                                       ScaffoldMessenger.of(
                                         context,
@@ -243,6 +250,12 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (_) =>
+=======
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+>>>>>>> origin/main
                                             const SignUp_for_worker_3(),
                                       ),
                                     );

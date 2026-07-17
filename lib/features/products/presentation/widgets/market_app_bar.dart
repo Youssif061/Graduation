@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
+import 'package:expertisemarket/core/constants/app_images.dart';
+import 'package:expertisemarket/features/products/presentation/pages/main_shell_notifier.dart';
 
 class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showHeart;
@@ -21,89 +23,86 @@ class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final canPop = Navigator.of(context).canPop();
+    final notifier = MainShellNotifier.maybeOf(context);
 
     return AppBar(
-      backgroundColor: Colors.white, // Pure white app bar as shown in mockup
+      backgroundColor: Colors.white,
       surfaceTintColor: Colors.transparent,
       elevation: 0,
       automaticallyImplyLeading: false,
-      leading: leading ?? (canPop
-          ? IconButton(
-              icon: const Icon(Icons.arrow_back, color: AppColors.marketText),
-              onPressed: () => Navigator.pop(context),
-            )
-          : null),
-      title: customTitle != null
-          ? Text(customTitle!, style: MarketTextStyles.appBarTitle)
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Green user avatar circle as seen in screen 1 mockup
-                if (!canPop)
-                  Container(
-                    width: 32,
-                    height: 32,
-                    decoration: const BoxDecoration(
-                      color: AppColors.marketGreenBadge,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.person,
-                      color: AppColors.marketGreen,
-                      size: 20,
+      leadingWidth: 60,
+      leading: leading ??
+          GestureDetector(
+            onTap: () {
+              // Switch to Profile tab (index 3) if inside MainShell,
+              // otherwise push the profile route.
+              if (notifier != null) {
+                notifier.switchTab(3);
+              } else {
+                Navigator.pushNamed(context, Routers.profile);
+              }
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: CircleAvatar(
+                radius: 22,
+                backgroundColor: AppColors.backgroundColor,
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.transparent,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.asset(
+                      AppImages.User,
+                      width: 40,
+                      height: 40,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                if (!canPop) const SizedBox(width: 10),
-                Text(
-                  canPop ? 'CraftMarket' : 'CraftMarket',
-                  style: MarketTextStyles.appBarTitle,
                 ),
-              ],
+              ),
+            ),
+          ),
+      title: customTitle != null
+          ? Text(customTitle!, style: MarketTextStyles.appBarTitle)
+          : Text(
+              'ExpertiseMarket',
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
       actions: [
-        if (showHeart && !canPop)
-          IconButton(
-            icon: const Icon(
-              Icons.favorite_border,
-              color: AppColors.marketTextSub,
-              size: 24,
-            ),
-            onPressed: () {
+        // Wishlist icon → switch to Wishlist tab (index 1)
+        IconButton(
+          icon: const Icon(
+            Icons.favorite_border,
+            color: AppColors.marketTextSub,
+            size: 24,
+          ),
+          onPressed: () {
+            if (notifier != null) {
+              notifier.switchTab(1);
+            } else {
               Navigator.pushNamed(context, Routers.wishlist);
-            },
-            
+            }
+          },
+        ),
+        // Cart icon → switch to Cart tab (index 2)
+        IconButton(
+          icon: const Icon(
+            Icons.shopping_cart_outlined,
+            color: AppColors.marketTextSub,
+            size: 24,
           ),
-           if (showCart && !canPop)
-          IconButton(
-            icon: const Icon(
-              Icons.shopping_cart_outlined,
-              color: AppColors.marketTextSub,
-              size: 24,
-            ),
-            onPressed: () {
+          onPressed: () {
+            if (notifier != null) {
+              notifier.switchTab(2);
+            } else {
               Navigator.pushNamed(context, Routers.cart);
-            },
-            
-          ),
-        if (showProfile || canPop)
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: AppColors.marketCardLight,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.marketBorder),
-            ),
-            child: const Icon(
-              Icons.person_outline,
-              color: AppColors.marketTextSub,
-              size: 20,
-            ),
-          )
-        else
-          const SizedBox(width: 4),
+            }
+          },
+        ),
+        const SizedBox(width: 8),
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1),
@@ -116,5 +115,5 @@ class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 1);
 }

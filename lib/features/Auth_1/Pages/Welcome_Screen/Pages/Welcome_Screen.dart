@@ -22,10 +22,17 @@ class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
   @override
+<<<<<<< HEAD
   State<WelcomeScreen> createState() => _Welcome_ScreenState();
 }
 
 class _Welcome_ScreenState extends State<WelcomeScreen> {
+=======
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+>>>>>>> origin/main
   final _formKey = GlobalKey<FormState>();
   bool stayLogged = false;
   final emailController = TextEditingController();
@@ -137,9 +144,13 @@ class _Welcome_ScreenState extends State<WelcomeScreen> {
                               ),
                               const Text(
                                 "Stay logged in for 30 days",
+<<<<<<< HEAD
                                 style: TextStyle(
                                   fontSize: 12,
                                 ), // تعديل بسيط لضمان حجم النص
+=======
+                                style: TextStyle(fontSize: 12), // تعديل بسيط لضمان حجم النص
+>>>>>>> origin/main
                               ),
                             ],
                           ),
@@ -175,8 +186,12 @@ class _Welcome_ScreenState extends State<WelcomeScreen> {
                           Login_With(
                             Image: AppImages.googleSvg,
                             label: "Continue with Google",
+<<<<<<< HEAD
                             ontap:
                                 () {}, 
+=======
+                            ontap: () {}, // تم إبقاء اسم الخاصية كما هو معرف في الـ Widget لديك
+>>>>>>> origin/main
                           ),
                           const Gap(15),
                           Login_With(

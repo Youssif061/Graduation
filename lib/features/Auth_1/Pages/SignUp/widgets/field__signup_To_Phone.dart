@@ -31,6 +31,7 @@ class Field_Signup_Phone extends StatelessWidget {
         ),
         const Gap(7),
         CustomTextFormField(
+          controller: controller,
           text: Description,
           prefixIcon: Icon(icon),
           Text_Styles: AppColors.cardShadowColor,

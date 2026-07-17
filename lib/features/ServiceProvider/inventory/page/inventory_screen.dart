@@ -1,65 +1,171 @@
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/add_product_screen.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_filter_row.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_header.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_list.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_search.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_stats_grid.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_filter_row.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_header.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_list.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_search.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_stats_grid.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class InventoryScreen extends StatelessWidget {
-  const InventoryScreen({super.key});
+class InventoryScreen extends StatefulWidget {
+  const InventoryScreen({
+    super.key,
+  });
+
+  @override
+  State<InventoryScreen> createState() =>
+      _InventoryScreenState();
+}
+
+class _InventoryScreenState
+    extends State<InventoryScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      context
+          .read<InventoryCubit>()
+          .loadInventory();
+    });
+  }
+
+  Future<void> _refresh() async {
+    await context
+        .read<InventoryCubit>()
+        .refresh();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8FAFC),
+      backgroundColor:
+          const Color(0xffF8FAFC),
 
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-          child: const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InventoryHeader(),
+        child: BlocBuilder<
+            InventoryCubit,
+            InventoryState>(
+          builder: (context, state) {
+            if (state
+                is InventoryLoading) {
+              return const Center(
+                child:
+                    CircularProgressIndicator(),
+              );
+            }
 
-              SizedBox(height: 24),
+            if (state
+                is InventoryFailure) {
+              return Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(
+                    20,
+                  ),
+                  child: Text(
+                    state.message,
+                    textAlign:
+                        TextAlign.center,
+                  ),
+                ),
+              );
+            }
 
-              InventoryStatsGrid(),
+            if (state
+                is InventoryLoaded) {
+              return RefreshIndicator(
+                onRefresh: _refresh,
+                child:
+                    SingleChildScrollView(
+                  physics:
+                      const AlwaysScrollableScrollPhysics(),
+                  padding:
+                      const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 18,
+                  ),
+                  child: Column(
+                    crossAxisAlignment:
+                        CrossAxisAlignment
+                            .start,
+                    children: [
+                      const InventoryHeader(),
 
-              SizedBox(height: 18),
+                      const SizedBox(
+                        height: 24,
+                      ),
 
-              InventorySearch(),
+                      InventoryStatsGrid(
+                        products:
+                            state.products,
+                      ),
 
-              SizedBox(height: 14),
+                      const SizedBox(
+                        height: 20,
+                      ),
 
-              InventoryFilterRow(),
+                      const InventorySearch(),
 
-              SizedBox(height: 22),
+                      const SizedBox(
+                        height: 14,
+                      ),
 
-              InventoryList(),
-            ],
-          ),
-        ),
-      ),
+                      const InventoryFilterRow(),
 
-      floatingActionButton: SizedBox(
-        width: 62,
-        height: 62,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => const AddProductScreen()),
-            );
+                      const SizedBox(
+                        height: 22,
+                      ),
+
+                      InventoryList(
+                        products:
+                            state.products,
+                      ),
+
+                      const SizedBox(
+                        height: 90,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            return const SizedBox();
           },
-          backgroundColor: const Color(0xFF001A2C),
-          elevation: 10,
-          shape: const CircleBorder(),
-          child: const Icon(Icons.add, size: 30, color: Colors.white),
         ),
       ),
 
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton:
+          FloatingActionButton(
+        backgroundColor:
+            const Color(0xff001A2C),
+        foregroundColor: Colors.white,
+        elevation: 8,
+        shape: const CircleBorder(),
+        child: const Icon(
+          Icons.add,
+        ),
+        onPressed: () async {
+          final result =
+              await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) =>
+                  const AddProductScreen(),
+            ),
+          );
+
+          if (result == true &&
+              context.mounted) {
+            context
+                .read<InventoryCubit>()
+                .refresh();
+          }
+        },
+      ),
     );
   }
 }

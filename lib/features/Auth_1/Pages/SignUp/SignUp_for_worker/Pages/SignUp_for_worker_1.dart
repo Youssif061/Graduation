@@ -1,6 +1,6 @@
 import 'dart:io';
+
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/app_button.dart';
@@ -193,33 +193,24 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
 
                                       if (image == null) return;
 
-                                      setState(() {
-                                        path = image.path;
-                                      });
-
-                                      try {
-                                        String imageUrl =
-                                            await CloudinaryService.uploadImage(
-                                              image.path,
-                                            );
-
-                                        context
-                                            .read<WorkerSignupCubit>()
-                                            .saveImage(imageUrl);
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Image upload failed",
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
+                        Gap(25),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                title: "Continue to Step 2",
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const SignUp_for_worker_2(),
+                                      ),
+                                    );
+                                  }
+                                },
+                                backgroundColor: AppColors.marketGreen,
                               ),
                               const Gap(15),
                               Expanded(

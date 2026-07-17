@@ -2,7 +2,10 @@ import 'package:expertisemarket/features/ServiceProvider/request/model/request_m
 import 'package:flutter/material.dart';
 
 class ClientHeader extends StatelessWidget {
-  const ClientHeader({super.key, required this.request});
+  const ClientHeader({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -11,17 +14,28 @@ class ClientHeader extends StatelessWidget {
     return Row(
       children: [
         Hero(
-          tag: request.clientName,
-          child: Container(
-            width: 64,
-            height: 64,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: const Color(0xffE2E8F0)),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image.asset(request.clientImage, fit: BoxFit.cover),
+          tag: request.id,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(16),
+            child: Image.asset(
+              request.clientImage,
+              width: 64,
+              height: 64,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) {
+                return Container(
+                  width: 64,
+                  height: 64,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffF1F5F9),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.person,
+                    color: Color(0xff64748B),
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -35,7 +49,7 @@ class ClientHeader extends StatelessWidget {
               Text(
                 request.clientName,
                 style: const TextStyle(
-                  fontSize: 19,
+                  fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: Color(0xff001A2C),
                 ),
@@ -67,17 +81,20 @@ class ClientHeader extends StatelessWidget {
         ),
 
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+          padding: const EdgeInsets.symmetric(
+            horizontal: 14,
+            vertical: 8,
+          ),
           decoration: BoxDecoration(
             color: const Color(0xffDCFCE7),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(
-            request.price,
+            request.formattedPrice,
             style: const TextStyle(
               color: Color(0xff15803D),
-              fontWeight: FontWeight.bold,
               fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),

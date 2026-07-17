@@ -1,10 +1,14 @@
+import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StockField extends StatelessWidget {
   const StockField({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cubit = context.read<AddProductCubit>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,9 +24,12 @@ class StockField extends StatelessWidget {
         const SizedBox(height: 10),
 
         TextFormField(
+          controller: cubit.stockController,
           keyboardType: TextInputType.number,
+          textInputAction: TextInputAction.done,
+
           decoration: InputDecoration(
-            hintText: "0",
+            hintText: "Available Quantity",
 
             prefixIcon: const Icon(
               Icons.inventory_2_outlined,
@@ -52,6 +59,24 @@ class StockField extends StatelessWidget {
               ),
             ),
           ),
+
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return "Please enter stock quantity";
+            }
+
+            final stock = int.tryParse(value);
+
+            if (stock == null) {
+              return "Invalid quantity";
+            }
+
+            if (stock < 0) {
+              return "Quantity cannot be negative";
+            }
+
+            return null;
+          },
         ),
       ],
     );

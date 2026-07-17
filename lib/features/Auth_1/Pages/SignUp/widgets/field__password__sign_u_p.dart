@@ -9,11 +9,18 @@ class Field_Password_SignUP extends StatelessWidget {
     super.key,
     required this.Title,
     this.controller,
+<<<<<<< HEAD
     this.validator,
   });
   final String Title;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+=======
+  });
+
+  final String Title;
+  final TextEditingController? controller;
+>>>>>>> origin/main
 
   @override
   Widget build(BuildContext context) {
@@ -27,12 +34,25 @@ class Field_Password_SignUP extends StatelessWidget {
         ),
         const Gap(7),
         CustomTextFormFieldPassword(
+          controller: controller,
           text: "••••••••",
-          prefixIcon: Icon(Icons.lock_outline),
+          prefixIcon: const Icon(Icons.lock_outline),
           Text_Color: AppColors.darkColor,
           fill_color: AppColors.backgroundColor,
+<<<<<<< HEAD
           controller: controller,
           validator: validator,
+=======
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return "Please enter your password";
+            }
+            if (value.length < 6) {
+              return "Password must be at least 6 characters";
+            }
+            return null;
+          },
+>>>>>>> origin/main
         ),
       ],
     );

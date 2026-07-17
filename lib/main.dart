@@ -1,41 +1,53 @@
-import 'package:expertisemarket/firebase_options.dart';
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'core/routes/app_router.dart';
 import 'core/routes/routers.dart';
+import 'core/styles/themes.dart';
+import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  await Firebase.initializeApp(
+    options:
+        DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'CraftMarket',
+
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: GoogleFonts.inter().fontFamily,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF00B074),
-          brightness: Brightness.light,
-        ),
-      ),
-      initialRoute: Routers.splash,
-      onGenerateRoute: AppRouter.generateRoute,
-      builder: (context, child) {
-        return MediaQuery(
-          data: MediaQuery.of(
-            context,
-          ).copyWith(textScaler: TextScaler.linear(1.0)), // hit accessibility
-          child: child!,
+
+      theme: AppThemes.lightTheme,
+
+      initialRoute: Routers.main,
+
+      onGenerateRoute:
+          AppRouter.generateRoute,
+
+      builder: (
+        context,
+        child,
+      ) {
+        return SafeArea(
+          top: false,
+          bottom: Platform.isAndroid,
+          child:
+              child ??
+              const SizedBox.shrink(),
         );
       },
     );

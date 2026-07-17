@@ -1,10 +1,13 @@
-import 'package:expertisemarket/features/ServiceProvider/publish_proposal/widgets/request_summary_card.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/model/request_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/widget/request_job_card.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/widget/request_summary_card.dart';
 import 'package:flutter/material.dart';
 
 class RequestScreen extends StatelessWidget {
-  const RequestScreen({super.key, required this.request});
+  const RequestScreen({
+    super.key,
+    required this.request,
+  });
 
   final RequestModel request;
 
@@ -14,8 +17,9 @@ class RequestScreen extends StatelessWidget {
       backgroundColor: const Color(0xffF8FAFC),
 
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        centerTitle: true,
         elevation: 0,
+        backgroundColor: Colors.white,
         surfaceTintColor: Colors.white,
         scrolledUnderElevation: 0,
 
@@ -23,33 +27,54 @@ class RequestScreen extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xff001A2C)),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: Color(0xff001A2C),
+          ),
+        ),
+
+        title: const Text(
+          "Request Details",
+          style: TextStyle(
+            color: Color(0xff001A2C),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            RequestSummaryCard(request: request),
-
-            const SizedBox(height: 28),
-
-            const Text(
-              "Client Proposal",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Color(0xff001A2C),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
+            children: [
+              RequestSummaryCard(
+                request: request,
               ),
-            ),
 
-            const SizedBox(height: 18),
+              const SizedBox(
+                height: 28,
+              ),
 
-            RequestJobCard(request: request),
-          ],
+              const Text(
+                "Client Proposal",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff001A2C),
+                ),
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
+
+              RequestJobCard(
+                request: request,
+              ),
+            ],
+          ),
         ),
       ),
     );
