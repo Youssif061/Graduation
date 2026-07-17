@@ -31,6 +31,7 @@ abstract class DummyData {
   static final List<ProductModel> featuredProducts = [
     ProductModel(
       id: 'p1',
+      providerId: 'expert_dummy',
       name: 'Elite Force 18V Hammer Drill',
       category: 'Tools',
       description:
@@ -57,9 +58,11 @@ abstract class DummyData {
         'Certifications': 'CE, UL, CSA',
       },
       thumbnails: ['assets/images/drill.png'],
+      createdAt: DateTime(2026, 1, 1),
     ),
     ProductModel(
       id: 'p2',
+      providerId: 'expert_dummy',
       name: 'MasterFix Pro Plumbing Kit',
       category: 'Plumbing',
       description:
@@ -86,9 +89,11 @@ abstract class DummyData {
         'Certifications': 'NSF, ASTM',
       },
       thumbnails: ['assets/images/plumbing.png'],
+      createdAt: DateTime(2026, 1, 1),
     ),
     ProductModel(
       id: 'p3',
+      providerId: 'expert_dummy',
       name: 'VoltGuard 9000 Tester',
       category: 'Electrical',
       description:
@@ -115,9 +120,11 @@ abstract class DummyData {
         'Certifications': 'CE, UL, CAT IV',
       },
       thumbnails: ['assets/images/tester.png'],
+      createdAt: DateTime(2026, 1, 1),
     ),
     ProductModel(
       id: 'p4',
+      providerId: 'expert_dummy',
       name: 'OmniLevel 360 Laser',
       category: 'Tools',
       description:
@@ -144,12 +151,14 @@ abstract class DummyData {
         'Certifications': 'CE, FCC, RoHS',
       },
       thumbnails: ['assets/images/laser.png'],
+      createdAt: DateTime(2026, 1, 1),
     ),
   ];
 
   // ─── Mechanic Toolkit (Product Details screen) ─────────────────
   static final ProductModel mechanicToolkit = ProductModel(
     id: 'pd1',
+    providerId: 'expert_dummy',
     name: 'Professional Master Mechanic Toolkit (152-Piece)',
     category: 'Tools',
     description:
@@ -181,12 +190,14 @@ abstract class DummyData {
       'assets/images/toolkit.png',
       'assets/images/toolkit.png',
     ],
+    createdAt: DateTime(2026, 1, 1),
   );
 
   // ─── Search Recommended ────────────────────────────────────────
   static final List<ProductModel> searchRecommended = [
     ProductModel(
       id: 'sr1',
+      providerId: 'expert_dummy',
       name: 'Titan 4500 Laser Level',
       category: 'Tools',
       description: 'Professional laser level with 4500 lumen output.',
@@ -201,9 +212,11 @@ abstract class DummyData {
       storeRating: 4.9,
       storeProducts: '150+',
       specs: {'Range': '60m', 'Weight': '1.2 kg'},
+      createdAt: DateTime(2026, 1, 1),
     ),
     ProductModel(
       id: 'sr2',
+      providerId: 'expert_dummy',
       name: 'Precision Multimeter',
       category: 'Electrical',
       description: 'High-accuracy digital multimeter for professionals.',
@@ -218,6 +231,7 @@ abstract class DummyData {
       storeRating: 4.7,
       storeProducts: '300+',
       specs: {'Display': '6000-Count', 'Weight': '0.4 kg'},
+      createdAt: DateTime(2026, 1, 1),
     ),
   ];
 

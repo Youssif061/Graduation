@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/product_cubit.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/products/data/dummy_data.dart';
@@ -44,7 +47,7 @@ class _ProductsTabState extends State<ProductsTab> {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: DummyData.categories.length,
-              separatorBuilder: (_, _) => const SizedBox(width: 8),
+              separatorBuilder: (_, __) => const SizedBox(width: 8),
               itemBuilder: (_, i) => CategoryChip(
                 label: DummyData.categories[i],
                 isSelected: _selectedCategory == i,
@@ -101,13 +104,38 @@ class _ProductsTabState extends State<ProductsTab> {
           ),
           const SizedBox(height: 16),
           // Product Cards
-          ...DummyData.featuredProducts
-              .where(
-                (p) =>
-                    _selectedCategory == 0 ||
-                    p.category == DummyData.categories[_selectedCategory],
-              )
-              .map((p) => MarketProductCard(product: p)),
+          BlocBuilder<ProductCubit, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoading) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              if (state is ProductError) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 40),
+                  child: Center(child: Text(state.message)),
+                );
+              }
+              final products = state is ProductLoaded ? state.products : <ProductModel>[];
+              final category = DummyData.categories[_selectedCategory];
+              final filtered = products.where((p) {
+                return _selectedCategory == 0 || p.category.toLowerCase() == category.toLowerCase();
+              }).toList();
+
+              if (filtered.isEmpty) {
+                return const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40),
+                  child: Center(child: Text('No products found in this category')),
+                );
+              }
+
+              return Column(
+                children: filtered.map((p) => MarketProductCard(product: p)).toList(),
+              );
+            },
+          ),
           const SizedBox(height: 20),
         ],
       ),

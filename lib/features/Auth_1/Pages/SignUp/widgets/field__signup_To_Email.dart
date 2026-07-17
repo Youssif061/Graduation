@@ -11,11 +11,13 @@ class Field_Signup extends StatelessWidget {
     required this.Title,
     required this.Description,
     required this.icon,
+    this.controller,
   });
 
   final String Title;
   final String Description;
   final IconData icon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class Field_Signup extends StatelessWidget {
         ),
         const Gap(7),
         CustomTextFormField(
+          controller: controller,
           text: Description,
           prefixIcon: Icon(icon),
           Text_Styles: AppColors.cardShadowColor,
@@ -36,10 +39,10 @@ class Field_Signup extends StatelessWidget {
 
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return "Please enter your Email";
+              return "Please enter your $Title";
             }
 
-            if (!App_Email.isEmailValid(value.trim())) {
+            if (Title.contains("Email") && !App_Email.isEmailValid(value.trim())) {
               return "Invalid Email";
             }
 

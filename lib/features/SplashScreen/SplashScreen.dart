@@ -6,6 +6,10 @@ import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/Pages/Welcome_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
+import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,11 +21,35 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 4), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const WelcomeScreen()),
-      );
+    Future.delayed(const Duration(seconds: 4), () async {
+      if (!mounted) return;
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        try {
+          final doc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+          final role = doc.data()?['role'] ?? 'user';
+          if (mounted) {
+            if (role == 'worker') {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MainAppScreen()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const MainShell()),
+              );
+            }
+            return;
+          }
+        } catch (_) {}
+      }
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const WelcomeScreen()),
+        );
+      }
     });
     super.initState();
   }

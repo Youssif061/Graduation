@@ -7,6 +7,7 @@ import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inven
 import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_stats_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/products/presentation/cubit/order_cubit.dart';
+import 'package:expertisemarket/features/products/models/product_model.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/data/dummy_data.dart';
 import 'package:expertisemarket/features/products/presentation/pages/order_success_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -15,10 +18,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final TextEditingController _addressCtrl = TextEditingController();
   int _selectedPayment = 0; // 0 = Cash on Delivery
 
-  final double _subtotal = 1798.00;
-  final double _taxes = 143.84;
-  double get _total => _subtotal + _taxes;
-
   @override
   void dispose() {
     _addressCtrl.dispose();
@@ -27,7 +26,46 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocConsumer<OrderCubit, OrderState>(
+      listener: (context, orderState) {
+        if (orderState is OrderSuccess) {
+          context.read<CartCubit>().clearCart();
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OrderSuccessScreen(order: orderState.order),
+            ),
+          );
+        }
+        if (orderState is OrderError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(orderState.message)),
+          );
+        }
+      },
+      builder: (context, orderState) {
+        final isPlacingOrder = orderState is OrderLoading;
+
+        return BlocBuilder<CartCubit, CartState>(
+          builder: (context, cartState) {
+            final List<CartItemModel> cartItems;
+            final double subtotal;
+            final double taxes;
+            final double total;
+
+            if (cartState is CartLoaded) {
+              cartItems = cartState.items;
+              subtotal = cartState.subtotal;
+              taxes = cartState.tax;
+              total = cartState.total;
+            } else {
+              cartItems = [];
+              subtotal = 0.0;
+              taxes = 0.0;
+              total = 0.0;
+            }
+
+            return Scaffold(
       backgroundColor: AppColors.marketBg,
       appBar: AppBar(
         backgroundColor: Colors.white, // White app bar as seen in mockup
@@ -193,7 +231,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         ],
                       ),
                       const SizedBox(height: 12),
-                      ...DummyData.checkoutItems.map(
+                      ...cartItems.map(
                         (item) => Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Row(
@@ -204,15 +242,25 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   width: 52,
                                   height: 52,
                                   color: const Color(0xFFF8FAFC),
-                                  child: Image.asset(
-                                    item.imageAsset,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, _, _) => const Icon(
-                                      Icons.inventory_2_outlined,
-                                      color: Color(0xFFCBD5E1),
-                                      size: 24,
-                                    ),
-                                  ),
+                                  child: item.imageAsset.startsWith('http')
+                                      ? Image.network(
+                                          item.imageAsset,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, _, _) => const Icon(
+                                            Icons.inventory_2_outlined,
+                                            color: Color(0xFFCBD5E1),
+                                            size: 24,
+                                          ),
+                                        )
+                                      : Image.asset(
+                                          item.imageAsset,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (_, _, _) => const Icon(
+                                            Icons.inventory_2_outlined,
+                                            color: Color(0xFFCBD5E1),
+                                            size: 24,
+                                          ),
+                                        ),
                                 ),
                               ),
                               const SizedBox(width: 10),
@@ -376,12 +424,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     children: [
                       _SummaryRow(
                         label: 'Subtotal',
-                        value: '\$${_subtotal.toStringAsFixed(2)}',
+                        value: '\$${subtotal.toStringAsFixed(2)}',
                       ),
                       const SizedBox(height: 8),
                       _SummaryRow(
                         label: 'Taxes',
-                        value: '\$${_taxes.toStringAsFixed(2)}',
+                        value: '\$${taxes.toStringAsFixed(2)}',
                       ),
                       const Padding(
                         padding: EdgeInsets.symmetric(vertical: 10),
@@ -398,7 +446,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             ),
                           ),
                           Text(
-                            '\$${_total.toStringAsFixed(2)}',
+                            '\$${total.toStringAsFixed(2)}',
                             style: MarketTextStyles.grandTotal.copyWith(
                               fontSize: 18,
                               color: AppColors.marketText,
@@ -414,11 +462,22 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 // Confirm button
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const OrderSuccessScreen(),
-                      ),
+                    if (cartItems.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Your cart is empty')),
+                      );
+                      return;
+                    }
+                    if (_addressCtrl.text.trim().isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Please enter a delivery address')),
+                      );
+                      return;
+                    }
+                    context.read<OrderCubit>().placeOrder(
+                      items: cartItems,
+                      address: _addressCtrl.text.trim(),
+                      paymentMethod: _selectedPayment == 0 ? 'Cash on Delivery' : 'Card',
                     );
                   },
                   child: Container(
@@ -430,22 +489,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Confirm Order',
-                          style: MarketTextStyles.buttonText.copyWith(
-                            fontSize: 15,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ],
+                      children: isPlacingOrder
+                          ? [
+                              const SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              )
+                            ]
+                          : [
+                              Text(
+                                'Confirm Order',
+                                style: MarketTextStyles.buttonText.copyWith(
+                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              const SizedBox(width: 6),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: Colors.white,
+                                size: 20,
+                              ),
+                            ],
                     ),
                   ),
                 ),
@@ -455,6 +522,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           ),
         ],
       ),
+    );
+          },
+        );
+      },
     );
   }
 }

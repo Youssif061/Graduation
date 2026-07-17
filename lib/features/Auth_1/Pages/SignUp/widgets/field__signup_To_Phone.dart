@@ -11,11 +11,13 @@ class Field_Signup_Phone extends StatelessWidget {
     required this.Title,
     required this.Description,
     required this.icon,
+    this.controller,
   });
 
   final String Title;
   final String Description;
   final IconData icon;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class Field_Signup_Phone extends StatelessWidget {
         ),
         const Gap(7),
         CustomTextFormField(
+          controller: controller,
           text: Description,
           prefixIcon: Icon(icon),
           Text_Styles: AppColors.cardShadowColor,
