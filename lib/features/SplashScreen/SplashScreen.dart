@@ -26,7 +26,10 @@ class _SplashScreenState extends State<SplashScreen> {
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         try {
-          final doc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+          final doc = await FirebaseFirestore.instance
+              .collection('users')
+              .doc(currentUser.uid)
+              .get();
           final role = doc.data()?['role'] ?? 'user';
           if (mounted) {
             if (role == 'worker') {

@@ -47,9 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (state is HomeFailure) {
@@ -65,10 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.red,
                         ),
                         const SizedBox(height: 16),
-                        Text(
-                          state.message,
-                          textAlign: TextAlign.center,
-                        ),
+                        Text(state.message, textAlign: TextAlign.center),
                         const SizedBox(height: 20),
                         ElevatedButton(
                           onPressed: () {
@@ -105,10 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const Text(
                     "Here's your professional overview for today.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
                   ),
 
                   const SizedBox(height: 24),
@@ -135,10 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     topRightWidget: const SizedBox(),
                     bottomSubtitle: Text(
                       "/5.0 (${stats.reviews} Reviews)",
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15,
-                      ),
+                      style: const TextStyle(color: Colors.grey, fontSize: 15),
                     ),
                   ),
 

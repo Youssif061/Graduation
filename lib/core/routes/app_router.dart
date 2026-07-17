@@ -13,6 +13,7 @@ import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/cart_screen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
 import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
+import 'package:expertisemarket/features/users/screens/home.dart';
 import 'package:expertisemarket/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:flutter/material.dart';
 
@@ -46,6 +47,8 @@ class AppRouter {
 
       case Routers.chat:
         return MaterialPageRoute(builder: (_) => const ChatScreen());
+      case Routers.Screens:
+        return MaterialPageRoute(builder: (_) => const Home());
 
       case Routers.profile:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
