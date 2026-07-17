@@ -59,6 +59,7 @@ class Sign_up extends StatelessWidget {
                   Title: "I Offer Services",
                   ontap: () {
                     pushTo(context, const SignUp_for_worker_1());
+                   
                   },
                 ),
               ],

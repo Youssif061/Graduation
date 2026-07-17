@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expertisemarket/core/functions/navigations.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
@@ -7,12 +8,16 @@ import 'package:expertisemarket/core/widgets/custom_text_form_field.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker_3.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Widgets/Trust_Matters.dart';
+import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class SignUp_for_worker_2 extends StatefulWidget {
-  const SignUp_for_worker_2({super.key});
+  final User? user;
+
+  const SignUp_for_worker_2({super.key, this.user});
 
   @override
   State<SignUp_for_worker_2> createState() => _SignUp_for_worker_2State();
@@ -25,7 +30,8 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
     'Carpenter',
     'HVAC Specialist',
   ];
-
+  final experienceController = TextEditingController();
+  final nationalIdController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? selectedValue;
   @override
@@ -120,9 +126,21 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                             Icons.history_edu_outlined,
                             size: 30,
                           ),
-                          text: "Enter number of Years",
+                          text: "Enter years of experience",
                           Text_Styles: AppColors.cardShadowColor,
                           fill_color: AppColors.backgroundColor,
+                          controller: experienceController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Enter years of experience";
+                            }
+
+                            if (int.tryParse(value) == null) {
+                              return "Years must be a number";
+                            }
+
+                            return null;
+                          },
                         ),
                         Gap(25),
                         Row(
@@ -163,6 +181,7 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                           text: "National ID",
                           Text_Styles: AppColors.cardShadowColor,
                           fill_color: AppColors.backgroundColor,
+                          controller: nationalIdController,
                           validator: (value) {
                             if (value == null || value.trim().isEmpty) {
                               return "Please enter your National ID";
@@ -188,10 +207,44 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                               child: AppButton(
                                 title: "Continue to Step 3",
                                 onPressed: () {
+                                  if (selectedValue == null) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          "Please select your category",
+                                        ),
+                                      ),
+                                    );
+                                    return;
+                                  }
+
                                   if (_formKey.currentState!.validate()) {
-                                    pushTo(
+                                    if (selectedValue == null) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Please choose your profession",
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    context.read<WorkerSignupCubit>().saveStep2(
+                                      category: selectedValue!,
+                                      experience: experienceController.text
+                                          .trim(),
+                                      nationalId: nationalIdController.text
+                                          .trim(),
+                                    );
+
+                                    Navigator.push(
                                       context,
-                                      const SignUp_for_worker_3(),
+                                      MaterialPageRoute(
+                                        builder: (_) =>
+                                            const SignUp_for_worker_3(),
+                                      ),
                                     );
                                   }
                                 },

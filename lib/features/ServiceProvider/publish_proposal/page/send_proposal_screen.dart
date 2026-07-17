@@ -46,7 +46,7 @@ class SendProposalScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               /// Request Summary
-              RequestSummaryCard(),
+              // RequestSummaryCard(),
 
               SizedBox(height: 24),
 

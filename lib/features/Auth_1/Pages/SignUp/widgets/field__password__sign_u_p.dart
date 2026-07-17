@@ -5,8 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class Field_Password_SignUP extends StatelessWidget {
-  const Field_Password_SignUP({super.key, required this.Title});
+  const Field_Password_SignUP({
+    super.key,
+    required this.Title,
+    this.controller,
+    this.validator,
+  });
   final String Title;
+  final TextEditingController? controller;
+  final String? Function(String?)? validator;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,6 +31,8 @@ class Field_Password_SignUP extends StatelessWidget {
           prefixIcon: Icon(Icons.lock_outline),
           Text_Color: AppColors.darkColor,
           fill_color: AppColors.backgroundColor,
+          controller: controller,
+          validator: validator,
         ),
       ],
     );

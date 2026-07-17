@@ -27,7 +27,6 @@ class Container_SignUp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 360,
-      height: 500,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: AppColors.backgroundColor,

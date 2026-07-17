@@ -76,49 +76,49 @@ class NotificationScreen extends StatelessWidget {
             const SectionHeader(title: 'Today'),
             const SizedBox(height: 12),
 
-            ActivityCard(
-              iconPath: AppImages.correctSvg,
-              title: 'Payment Received',
-              subtitle:
-                  'Transaction of \$1,200.00 for "Cloud Strategy Roadmap" was successful.',
-              time: '2h ago',
-              isVerified: true,
-            ),
-            ActivityCard(
-              iconPath: AppImages.workSvg,
-              title: 'New Proposal',
-              subtitle:
-                  'Sarah Jenkins submitted a proposal for your UI Audit Project.',
-              time: '5h ago',
-            ),
-            ActivityCard(
-              iconPath: AppImages.messageSvg,
-              title: 'New Message',
-              subtitle:
-                  '"I\'ve uploaded the revised wireframes. Let me know if the user flow matches..."',
-              time: '8h ago',
-              hasUnreadDot: true,
-            ),
+            // ActivityCard(
+            //   iconPath: AppImages.correctSvg,
+            //   title: 'Payment Received',
+            //   subtitle:
+            //       'Transaction of \$1,200.00 for "Cloud Strategy Roadmap" was successful.',
+            //   time: '2h ago',
+            //   isVerified: true,
+            // ),
+            // ActivityCard(
+            //   iconPath: AppImages.workSvg,
+            //   title: 'New Proposal',
+            //   subtitle:
+            //       'Sarah Jenkins submitted a proposal for your UI Audit Project.',
+            //   time: '5h ago',
+            // ),
+            // ActivityCard(
+            //   iconPath: AppImages.messageSvg,
+            //   title: 'New Message',
+            //   subtitle:
+            //       '"I\'ve uploaded the revised wireframes. Let me know if the user flow matches..."',
+            //   time: '8h ago',
+            //   hasUnreadDot: true,
+            // ),
 
             const SizedBox(height: 20),
 
             const SectionHeader(title: 'Earlier'),
             const SizedBox(height: 12),
 
-            ActivityCard(
-              iconPath: AppImages.inventorySvg,
-              title: 'Stock Low',
-              subtitle:
-                  'Digital Asset Bundle: "Icon Set v2.0" has less than 5 copies remaining.',
-              time: 'Yesterday',
-            ),
-            ActivityCard(
-              iconPath: AppImages.protectSvg,
-              title: 'Login Detected',
-              subtitle:
-                  'A new login was detected from Chrome on MacOS in New York, USA.',
-              time: '2 days ago',
-            ),
+            // ActivityCard(
+            //   iconPath: AppImages.inventorySvg,
+            //   title: 'Stock Low',
+            //   subtitle:
+            //       'Digital Asset Bundle: "Icon Set v2.0" has less than 5 copies remaining.',
+            //   time: 'Yesterday',
+            // ),
+            // ActivityCard(
+            //   iconPath: AppImages.protectSvg,
+            //   title: 'Login Detected',
+            //   subtitle:
+            //       'A new login was detected from Chrome on MacOS in New York, USA.',
+            //   time: '2 days ago',
+            // ),
           ],
         ),
       ),
