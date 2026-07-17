@@ -17,53 +17,75 @@ class InventoryRepositoryImpl
       get _products =>
           _firestore.collection("products");
 
-  String get _providerId {
-    final user = _auth.currentUser;
+  //--------------------------------------------------
+  // Current Provider
+  //--------------------------------------------------
 
-    if (user == null) {
-      throw Exception("User not authenticated.");
-    }
+  String? get currentProviderId =>
+      _auth.currentUser?.uid;
 
-    return user.uid;
-  }
-
-  //==========================================
+  //--------------------------------------------------
   // Load Inventory
-  //==========================================
+  //--------------------------------------------------
 
   @override
   Future<List<ProductModel>> loadInventory() async {
-    final snapshot = await _products
-        .where(
-          "providerId",
-          isEqualTo: _providerId,
-        )
-        .orderBy(
-          "createdAt",
-          descending: true,
-        )
-        .get();
+    try {
+      final providerId =
+          currentProviderId;
 
-    return snapshot.docs
-        .map(
-          (doc) => ProductModel.fromJson(
-            doc.data(),
-            doc.id,
-          ),
-        )
-        .toList();
+      // المستخدم لم يسجل دخول بعد
+      if (providerId == null) {
+        return [];
+      }
+
+      final snapshot = await _products
+          .where(
+            "providerId",
+            isEqualTo: providerId,
+          )
+          .orderBy(
+            "createdAt",
+            descending: true,
+          )
+          .get();
+
+      return snapshot.docs
+          .map(
+            (doc) => ProductModel.fromJson(
+              doc.data(),
+              doc.id,
+            ),
+          )
+          .toList();
+    } on FirebaseException {
+      return [];
+    } catch (_) {
+      return [];
+    }
   }
 
-  //==========================================
+  //--------------------------------------------------
   // Delete Product
-  //==========================================
+  //--------------------------------------------------
 
   @override
   Future<void> deleteProduct(
     String productId,
   ) async {
-    await _products
-        .doc(productId)
-        .delete();
+    try {
+      final providerId =
+          currentProviderId;
+
+      if (providerId == null) {
+        return;
+      }
+
+      await _products
+          .doc(productId)
+          .delete();
+    } catch (_) {
+      // Ignore
+    }
   }
 }

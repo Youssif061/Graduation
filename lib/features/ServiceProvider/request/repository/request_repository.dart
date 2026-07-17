@@ -20,43 +20,46 @@ class RequestRepository {
   // Current Service Provider
   //--------------------------------------------------
 
-  String get currentProviderId {
-    final user = _auth.currentUser;
-
-    if (user == null) {
-      throw Exception(
-        'User is not logged in.',
-      );
-    }
-
-    return user.uid;
-  }
+  String? get currentProviderId =>
+      _auth.currentUser?.uid;
 
   //--------------------------------------------------
   // Get Requests
   //--------------------------------------------------
 
-  Future<List<RequestModel>>
-      getRequests() async {
-    final snapshot = await _requests
-        .where(
-          'expertId',
-          isEqualTo: currentProviderId,
-        )
-        .orderBy(
-          'createdAt',
-          descending: true,
-        )
-        .get();
+  Future<List<RequestModel>> getRequests() async {
+    try {
+      final providerId = currentProviderId;
 
-    return snapshot.docs
-        .map(
-          (doc) => RequestModel.fromMap(
-            doc.data(),
-            doc.id,
-          ),
-        )
-        .toList();
+      // المستخدم غير مسجل دخول
+      if (providerId == null) {
+        return [];
+      }
+
+      final snapshot = await _requests
+          .where(
+            'expertId',
+            isEqualTo: providerId,
+          )
+          .orderBy(
+            'createdAt',
+            descending: true,
+          )
+          .get();
+
+      return snapshot.docs
+          .map(
+            (doc) => RequestModel.fromMap(
+              doc.data(),
+              doc.id,
+            ),
+          )
+          .toList();
+    } on FirebaseException {
+      return [];
+    } catch (_) {
+      return [];
+    }
   }
 
   //--------------------------------------------------
@@ -66,9 +69,17 @@ class RequestRepository {
   Future<void> acceptRequest(
     String requestId,
   ) async {
-    await _requests.doc(requestId).update({
-      'status': 'In Progress',
-    });
+    try {
+      final providerId = currentProviderId;
+
+      if (providerId == null) {
+        return;
+      }
+
+      await _requests.doc(requestId).update({
+        'status': 'In Progress',
+      });
+    } catch (_) {}
   }
 
   //--------------------------------------------------
@@ -78,7 +89,17 @@ class RequestRepository {
   Future<void> rejectRequest(
     String requestId,
   ) async {
-    await _requests.doc(requestId).delete();
+    try {
+      final providerId = currentProviderId;
+
+      if (providerId == null) {
+        return;
+      }
+
+      await _requests
+          .doc(requestId)
+          .delete();
+    } catch (_) {}
   }
 
   //--------------------------------------------------
@@ -89,9 +110,17 @@ class RequestRepository {
     required String requestId,
     required double price,
   }) async {
-    await _requests.doc(requestId).update({
-      'price': price,
-    });
+    try {
+      final providerId = currentProviderId;
+
+      if (providerId == null) {
+        return;
+      }
+
+      await _requests.doc(requestId).update({
+        'price': price,
+      });
+    } catch (_) {}
   }
 
   //--------------------------------------------------
@@ -102,9 +131,17 @@ class RequestRepository {
     required String requestId,
     required String status,
   }) async {
-    await _requests.doc(requestId).update({
-      'status': status,
-    });
+    try {
+      final providerId = currentProviderId;
+
+      if (providerId == null) {
+        return;
+      }
+
+      await _requests.doc(requestId).update({
+        'status': status,
+      });
+    } catch (_) {}
   }
 
   //--------------------------------------------------
@@ -114,16 +151,34 @@ class RequestRepository {
   Future<RequestModel?> getRequestById(
     String requestId,
   ) async {
-    final document =
-        await _requests.doc(requestId).get();
+    try {
+      final providerId = currentProviderId;
 
-    if (!document.exists) {
+      if (providerId == null) {
+        return null;
+      }
+
+      final document =
+          await _requests.doc(requestId).get();
+
+      if (!document.exists) {
+        return null;
+      }
+
+      final data = document.data();
+
+      if (data == null) {
+        return null;
+      }
+
+      return RequestModel.fromMap(
+        data,
+        document.id,
+      );
+    } on FirebaseException {
+      return null;
+    } catch (_) {
       return null;
     }
-
-    return RequestModel.fromMap(
-      document.data()!,
-      document.id,
-    );
   }
 }
