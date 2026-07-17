@@ -1,13 +1,32 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/repository/inventory_repository.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/repository/inventory_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'inventory_state.dart';
 
-class InventoryCubit extends Cubit<InventoryState> {
-  InventoryCubit() : super(const InventoryInitial());
+enum InventoryFilter {
+  all,
+  active,
+  lowStock,
+  outOfStock,
+}
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+enum InventorySort {
+  newest,
+  oldest,
+  priceLowHigh,
+  priceHighLow,
+  nameAZ,
+  nameZA,
+}
+
+class InventoryCubit extends Cubit<InventoryState> {
+  InventoryCubit()
+      : _repository = InventoryRepositoryImpl(),
+        super(const InventoryInitial());
+
+  final InventoryRepository _repository;
 
   List<ProductModel> products = [];
 
@@ -15,50 +34,24 @@ class InventoryCubit extends Cubit<InventoryState> {
 
   String searchText = "";
 
-  ///==============================
-  /// Load Inventory
-  ///==============================
+  InventoryFilter currentFilter =
+      InventoryFilter.all;
 
-  Future<void> loadInventory({
-    required String providerId,
-  }) async {
+  InventorySort currentSort =
+      InventorySort.newest;
+
+  //---------------------------------------
+  // Load Inventory
+  //---------------------------------------
+
+  Future<void> loadInventory() async {
     try {
       emit(const InventoryLoading());
 
-      final snapshot = await _firestore
-          .collection("products")
-          .where(
-            "providerId",
-            isEqualTo: providerId,
-          )
-          .orderBy(
-            "createdAt",
-            descending: true,
-          )
-          .get();
+      products =
+          await _repository.loadInventory();
 
-      products = snapshot.docs
-          .map(
-            (doc) => ProductModel.fromJson(
-              doc.data(),
-              doc.id,
-            ),
-          )
-          .toList();
-
-      filteredProducts = List.from(products);
-
-      emit(
-        InventoryLoaded(
-          filteredProducts,
-        ),
-      );
-    } on FirebaseException catch (e) {
-      emit(
-        InventoryFailure(
-          e.message ?? "Firebase Error",
-        ),
-      );
+      _applyFilters();
     } catch (e) {
       emit(
         InventoryFailure(
@@ -68,40 +61,176 @@ class InventoryCubit extends Cubit<InventoryState> {
     }
   }
 
-  ///==============================
-  /// Search
-  ///==============================
+  //---------------------------------------
+  // Refresh
+  //---------------------------------------
+
+  Future<void> refresh() async {
+    await loadInventory();
+  }
+
+  //---------------------------------------
+  // Search
+  //---------------------------------------
 
   void search(String value) {
-    searchText = value;
+    searchText = value.trim();
 
-    if (value.trim().isEmpty) {
-      filteredProducts = List.from(products);
-    } else {
-      filteredProducts = products.where((product) {
+    _applyFilters();
+  }
+
+  void clearSearch() {
+    searchText = "";
+
+    _applyFilters();
+  }
+
+  //---------------------------------------
+  // Filter
+  //---------------------------------------
+
+  void changeFilter(
+    InventoryFilter filter,
+  ) {
+    currentFilter = filter;
+
+    _applyFilters();
+  }
+
+  //---------------------------------------
+  // Sort
+  //---------------------------------------
+
+  void changeSort(
+    InventorySort sort,
+  ) {
+    currentSort = sort;
+
+    _applyFilters();
+  }
+
+  //---------------------------------------
+  // Apply Search + Filter + Sort
+  //---------------------------------------
+
+  void _applyFilters() {
+    filteredProducts =
+        List<ProductModel>.from(products);
+
+    // Search
+
+    if (searchText.isNotEmpty) {
+      filteredProducts =
+          filteredProducts.where((product) {
         return product.name
                 .toLowerCase()
                 .contains(
-                  value.toLowerCase(),
+                  searchText.toLowerCase(),
                 ) ||
             product.category
                 .toLowerCase()
                 .contains(
-                  value.toLowerCase(),
+                  searchText.toLowerCase(),
                 );
       }).toList();
     }
 
+    // Filter
+
+    switch (currentFilter) {
+      case InventoryFilter.all:
+        break;
+
+      case InventoryFilter.active:
+        filteredProducts =
+            filteredProducts.where(
+          (product) {
+            return product.stock > 0;
+          },
+        ).toList();
+        break;
+
+      case InventoryFilter.lowStock:
+        filteredProducts =
+            filteredProducts.where(
+          (product) {
+            return product.stock > 0 &&
+                product.stock <= 5;
+          },
+        ).toList();
+        break;
+
+      case InventoryFilter.outOfStock:
+        filteredProducts =
+            filteredProducts.where(
+          (product) {
+            return product.stock == 0;
+          },
+        ).toList();
+        break;
+    }
+
+    // Sort
+        switch (currentSort) {
+      case InventorySort.newest:
+        filteredProducts.sort(
+          (a, b) =>
+              b.createdAt.compareTo(a.createdAt),
+        );
+        break;
+
+      case InventorySort.oldest:
+        filteredProducts.sort(
+          (a, b) =>
+              a.createdAt.compareTo(b.createdAt),
+        );
+        break;
+
+      case InventorySort.priceLowHigh:
+        filteredProducts.sort(
+          (a, b) =>
+              a.price.compareTo(b.price),
+        );
+        break;
+
+      case InventorySort.priceHighLow:
+        filteredProducts.sort(
+          (a, b) =>
+              b.price.compareTo(a.price),
+        );
+        break;
+
+      case InventorySort.nameAZ:
+        filteredProducts.sort(
+          (a, b) =>
+              a.name.toLowerCase().compareTo(
+                    b.name.toLowerCase(),
+                  ),
+        );
+        break;
+
+      case InventorySort.nameZA:
+        filteredProducts.sort(
+          (a, b) =>
+              b.name.toLowerCase().compareTo(
+                    a.name.toLowerCase(),
+                  ),
+        );
+        break;
+    }
+
     emit(
       InventoryLoaded(
-        filteredProducts,
+        products: List<ProductModel>.from(
+          filteredProducts,
+        ),
       ),
     );
   }
 
-  ///==============================
-  /// Delete Product
-  ///==============================
+  //---------------------------------------
+  // Delete Product
+  //---------------------------------------
 
   Future<void> deleteProduct(
     String productId,
@@ -109,30 +238,16 @@ class InventoryCubit extends Cubit<InventoryState> {
     try {
       emit(const InventoryDeleting());
 
-      await _firestore
-          .collection("products")
-          .doc(productId)
-          .delete();
+      await _repository.deleteProduct(
+        productId,
+      );
 
       products.removeWhere(
-        (e) => e.id == productId,
+        (product) =>
+            product.id == productId,
       );
 
-      filteredProducts.removeWhere(
-        (e) => e.id == productId,
-      );
-
-      emit(
-        InventoryLoaded(
-          filteredProducts,
-        ),
-      );
-    } on FirebaseException catch (e) {
-      emit(
-        InventoryFailure(
-          e.message ?? "Delete Failed",
-        ),
-      );
+      _applyFilters();
     } catch (e) {
       emit(
         InventoryFailure(
@@ -140,13 +255,5 @@ class InventoryCubit extends Cubit<InventoryState> {
         ),
       );
     }
-  }
-
-  Future<void> refresh(
-    String providerId,
-  ) async {
-    await loadInventory(
-      providerId: providerId,
-    );
   }
 }

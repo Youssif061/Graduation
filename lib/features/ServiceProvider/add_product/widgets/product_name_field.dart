@@ -25,15 +25,10 @@ class ProductNameField extends StatelessWidget {
 
         TextFormField(
           controller: cubit.nameController,
-
           textInputAction: TextInputAction.next,
 
           decoration: InputDecoration(
-            hintText: "e.g. Industrial Drill Kit",
-
-            hintStyle: TextStyle(
-              color: Colors.grey.shade500,
-            ),
+            hintText: "Enter Product Name",
 
             filled: true,
             fillColor: Colors.white,

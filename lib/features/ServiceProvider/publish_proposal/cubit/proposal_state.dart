@@ -4,29 +4,51 @@ sealed class ProposalState {
   const ProposalState();
 }
 
-/// الحالة الابتدائية
-final class ProposalInitial extends ProposalState {
+//==========================================
+// Initial
+//==========================================
+
+final class ProposalInitial
+    extends ProposalState {
   const ProposalInitial();
 }
 
-/// عند تغيير أي قيمة داخل الفورم
-final class ProposalFormChanged extends ProposalState {
+//==========================================
+// Form Changed
+//==========================================
+
+final class ProposalFormChanged
+    extends ProposalState {
   const ProposalFormChanged();
 }
 
-/// أثناء إرسال الـ Proposal
-final class ProposalLoading extends ProposalState {
+//==========================================
+// Loading
+//==========================================
+
+final class ProposalLoading
+    extends ProposalState {
   const ProposalLoading();
 }
 
-/// عند نجاح الإرسال
-final class ProposalSuccess extends ProposalState {
+//==========================================
+// Success
+//==========================================
+
+final class ProposalSuccess
+    extends ProposalState {
   const ProposalSuccess();
 }
 
-/// عند حدوث خطأ
-final class ProposalFailure extends ProposalState {
-  final String message;
+//==========================================
+// Failure
+//==========================================
 
-  const ProposalFailure(this.message);
+final class ProposalFailure
+    extends ProposalState {
+  const ProposalFailure(
+    this.message,
+  );
+
+  final String message;
 }

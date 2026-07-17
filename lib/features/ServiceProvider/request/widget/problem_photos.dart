@@ -33,29 +33,44 @@ class ProblemPhotos extends StatelessWidget {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: images.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 12),
+            separatorBuilder: (_, __) =>
+                const SizedBox(width: 12),
             itemBuilder: (context, index) {
               return ClipRRect(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius:
+                    BorderRadius.circular(16),
                 child: Image.asset(
                   images[index],
                   width: 95,
                   height: 95,
                   fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) {
+                  errorBuilder:
+                      (_, __, ___) {
                     return Container(
                       width: 95,
                       height: 95,
-                      decoration: BoxDecoration(
-                        color: const Color(0xffF1F5F9),
-                        borderRadius: BorderRadius.circular(16),
+                      decoration:
+                          BoxDecoration(
+                        color: const Color(
+                          0xffF1F5F9,
+                        ),
+                        borderRadius:
+                            BorderRadius
+                                .circular(
+                          16,
+                        ),
                         border: Border.all(
-                          color: const Color(0xffCBD5E1),
+                          color: const Color(
+                            0xffCBD5E1,
+                          ),
                         ),
                       ),
                       child: const Icon(
-                        Icons.image_not_supported_outlined,
-                        color: Color(0xff64748B),
+                        Icons
+                            .image_not_supported_outlined,
+                        color: Color(
+                          0xff64748B,
+                        ),
                         size: 32,
                       ),
                     );

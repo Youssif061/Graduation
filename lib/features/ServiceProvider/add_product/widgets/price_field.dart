@@ -25,15 +25,11 @@ class PriceField extends StatelessWidget {
 
         TextFormField(
           controller: cubit.priceController,
-
-          keyboardType: const TextInputType.numberWithOptions(
-            decimal: true,
-          ),
-
+          keyboardType: const TextInputType.numberWithOptions(decimal: true),
           textInputAction: TextInputAction.next,
 
           decoration: InputDecoration(
-            hintText: "\$0.00",
+            hintText: "Product Price",
 
             prefixIcon: const Icon(
               Icons.attach_money,
@@ -66,7 +62,7 @@ class PriceField extends StatelessWidget {
 
           validator: (value) {
             if (value == null || value.trim().isEmpty) {
-              return "Please enter price";
+              return "Please enter product price";
             }
 
             final price = double.tryParse(value);

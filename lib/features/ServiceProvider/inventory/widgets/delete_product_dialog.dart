@@ -4,58 +4,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DeleteProductDialog {
-  static void show(
+  const DeleteProductDialog._();
+
+  static Future<void> show(
     BuildContext context,
     ProductModel product,
-  ) {
-    showDialog(
+  ) async {
+    final bool? result = await showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (_) {
         return AlertDialog(
           backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(18),
           ),
-
           title: const Text(
             "Delete Product",
           ),
-
           content: Text(
             "Are you sure you want to delete '${product.name}'?\n\nThis action cannot be undone.",
           ),
-
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.pop(context, false);
               },
-              child: const Text("Cancel"),
+              child: const Text(
+                "Cancel",
+              ),
             ),
-
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
               ),
-
-              onPressed: () async {
-                Navigator.pop(context);
-
-                await context
-                    .read<InventoryCubit>()
-                    .deleteProduct(product.id);
-
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text(
-                        "Product Deleted Successfully",
-                      ),
-                    ),
-                  );
-                }
+              onPressed: () {
+                Navigator.pop(context, true);
               },
-
               child: const Text(
                 "Delete",
               ),
@@ -63,6 +49,40 @@ class DeleteProductDialog {
           ],
         );
       },
+    );
+
+    if (result != true || !context.mounted) {
+      return;
+    }
+
+    final cubit = context.read<InventoryCubit>();
+
+    await cubit.deleteProduct(
+      product.id,
+    );
+
+    if (!context.mounted) return;
+
+    final state = cubit.state;
+
+    if (state is InventoryFailure) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            state.message,
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text(
+          "Product deleted successfully.",
+        ),
+      ),
     );
   }
 }

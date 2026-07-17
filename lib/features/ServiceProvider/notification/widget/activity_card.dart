@@ -15,7 +15,12 @@ class ActivityCard extends StatelessWidget {
   final NotificationModel notification;
 
   String get timeText {
-    final difference = DateTime.now().difference(notification.createdAt);
+    final difference =
+        DateTime.now().difference(notification.createdAt);
+
+    if (difference.inMinutes < 1) {
+      return "Just now";
+    }
 
     if (difference.inMinutes < 60) {
       return "${difference.inMinutes}m ago";
@@ -63,14 +68,15 @@ class ActivityCard extends StatelessWidget {
 
       background: Container(
         alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 25),
+        padding: const EdgeInsets.only(right: 24),
         decoration: BoxDecoration(
           color: Colors.red,
           borderRadius: BorderRadius.circular(16),
         ),
         child: const Icon(
-          Icons.delete,
+          Icons.delete_outline,
           color: Colors.white,
+          size: 28,
         ),
       ),
 
@@ -83,8 +89,11 @@ class ActivityCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
 
+        padding: const EdgeInsets.all(16),
+
         decoration: BoxDecoration(
           color: Colors.white,
+
           borderRadius: BorderRadius.circular(16),
 
           boxShadow: [
@@ -96,113 +105,124 @@ class ActivityCard extends StatelessWidget {
           ],
         ),
 
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
+          children: [
 
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            Container(
+              width: 64,
+              height: 64,
 
-            children: [
-
-              Container(
-                padding: const EdgeInsets.all(12),
-
-                decoration: BoxDecoration(
-                  color: AppColors.backgroundColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-
-                child: SvgPicture.asset(
-                  iconPath,
-                  width: 42,
-                  height: 42,
-                ),
+              decoration: BoxDecoration(
+                color: AppColors.backgroundColor,
+                borderRadius:
+                    BorderRadius.circular(12),
               ),
 
-              const SizedBox(width: 16),
+              child: Center(
+                child: SvgPicture.asset(
+                  iconPath,
+                  width: 34,
+                  height: 34,
+                ),
+              ),
+            ),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(width: 16),
 
-                  children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                children: [
 
-                    Row(
-                      children: [
+                  Row(
+                    children: [
 
-                        Expanded(
-                          child: Text(
-                            notification.title,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.darkColor,
-                            ),
+                      Expanded(
+                        child: Text(
+                          notification.title,
+                          style:
+                              const TextStyle(
+                            fontSize: 16,
+                            fontWeight:
+                                FontWeight.bold,
+                            color:
+                                AppColors.darkColor,
                           ),
                         ),
-
-                        if (!notification.isRead)
-                          Container(
-                            width: 8,
-                            height: 8,
-                            decoration: const BoxDecoration(
-                              color: Colors.green,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
-
-                        const SizedBox(width: 8),
-
-                        Text(
-                          timeText,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.greyColor,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      notification.message,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        color: AppColors.darkGreyColor,
-                        height: 1.5,
                       ),
-                    ),
 
-                    if (notification.isVerified) ...[
-                      const SizedBox(height: 10),
-
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-
-                        decoration: BoxDecoration(
-                          color: const Color(0xffE8F7EE),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-
-                        child: const Text(
-                          "VERIFIED",
-                          style: TextStyle(
-                            color: Color(0xff27AE60),
-                            fontWeight: FontWeight.bold,
-                            fontSize: 10,
+                      if (!notification.isRead)
+                        Container(
+                          width: 8,
+                          height: 8,
+                          decoration:
+                              const BoxDecoration(
+                            color: Colors.green,
+                            shape: BoxShape.circle,
                           ),
+                        ),
+
+                      const SizedBox(width: 8),
+
+                      Text(
+                        timeText,
+                        style:
+                            const TextStyle(
+                          fontSize: 12,
+                          color: AppColors.greyColor,
                         ),
                       ),
                     ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Text(
+                    notification.message,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color:
+                          AppColors.darkGreyColor,
+                      height: 1.5,
+                    ),
+                  ),
+
+                  if (notification.isVerified) ...[
+                    const SizedBox(height: 12),
+
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 5,
+                      ),
+
+                      decoration: BoxDecoration(
+                        color:
+                            const Color(0xffE8F7EE),
+                        borderRadius:
+                            BorderRadius.circular(6),
+                      ),
+
+                      child: const Text(
+                        "VERIFIED",
+                        style: TextStyle(
+                          color:
+                              Color(0xff27AE60),
+                          fontWeight:
+                              FontWeight.bold,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
                   ],
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

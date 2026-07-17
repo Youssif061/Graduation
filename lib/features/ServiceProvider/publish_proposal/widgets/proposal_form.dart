@@ -15,17 +15,24 @@ class ProposalForm extends StatefulWidget {
   final RequestModel request;
 
   @override
-  State<ProposalForm> createState() => _ProposalFormState();
+  State<ProposalForm> createState() =>
+      _ProposalFormState();
 }
 
-class _ProposalFormState extends State<ProposalForm> {
+class _ProposalFormState
+    extends State<ProposalForm> {
   final _formKey = GlobalKey<FormState>();
 
-  final priceController = TextEditingController();
+  final TextEditingController
+      priceController =
+      TextEditingController();
 
-  final messageController = TextEditingController();
+  final TextEditingController
+      messageController =
+      TextEditingController();
 
-  String selectedDuration = "Less than 1 week";
+  String selectedDuration =
+      "Less than 1 week";
 
   @override
   void dispose() {
@@ -34,107 +41,146 @@ class _ProposalFormState extends State<ProposalForm> {
     super.dispose();
   }
 
+  void _sendProposal() {
+    if (!_formKey.currentState!.validate()) {
+      return;
+    }
+
+    context.read<ProposalCubit>().sendProposal(
+          requestId: widget.request.id,
+          price: priceController.text.trim(),
+          duration: selectedDuration,
+          message:
+              messageController.text.trim(),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<ProposalCubit>();
-
-    return BlocBuilder<ProposalCubit, ProposalState>(
+    return BlocBuilder<
+        ProposalCubit,
+        ProposalState>(
       builder: (context, state) {
-        final isLoading = state is ProposalLoading;
+        final isLoading =
+            state is ProposalLoading;
 
         return Form(
           key: _formKey,
           child: Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding:
+                const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius:
+                  BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(.04),
+                  color: Colors.black
+                      .withOpacity(.04),
                   blurRadius: 10,
-                  offset: const Offset(0, 4),
+                  offset:
+                      const Offset(0, 4),
                 ),
               ],
             ),
-
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 const Text(
                   "Your Proposal",
                   style: TextStyle(
                     fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff001A2C),
+                    fontWeight:
+                        FontWeight.bold,
+                    color:
+                        Color(0xff001A2C),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(
+                    height: 24),
 
                 const Text(
                   "Fixed Price (\$)",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(
+                    height: 10),
 
                 CustomTextField(
-                  controller: priceController,
+                  controller:
+                      priceController,
                   hint: "\$2500",
-                  keyboardType: TextInputType.number,
+                  keyboardType:
+                      TextInputType.number,
                 ),
 
-                const SizedBox(height: 12),
+                const SizedBox(
+                    height: 12),
 
                 const Text(
                   "Client will see the total amount inclusive of platform fees.",
                   style: TextStyle(
-                    color: Color(0xff64748B),
+                    color:
+                        Color(0xff64748B),
                   ),
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(
+                    height: 24),
 
                 const Text(
                   "Estimated Duration",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(
+                    height: 10),
 
                 DurationDropdown(
-                  value: selectedDuration,
+                  value:
+                      selectedDuration,
                   onChanged: (value) {
-                    if (value != null) {
-                      setState(() {
-                        selectedDuration = value;
-                      });
+                    if (value == null) {
+                      return;
                     }
+
+                    setState(() {
+                      selectedDuration =
+                          value;
+                    });
                   },
                 ),
 
-                const SizedBox(height: 24),
+                const SizedBox(
+                    height: 24),
 
                 const Text(
                   "Proposal Message",
                   style: TextStyle(
-                    fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
 
-                const SizedBox(height: 10),
+                const SizedBox(
+                    height: 10),
 
                 CustomTextField(
-                  controller: messageController,
+                  controller:
+                      messageController,
                   hint:
                       "Describe your approach, experience, and why you're the perfect fit for this project...",
                   maxLines: 6,
@@ -143,56 +189,31 @@ class _ProposalFormState extends State<ProposalForm> {
                   },
                 ),
 
-                const SizedBox(height: 8),
+                const SizedBox(
+                    height: 8),
 
                 Row(
                   mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                      MainAxisAlignment
+                          .spaceBetween,
                   children: [
                     const Text(
                       "Minimum 100 characters",
                     ),
-
                     Text(
                       "${messageController.text.length}/5000",
                     ),
                   ],
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(
+                    height: 30),
 
                 SendProposalButton(
-                  isLoading: isLoading,
-                  onPressed: () {
-                    if (priceController.text.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Please enter your price",
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-
-                    if (messageController.text.trim().length < 100) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            "Proposal must be at least 100 characters",
-                          ),
-                        ),
-                      );
-                      return;
-                    }
-
-                    cubit.sendProposal(
-                      requestId: widget.request.id,
-                      price: priceController.text,
-                      duration: selectedDuration,
-                      message: messageController.text.trim(),
-                    );
-                  },
+                  isLoading:
+                      isLoading,
+                  onPressed:
+                      _sendProposal,
                 ),
               ],
             ),

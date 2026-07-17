@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-class JobRequestsHeader extends StatelessWidget {
+class JobRequestsHeader
+    extends StatelessWidget {
   const JobRequestsHeader({
     super.key,
     this.totalRequests,
@@ -8,6 +9,7 @@ class JobRequestsHeader extends StatelessWidget {
   });
 
   final int? totalRequests;
+
   final VoidCallback? onSortPressed;
 
   @override
@@ -21,47 +23,62 @@ class JobRequestsHeader extends StatelessWidget {
                 : "$totalRequests Available Requests",
             style: const TextStyle(
               fontSize: 22,
-              fontWeight: FontWeight.bold,
+              fontWeight:
+                  FontWeight.bold,
               color: Color(0xff001A2C),
             ),
           ),
         ),
 
         InkWell(
-          borderRadius: BorderRadius.circular(12),
           onTap: onSortPressed,
+          borderRadius:
+              BorderRadius.circular(12),
           child: Container(
-            padding: const EdgeInsets.symmetric(
+            padding:
+                const EdgeInsets.symmetric(
               horizontal: 12,
               vertical: 10,
             ),
             decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius:
+                  BorderRadius.circular(
+                12,
+              ),
               border: Border.all(
-                color: const Color(0xffE2E8F0),
+                color: const Color(
+                  0xffE2E8F0,
+                ),
               ),
             ),
-            child: Row(
+            child: const Row(
               children: [
-                const Icon(
+                Icon(
                   Icons.sort,
                   size: 18,
-                  color: Color(0xff64748B),
+                  color: Color(
+                    0xff64748B,
+                  ),
                 ),
-                const SizedBox(width: 6),
-                const Text(
+                SizedBox(width: 6),
+                Text(
                   "Latest",
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xff64748B),
+                    color: Color(
+                      0xff64748B,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 4),
-                const Icon(
-                  Icons.keyboard_arrow_down,
+                SizedBox(width: 4),
+                Icon(
+                  Icons
+                      .keyboard_arrow_down,
                   size: 18,
-                  color: Color(0xff64748B),
+                  color: Color(
+                    0xff64748B,
+                  ),
                 ),
               ],
             ),

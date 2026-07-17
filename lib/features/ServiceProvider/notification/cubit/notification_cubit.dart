@@ -1,43 +1,80 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expertisemarket/features/ServiceProvider/notification/model/notification_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/notification/repository/notification_repository.dart';
+import 'package:expertisemarket/features/ServiceProvider/notification/repository/notification_repository_impl.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../model/notification_model.dart';
 
 part 'notification_state.dart';
 
 class NotificationCubit extends Cubit<NotificationState> {
-  NotificationCubit() : super(const NotificationInitial());
+  NotificationCubit()
+      : _repository = NotificationRepositoryImpl(),
+        super(const NotificationInitial());
 
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final NotificationRepository _repository;
 
-  /// جميع الإشعارات
   List<NotificationModel> notifications = [];
 
-  ///===============================================
-  /// Load Notifications
-  ///===============================================
+  //------------------------------------------
+  // Load Notifications
+  //------------------------------------------
 
   Future<void> loadNotifications() async {
     try {
       emit(const NotificationLoading());
 
-      final snapshot = await _firestore
-          .collection("notifications")
-          .orderBy("createdAt", descending: true)
-          .get();
+      notifications =
+          await _repository.loadNotifications();
 
-      notifications = snapshot.docs
+      emit(
+        NotificationLoaded(
+          notifications:
+              List<NotificationModel>.from(
+            notifications,
+          ),
+        ),
+      );
+    } catch (e) {
+      emit(
+        NotificationFailure(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+  //------------------------------------------
+  // Refresh
+  //------------------------------------------
+
+  Future<void> refresh() async {
+    await loadNotifications();
+  }
+
+  //------------------------------------------
+  // Mark All As Read
+  //------------------------------------------
+
+  Future<void> markAllAsRead() async {
+    try {
+      emit(const NotificationUpdating());
+
+      await _repository.markAllAsRead();
+
+      notifications = notifications
           .map(
-            (doc) => NotificationModel.fromJson(
-              doc.data(),
-              doc.id,
+            (notification) =>
+                notification.copyWith(
+              isRead: true,
             ),
           )
           .toList();
 
       emit(
         NotificationLoaded(
-          List.from(notifications),
+          notifications:
+              List<NotificationModel>.from(
+            notifications,
+          ),
         ),
       );
     } catch (e) {
@@ -49,61 +86,32 @@ class NotificationCubit extends Cubit<NotificationState> {
     }
   }
 
-  ///===============================================
-  /// Mark All As Read
-  ///===============================================
+  //------------------------------------------
+  // Delete Notification
+  //------------------------------------------
 
-  Future<void> markAllAsRead() async {
+  Future<void> deleteNotification(
+    String notificationId,
+  ) async {
     try {
       emit(const NotificationUpdating());
 
-      final batch = _firestore.batch();
-
-      for (final notification in notifications) {
-        if (!notification.isRead) {
-          batch.update(
-            _firestore
-                .collection("notifications")
-                .doc(notification.id),
-            {
-              "isRead": true,
-            },
-          );
-        }
-      }
-
-      await batch.commit();
-
-      await loadNotifications();
-    } catch (e) {
-      emit(
-        NotificationFailure(
-          e.toString(),
-        ),
+      await _repository.deleteNotification(
+        notificationId,
       );
-    }
-  }
-
-  ///===============================================
-  /// Delete Notification
-  ///===============================================
-
-  Future<void> deleteNotification(String id) async {
-    try {
-      emit(const NotificationUpdating());
-
-      await _firestore
-          .collection("notifications")
-          .doc(id)
-          .delete();
 
       notifications.removeWhere(
-        (element) => element.id == id,
+        (notification) =>
+            notification.id ==
+            notificationId,
       );
 
       emit(
         NotificationLoaded(
-          List.from(notifications),
+          notifications:
+              List<NotificationModel>.from(
+            notifications,
+          ),
         ),
       );
     } catch (e) {
@@ -113,13 +121,5 @@ class NotificationCubit extends Cubit<NotificationState> {
         ),
       );
     }
-  }
-
-  ///===============================================
-  /// Refresh
-  ///===============================================
-
-  Future<void> refresh() async {
-    await loadNotifications();
   }
 }

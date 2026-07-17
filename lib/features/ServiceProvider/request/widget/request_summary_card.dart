@@ -23,7 +23,8 @@ class RequestSummaryCard extends StatelessWidget {
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
           Text(
             request.title,
@@ -34,24 +35,29 @@ class RequestSummaryCard extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 18),
+          const SizedBox(height: 20),
 
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
               color: const Color(0xffF8FAFC),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius:
+                  BorderRadius.circular(16),
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment:
+                  CrossAxisAlignment.start,
               children: [
                 const Text(
                   "Client Request Summary",
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff001A2C),
+                    fontWeight:
+                        FontWeight.bold,
+                    color: Color(
+                      0xff001A2C,
+                    ),
                   ),
                 ),
 
@@ -62,7 +68,9 @@ class RequestSummaryCard extends StatelessWidget {
                   style: const TextStyle(
                     fontSize: 15,
                     height: 1.6,
-                    color: Color(0xff64748B),
+                    color: Color(
+                      0xff64748B,
+                    ),
                   ),
                 ),
               ],
@@ -72,7 +80,7 @@ class RequestSummaryCard extends StatelessWidget {
           const SizedBox(height: 20),
 
           RequestInfoRow(
-            icon: Icons.attach_money_rounded,
+            icon: Icons.attach_money,
             title: "Budget",
             value: request.budget,
           ),
@@ -80,7 +88,7 @@ class RequestSummaryCard extends StatelessWidget {
           const SizedBox(height: 14),
 
           RequestInfoRow(
-            icon: Icons.schedule_rounded,
+            icon: Icons.schedule,
             title: "Timeline",
             value: request.timeline,
           ),
@@ -88,7 +96,7 @@ class RequestSummaryCard extends StatelessWidget {
           const SizedBox(height: 14),
 
           RequestInfoRow(
-            icon: Icons.location_on_rounded,
+            icon: Icons.location_on,
             title: "Location",
             value: request.location,
           ),

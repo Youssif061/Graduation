@@ -2,25 +2,8 @@ import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_p
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CategoryDropdown extends StatefulWidget {
-  const CategoryDropdown({super.key});
-
-  @override
-  State<CategoryDropdown> createState() => _CategoryDropdownState();
-}
-
-class _CategoryDropdownState extends State<CategoryDropdown> {
-  final List<String> categories = const [
-    "Electronics",
-    "Tools",
-    "Furniture",
-    "Machines",
-    "Safety",
-    "Accessories",
-    "Other",
-  ];
-
-  String? selectedCategory;
+class CategoryField extends StatelessWidget {
+  const CategoryField({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +23,13 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
 
         const SizedBox(height: 10),
 
-        DropdownButtonFormField<String>(
-          value: selectedCategory,
+        TextFormField(
+          controller: cubit.categoryController,
+          textInputAction: TextInputAction.next,
 
           decoration: InputDecoration(
+            hintText: "e.g. Wood, Metal, Furniture",
+
             filled: true,
             fillColor: Colors.white,
 
@@ -68,26 +54,13 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
             ),
           ),
 
-          hint: const Text("Select Category"),
-
-          items: categories.map((category) {
-            return DropdownMenuItem(
-              value: category,
-              child: Text(category),
-            );
-          }).toList(),
-
-          onChanged: (value) {
-            setState(() {
-              selectedCategory = value;
-            });
-
-            cubit.categoryController.text = value ?? "";
-          },
-
           validator: (value) {
-            if (value == null || value.isEmpty) {
-              return "Please select category";
+            if (value == null || value.trim().isEmpty) {
+              return "Please enter category";
+            }
+
+            if (value.trim().length < 2) {
+              return "Category name is too short";
             }
 
             return null;

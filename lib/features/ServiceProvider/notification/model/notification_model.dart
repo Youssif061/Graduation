@@ -2,11 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationModel {
   final String id;
+
   final String title;
+
   final String message;
+
   final String icon;
+
   final bool isRead;
+
   final bool isVerified;
+
   final DateTime createdAt;
 
   const NotificationModel({
@@ -25,19 +31,14 @@ class NotificationModel {
   ) {
     return NotificationModel(
       id: documentId,
-
       title: json["title"] ?? "",
-
       message: json["message"] ?? "",
-
       icon: json["icon"] ?? "",
-
       isRead: json["isRead"] ?? false,
-
       isVerified: json["isVerified"] ?? false,
-
       createdAt: json["createdAt"] is Timestamp
-          ? (json["createdAt"] as Timestamp).toDate()
+          ? (json["createdAt"] as Timestamp)
+              .toDate()
           : DateTime.now(),
     );
   }
@@ -45,16 +46,12 @@ class NotificationModel {
   Map<String, dynamic> toJson() {
     return {
       "title": title,
-
       "message": message,
-
       "icon": icon,
-
       "isRead": isRead,
-
       "isVerified": isVerified,
-
-      "createdAt": Timestamp.fromDate(createdAt),
+      "createdAt":
+          Timestamp.fromDate(createdAt),
     };
   }
 
@@ -69,18 +66,39 @@ class NotificationModel {
   }) {
     return NotificationModel(
       id: id ?? this.id,
-
       title: title ?? this.title,
-
       message: message ?? this.message,
-
       icon: icon ?? this.icon,
-
       isRead: isRead ?? this.isRead,
-
-      isVerified: isVerified ?? this.isVerified,
-
-      createdAt: createdAt ?? this.createdAt,
+      isVerified:
+          isVerified ?? this.isVerified,
+      createdAt:
+          createdAt ?? this.createdAt,
     );
   }
+
+  @override
+  String toString() {
+    return '''
+NotificationModel(
+  id: $id,
+  title: $title,
+  isRead: $isRead,
+  isVerified: $isVerified,
+  createdAt: $createdAt
+)
+''';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        other is NotificationModel &&
+            runtimeType ==
+                other.runtimeType &&
+            id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }

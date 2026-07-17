@@ -1,19 +1,19 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/features/ServiceProvider/chat/page/chat_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/home/cubit/home_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/home/repository/home_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/request/repository/request_repository.dart';
 import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
-// استيرادات الـ Bloc والـ Cubits الأساسية للتبويبات (Tabs) فقط
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expertisemarket/features/ServiceProvider/home/cubit/home_cubit.dart';
-import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class MainAppScreen extends StatefulWidget {
   const MainAppScreen({super.key});
@@ -23,32 +23,71 @@ class MainAppScreen extends StatefulWidget {
 }
 
 class _MainAppScreenState extends State<MainAppScreen> {
+  late final HomeCubit _homeCubit;
+  late final InventoryCubit _inventoryCubit;
+  late final RequestCubit _requestCubit;
+
+  late final HomeRepository _homeRepository;
+  late final RequestRepository _requestRepository;
+
   int currentIndex = 0;
 
-  final List<Widget> screens = [
-    const HomeScreen(),
-    const RequestsScreen(),
-    const InventoryScreen(),
-    const ChatScreen(),
-    const ProfileScreen(),
-  ];
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _homeRepository = HomeRepository();
+    _requestRepository = RequestRepository();
+
+    _homeCubit = HomeCubit(_homeRepository);
+
+    _inventoryCubit = InventoryCubit();
+
+    _requestCubit = RequestCubit(
+      repository: _requestRepository,
+    );
+
+    _screens = const [
+      HomeScreen(),
+      RequestsScreen(),
+      InventoryScreen(),
+      ChatScreen(),
+      ProfileScreen(),
+    ];
+  }
+
+  @override
+  void dispose() {
+    _homeCubit.close();
+    _inventoryCubit.close();
+    _requestCubit.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => HomeCubit()),
-        BlocProvider(create: (context) => RequestCubit()),
-        BlocProvider(create: (context) => InventoryCubit()),
+        BlocProvider<HomeCubit>.value(
+          value: _homeCubit,
+        ),
+        BlocProvider<InventoryCubit>.value(
+          value: _inventoryCubit,
+        ),
+        BlocProvider<RequestCubit>.value(
+          value: _requestCubit,
+        ),
       ],
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
           foregroundColor: Colors.black,
           surfaceTintColor: Colors.white,
-          shadowColor: Colors.transparent,
-          scrolledUnderElevation: 0,
           elevation: 0,
+          scrolledUnderElevation: 0,
+          shadowColor: Colors.transparent,
           leadingWidth: 60,
           leading: Padding(
             padding: const EdgeInsets.only(left: 16),
@@ -72,16 +111,15 @@ class _MainAppScreenState extends State<MainAppScreen> {
           ),
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'CraftMarket',
+                "CraftMarket",
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const Text(
-                'PREMIUM SELLER',
+                "PREMIUM SELLER",
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w800,
@@ -92,27 +130,33 @@ class _MainAppScreenState extends State<MainAppScreen> {
           ),
           actions: [
             IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const NotificationScreen(),
+                  ),
+                );
+              },
               icon: SvgPicture.asset(
                 AppImages.notificationsSvg,
                 width: 26,
                 height: 26,
               ),
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const NotificationScreen()),
-                );
-              },
             ),
             const SizedBox(width: 8),
           ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
-            child: Container(height: 1, color: Colors.grey.shade200),
+            child: Container(
+              height: 1,
+              color: Colors.grey.shade200,
+            ),
           ),
         ),
         body: IndexedStack(
           index: currentIndex,
-          children: screens,
+          children: _screens,
         ),
         bottomNavigationBar: Container(
           height: 85,
@@ -123,7 +167,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.06),
+                color: Colors.black.withOpacity(.06),
                 blurRadius: 10,
                 offset: const Offset(0, -2),
               ),
@@ -143,89 +187,79 @@ class _MainAppScreenState extends State<MainAppScreen> {
               },
               items: [
                 BottomNavigationBarItem(
+                  label: "Home",
                   icon: SvgPicture.asset(
                     AppImages.homeServiceProviderSvg,
                     width: 24,
-                    height: 24,
                   ),
                   activeIcon: SvgPicture.asset(
                     AppImages.homeServiceProviderSvg,
                     width: 24,
-                    height: 24,
                     colorFilter: const ColorFilter.mode(
                       AppColors.primaryColor,
                       BlendMode.srcIn,
                     ),
                   ),
-                  label: 'Home',
                 ),
                 BottomNavigationBarItem(
+                  label: "Requests",
                   icon: SvgPicture.asset(
                     AppImages.requestsServiceProviderSvg,
                     width: 24,
-                    height: 24,
                   ),
                   activeIcon: SvgPicture.asset(
                     AppImages.requestsServiceProviderSvg,
                     width: 24,
-                    height: 24,
                     colorFilter: const ColorFilter.mode(
                       AppColors.primaryColor,
                       BlendMode.srcIn,
                     ),
                   ),
-                  label: 'Requests',
                 ),
                 BottomNavigationBarItem(
+                  label: "Inventory",
                   icon: SvgPicture.asset(
                     AppImages.inventoryServiceProviderSvg,
                     width: 24,
-                    height: 24,
                   ),
                   activeIcon: SvgPicture.asset(
                     AppImages.inventoryServiceProviderSvg,
                     width: 24,
-                    height: 24,
                     colorFilter: const ColorFilter.mode(
                       AppColors.primaryColor,
                       BlendMode.srcIn,
                     ),
                   ),
-                  label: 'Inventory',
                 ),
                 BottomNavigationBarItem(
+                  label: "Chats",
                   icon: SvgPicture.asset(
                     AppImages.chatsServiceProviderSvg,
                     width: 24,
-                    height: 24,
                   ),
                   activeIcon: SvgPicture.asset(
                     AppImages.chatsServiceProviderSvg,
                     width: 24,
-                    height: 24,
                     colorFilter: const ColorFilter.mode(
                       AppColors.primaryColor,
                       BlendMode.srcIn,
                     ),
                   ),
-                  label: 'Chats',
                 ),
                 BottomNavigationBarItem(
+                  label: "Profile",
                   icon: SvgPicture.asset(
                     AppImages.profileSvg,
                     width: 24,
-                    height: 24,
                   ),
                   activeIcon: SvgPicture.asset(
                     AppImages.profileSvg,
                     width: 24,
-                    height: 24,
                     colorFilter: const ColorFilter.mode(
                       AppColors.primaryColor,
                       BlendMode.srcIn,
                     ),
                   ),
-                  label: 'Profile',
                 ),
               ],
             ),

@@ -1,8 +1,8 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/cubit/notification_cubit.dart';
-import 'package:expertisemarket/features/ServiceProvider/notification/widget/activity_card.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/widget/section_header.dart';
+import 'package:expertisemarket/features/ServiceProvider/notification/widget/activity_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -13,9 +13,11 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => NotificationCubit()..loadNotifications(),
+      create: (_) =>
+          NotificationCubit()..loadNotifications(),
       child: Scaffold(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor:
+            AppColors.backgroundColor,
 
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -25,28 +27,31 @@ class NotificationScreen extends StatelessWidget {
           scrolledUnderElevation: 0,
 
           leading: Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding:
+                const EdgeInsets.only(left: 8),
             child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
               icon: SvgPicture.asset(
                 AppImages.backSvg,
                 width: 20,
                 height: 20,
               ),
-              onPressed: () {
-                Navigator.pop(context);
-              },
             ),
           ),
 
           title: const Align(
             alignment: Alignment.centerRight,
             child: Padding(
-              padding: EdgeInsets.only(right: 16),
+              padding:
+                  EdgeInsets.only(right: 16),
               child: Text(
                 "Notifications",
                 style: TextStyle(
                   fontSize: 22,
-                  fontWeight: FontWeight.bold,
+                  fontWeight:
+                      FontWeight.bold,
                   color: Color(0xff001A2C),
                 ),
               ),
@@ -54,7 +59,8 @@ class NotificationScreen extends StatelessWidget {
           ),
 
           bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(1),
+            preferredSize:
+                const Size.fromHeight(1),
             child: Container(
               height: 1,
               color: Colors.grey.shade200,
@@ -62,100 +68,134 @@ class NotificationScreen extends StatelessWidget {
           ),
         ),
 
-        body: BlocConsumer<NotificationCubit, NotificationState>(
+        body: BlocConsumer<
+            NotificationCubit,
+            NotificationState>(
           listener: (context, state) {
-            if (state is NotificationFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
+            if (state
+                is NotificationFailure) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
+                  content:
+                      Text(state.message),
                 ),
               );
             }
           },
 
           builder: (context, state) {
-            final cubit = context.read<NotificationCubit>();
+            final cubit =
+                context.read<
+                    NotificationCubit>();
 
-            if (state is NotificationLoading) {
+            if (state
+                is NotificationLoading) {
               return const Center(
-                child: CircularProgressIndicator(),
+                child:
+                    CircularProgressIndicator(),
               );
             }
 
-            if (state is NotificationLoaded) {
-              final notifications = state.notifications;
+            if (state
+                is NotificationUpdating) {
+              return const Center(
+                child:
+                    CircularProgressIndicator(),
+              );
+            }
+
+            if (state
+                is NotificationLoaded) {
+              final notifications =
+                  state.notifications;
 
               if (notifications.isEmpty) {
-                return const Center(
-                  child: Text(
-                    "No Notifications Yet",
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
-                    ),
+                return RefreshIndicator(
+                  onRefresh:
+                      cubit.refresh,
+                  child: ListView(
+                    children: const [
+                      SizedBox(
+                        height: 250,
+                      ),
+                      Center(
+                        child: Text(
+                          "No Notifications Yet",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight:
+                                FontWeight
+                                    .w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 );
               }
 
               return RefreshIndicator(
-                onRefresh: cubit.refresh,
-
+                onRefresh:
+                    cubit.refresh,
                 child: ListView(
-                  padding: const EdgeInsets.symmetric(
+                  padding:
+                      const EdgeInsets.symmetric(
                     horizontal: 20,
                     vertical: 16,
                   ),
-
                   children: [
-
                     Row(
                       mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
+                          MainAxisAlignment
+                              .spaceBetween,
                       children: [
-
                         Text(
                           "Activity",
-                          style: Theme.of(context)
+                          style: Theme.of(
+                                  context)
                               .textTheme
                               .headlineLarge,
                         ),
-
                         TextButton(
                           onPressed: () {
-                            cubit.markAllAsRead();
+                            cubit
+                                .markAllAsRead();
                           },
                           child: const Text(
                             "Mark all as read",
                             style: TextStyle(
-                              color: AppColors.primaryColor,
-                              fontWeight: FontWeight.w600,
+                              color: AppColors
+                                  .primaryColor,
+                              fontWeight:
+                                  FontWeight
+                                      .w600,
                             ),
                           ),
                         ),
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(
+                        height: 20),
 
                     const SectionHeader(
-                      title: "Notifications",
+                      title:
+                          "Notifications",
                     ),
 
-                    const SizedBox(height: 16),
+                    const SizedBox(
+                        height: 16),
 
                     ...notifications.map(
-                      (notification) => ActivityCard(
-                        notification: notification,
+                      (notification) =>
+                          ActivityCard(
+                        notification:
+                            notification,
                       ),
                     ),
                   ],
                 ),
-              );
-            }
-
-            if (state is NotificationUpdating) {
-              return const Center(
-                child: CircularProgressIndicator(),
               );
             }
 

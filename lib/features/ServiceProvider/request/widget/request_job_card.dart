@@ -20,13 +20,15 @@ class RequestJobCard extends StatelessWidget {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius:
+            BorderRadius.circular(20),
         border: Border.all(
           color: const Color(0xffE2E8F0),
         ),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment:
+            CrossAxisAlignment.start,
         children: [
           ClientHeader(
             request: request,
@@ -38,13 +40,15 @@ class RequestJobCard extends StatelessWidget {
             request: request,
           ),
 
-          if (request.problemPhotos.isNotEmpty) ...[
-            const SizedBox(height: 24),
+          if (request.problemPhotos.isNotEmpty)
+            ...[
+              const SizedBox(height: 24),
 
-            ProblemPhotos(
-              images: request.problemPhotos,
-            ),
-          ],
+              ProblemPhotos(
+                images:
+                    request.problemPhotos,
+              ),
+            ],
 
           const SizedBox(height: 30),
 

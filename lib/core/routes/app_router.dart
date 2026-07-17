@@ -7,6 +7,7 @@ import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventor
 import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/publish_service/page/publish_service_screen.dart';
+import 'package:expertisemarket/features/ServiceProvider/publish_service/repository/publish_service_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/SplashScreen/SplashScreen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/cart_screen.dart';
@@ -55,7 +56,7 @@ class AppRouter {
       case Routers.publishService:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (context) => PublishServiceCubit(),
+            create: (_) => PublishServiceCubit(PublishServiceRepository()),
             child: const PublishServiceScreen(),
           ),
         );
@@ -69,7 +70,7 @@ class AppRouter {
             create: (context) => AddProductCubit(),
             child: const AddProductScreen(),
           ),
-        ); 
+        );
 
       case Routers.wishlist:
         return MaterialPageRoute(builder: (_) => const WishlistPage());

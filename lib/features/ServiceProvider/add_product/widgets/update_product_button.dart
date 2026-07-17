@@ -10,13 +10,14 @@ class UpdateProductButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AddProductCubit, AddProductState>(
       builder: (context, state) {
-        final isLoading = state is AddProductLoading;
-
         return MainButton(
           text: "Update Product",
           background: const Color(0xff001A2C),
-          icon: const Icon(Icons.edit, color: Colors.white),
-          isLoading: isLoading,
+          icon: const Icon(
+            Icons.edit,
+            color: Colors.white,
+          ),
+          isLoading: state is AddProductLoading,
           onPress: () {
             context.read<AddProductCubit>().updateProduct();
           },

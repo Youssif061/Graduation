@@ -4,30 +4,55 @@ sealed class InventoryState {
   const InventoryState();
 }
 
-class InventoryInitial extends InventoryState {
+//==========================================
+// Initial
+//==========================================
+
+final class InventoryInitial
+    extends InventoryState {
   const InventoryInitial();
 }
 
-class InventoryLoading extends InventoryState {
+//==========================================
+// Loading
+//==========================================
+
+final class InventoryLoading
+    extends InventoryState {
   const InventoryLoading();
 }
 
-class InventoryDeleting extends InventoryState {
+//==========================================
+// Deleting
+//==========================================
+
+final class InventoryDeleting
+    extends InventoryState {
   const InventoryDeleting();
 }
 
-class InventoryLoaded extends InventoryState {
-  final List<ProductModel> products;
+//==========================================
+// Loaded
+//==========================================
 
-  const InventoryLoaded(
-    this.products,
-  );
+final class InventoryLoaded
+    extends InventoryState {
+  const InventoryLoaded({
+    required this.products,
+  });
+
+  final List<ProductModel> products;
 }
 
-class InventoryFailure extends InventoryState {
-  final String message;
+//==========================================
+// Failure
+//==========================================
 
+final class InventoryFailure
+    extends InventoryState {
   const InventoryFailure(
     this.message,
   );
+
+  final String message;
 }

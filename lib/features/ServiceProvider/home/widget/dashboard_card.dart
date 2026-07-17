@@ -81,9 +81,7 @@ class DashboardCard extends StatelessWidget {
             if (topRightWidget != null) topRightWidget!,
           ],
         ),
-
         const SizedBox(height: 12),
-
         Text(
           title,
           style: TextStyle(
@@ -92,9 +90,7 @@ class DashboardCard extends StatelessWidget {
             color: AppColors.darkGreyColor,
           ),
         ),
-
         const SizedBox(height: 6),
-
         Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -106,10 +102,9 @@ class DashboardCard extends StatelessWidget {
                 color: Color(0xff001A2C),
               ),
             ),
-
             if (bottomSubtitle != null) ...[
               const SizedBox(width: 6),
-              bottomSubtitle!,
+              Flexible(child: bottomSubtitle!),
             ],
           ],
         ),

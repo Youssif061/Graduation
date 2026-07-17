@@ -1,5 +1,5 @@
-import 'package:expertisemarket/features/products/models/product_model.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/widget/inventory_product_card.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_product_card.dart';
 import 'package:flutter/material.dart';
 
 class InventoryList extends StatelessWidget {
@@ -14,7 +14,9 @@ class InventoryList extends StatelessWidget {
   Widget build(BuildContext context) {
     if (products.isEmpty) {
       return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 50),
+        padding: EdgeInsets.symmetric(
+          vertical: 60,
+        ),
         child: Center(
           child: Column(
             children: [
@@ -23,12 +25,23 @@ class InventoryList extends StatelessWidget {
                 size: 70,
                 color: Colors.grey,
               ),
-              SizedBox(height: 12),
+
+              SizedBox(height: 16),
+
               Text(
                 "No Products Found",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
+                ),
+              ),
+
+              SizedBox(height: 8),
+
+              Text(
+                "Start by adding your first product.",
+                style: TextStyle(
+                  color: Colors.grey,
                 ),
               ),
             ],
@@ -37,10 +50,12 @@ class InventoryList extends StatelessWidget {
       );
     }
 
-    return ListView.builder(
-      itemCount: products.length,
+    return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      itemCount: products.length,
+      separatorBuilder: (_, __) =>
+          const SizedBox(height: 16),
       itemBuilder: (context, index) {
         return InventoryProductCard(
           product: products[index],
