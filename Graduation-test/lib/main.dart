@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:expertisemarket/core/routes/routers.dart';
+import 'package:expertisemarket/features/ServiceProvider/home/cubit/home_cubit.dart';
+import 'package:expertisemarket/features/ServiceProvider/home/repository/home_repository.dart';
 import 'package:firebase_core/firebase_core.dart' hide FirebaseService;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -36,7 +39,11 @@ class MainApp extends StatelessWidget {
         BlocProvider(create: (_) => CartCubit()..loadCart()),
         BlocProvider(create: (_) => WishlistCubit()..loadWishlist()),
         BlocProvider(create: (_) => OrderCubit()),
+        BlocProvider(
+          create: (_) => HomeCubit(HomeRepository())..loadHomeData(),
+        ),
       ],
+
       child: MaterialApp(
         title: 'CraftMarket',
 
@@ -44,8 +51,7 @@ class MainApp extends StatelessWidget {
 
         theme: AppThemes.lightTheme,
 
-        initialRoute: '/',
-
+        initialRoute: Routers.splash,
         onGenerateRoute: AppRouter.generateRoute,
 
         builder: (context, child) {

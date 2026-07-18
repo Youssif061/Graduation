@@ -1,10 +1,13 @@
 class Routers {
   Routers._();
 
-  //  Splash
+  // Splash
   static const String splash = '/';
-  static const String main = '/';
-  //  Auth
+
+  // Main
+  static const String main = '/main';
+
+  // Auth
   static const String welcomeScreen = '/welcome';
   static const String mainSignUp = '/mainSignUp';
 
@@ -16,11 +19,11 @@ class Routers {
 
   static const String confirmEmail = '/confirmEmail';
 
-  //  User
+  // User
   static const String home = '/home';
-  static const String homeScreen = '/home';
+  static const String homeScreen = '/userHome';
 
-  //  Worker
+  // Worker
   static const String workerHome = '/workerHome';
 
   static const String requests = '/requests';
@@ -28,11 +31,12 @@ class Routers {
   static const String chat = '/chat';
   static const String profile = '/profile';
   static const String notification = '/notification';
+
   static const String publishService = '/publishService';
   static const String publishProposal = '/publishProposal';
   static const String addProduct = '/addProduct';
 
-  //  Common
+  // Common
   static const String products = '/products';
   static const String wishlist = '/wishlist';
   static const String cart = '/cart';
