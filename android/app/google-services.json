@@ -12,7 +12,20 @@
           "package_name": "com.CraftMarket"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "720084397751-tqvodt2vcr45mb573ejlut7an5m99905.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.CraftMarket",
+            "certificate_hash": "c00787417e491b326d9fea9934fdbe7a9ed8805e"
+          }
+        },
+        {
+          "client_id": "720084397751-a8gvdc6cfnkkpu0ae6dulr7mvipmels6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBxIUKH_nTGUSwe_SBuig03ItqdPQxI6rY"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "720084397751-a8gvdc6cfnkkpu0ae6dulr7mvipmels6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "720084397751-ab750duk107tv6a7p4a5ocmqaiqrgs67.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.CraftMarket"
+              }
+            }
+          ]
         }
       }
     }

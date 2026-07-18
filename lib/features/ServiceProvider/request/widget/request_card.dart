@@ -31,8 +31,7 @@ class RequestCard extends StatelessWidget {
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius:
-              BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(18),
           border: Border.all(
             color: const Color(0xffE2E8F0),
           ),
@@ -46,36 +45,46 @@ class RequestCard extends StatelessWidget {
               child: ClipRRect(
                 borderRadius:
                     BorderRadius.circular(14),
-                child: Image.asset(
-                  request.clientImage,
-                  width: 62,
-                  height: 62,
-                  fit: BoxFit.cover,
-                  errorBuilder:
-                      (_, __, ___) {
-                    return Container(
-                      width: 62,
-                      height: 62,
-                      decoration:
-                          BoxDecoration(
-                        color: const Color(
-                          0xffF1F5F9,
-                        ),
-                        borderRadius:
-                            BorderRadius
-                                .circular(
-                          14,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.person,
-                        color: Color(
-                          0xff64748B,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                child: request.clientImage.isNotEmpty
+                    ? Image.network(
+                        request.clientImage,
+                        width: 62,
+                        height: 62,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (
+                          context,
+                          child,
+                          progress,
+                        ) {
+                          if (progress == null) {
+                            return child;
+                          }
+
+                          return Container(
+                            width: 62,
+                            height: 62,
+                            decoration: BoxDecoration(
+                              color:
+                                  const Color(0xffF1F5F9),
+                              borderRadius:
+                                  BorderRadius.circular(
+                                14,
+                              ),
+                            ),
+                            child: const Center(
+                              child:
+                                  CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            ),
+                          );
+                        },
+                        errorBuilder:
+                            (_, __, ___) {
+                          return _placeholder();
+                        },
+                      )
+                    : _placeholder(),
               ),
             ),
 
@@ -84,8 +93,7 @@ class RequestCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment:
-                    CrossAxisAlignment
-                        .start,
+                    CrossAxisAlignment.start,
                 children: [
                   Row(
                     children: [
@@ -94,14 +102,12 @@ class RequestCard extends StatelessWidget {
                           request.title,
                           maxLines: 1,
                           overflow:
-                              TextOverflow
-                                  .ellipsis,
+                              TextOverflow.ellipsis,
                           style:
                               const TextStyle(
                             fontSize: 17,
                             fontWeight:
-                                FontWeight
-                                    .bold,
+                                FontWeight.bold,
                             color: Color(
                               0xff001A2C,
                             ),
@@ -127,8 +133,7 @@ class RequestCard extends StatelessWidget {
                               20,
                             ),
                           ),
-                          child:
-                              const Text(
+                          child: const Text(
                             "NEW",
                             style:
                                 TextStyle(
@@ -137,10 +142,8 @@ class RequestCard extends StatelessWidget {
                                 0xff15803D,
                               ),
                               fontWeight:
-                                  FontWeight
-                                      .bold,
-                              fontSize:
-                                  11,
+                                  FontWeight.bold,
+                              fontSize: 11,
                             ),
                           ),
                         ),
@@ -151,8 +154,7 @@ class RequestCard extends StatelessWidget {
 
                   Text(
                     request.clientName,
-                    style:
-                        const TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       color: Color(
                         0xff64748B,
@@ -166,10 +168,8 @@ class RequestCard extends StatelessWidget {
                     request.summary,
                     maxLines: 2,
                     overflow:
-                        TextOverflow
-                            .ellipsis,
-                    style:
-                        const TextStyle(
+                        TextOverflow.ellipsis,
+                    style: const TextStyle(
                       fontSize: 14,
                       height: 1.5,
                       color: Color(
@@ -183,17 +183,14 @@ class RequestCard extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(
-                        Icons
-                            .schedule_outlined,
+                        Icons.schedule_outlined,
                         size: 16,
                         color: Color(
                           0xff64748B,
                         ),
                       ),
 
-                      const SizedBox(
-                        width: 4,
-                      ),
+                      const SizedBox(width: 4),
 
                       Expanded(
                         child: Text(
@@ -209,16 +206,14 @@ class RequestCard extends StatelessWidget {
                       ),
 
                       Text(
-                        request
-                            .formattedPrice,
+                        request.formattedPrice,
                         style:
                             const TextStyle(
                           color: Color(
                             0xff0C8A43,
                           ),
                           fontWeight:
-                              FontWeight
-                                  .bold,
+                              FontWeight.bold,
                           fontSize: 20,
                         ),
                       ),
@@ -239,6 +234,21 @@ class RequestCard extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      width: 62,
+      height: 62,
+      decoration: BoxDecoration(
+        color: const Color(0xffF1F5F9),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: const Icon(
+        Icons.person,
+        color: Color(0xff64748B),
       ),
     );
   }

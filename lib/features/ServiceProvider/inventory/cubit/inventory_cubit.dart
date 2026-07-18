@@ -22,34 +22,32 @@ enum InventorySort {
 }
 
 class InventoryCubit extends Cubit<InventoryState> {
-  InventoryCubit()
-      : _repository = InventoryRepositoryImpl(),
+  InventoryCubit({
+    InventoryRepository? repository,
+  })  : _repository = repository ?? InventoryRepositoryImpl(),
         super(const InventoryInitial());
 
   final InventoryRepository _repository;
 
-  List<ProductModel> products = [];
+  List<ProductModel> _products = [];
 
   List<ProductModel> filteredProducts = [];
 
   String searchText = "";
 
-  InventoryFilter currentFilter =
-      InventoryFilter.all;
+  InventoryFilter currentFilter = InventoryFilter.all;
 
-  InventorySort currentSort =
-      InventorySort.newest;
+  InventorySort currentSort = InventorySort.newest;
 
-  //---------------------------------------
-  // Load Inventory
-  //---------------------------------------
+  //---------------------------------------------------------
+  // Load
+  //---------------------------------------------------------
 
   Future<void> loadInventory() async {
-    try {
-      emit(const InventoryLoading());
+    emit(const InventoryLoading());
 
-      products =
-          await _repository.loadInventory();
+    try {
+      _products = await _repository.loadInventory();
 
       _applyFilters();
     } catch (e) {
@@ -61,17 +59,17 @@ class InventoryCubit extends Cubit<InventoryState> {
     }
   }
 
-  //---------------------------------------
+  //---------------------------------------------------------
   // Refresh
-  //---------------------------------------
+  //---------------------------------------------------------
 
   Future<void> refresh() async {
     await loadInventory();
   }
 
-  //---------------------------------------
+  //---------------------------------------------------------
   // Search
-  //---------------------------------------
+  //---------------------------------------------------------
 
   void search(String value) {
     searchText = value.trim();
@@ -85,9 +83,9 @@ class InventoryCubit extends Cubit<InventoryState> {
     _applyFilters();
   }
 
-  //---------------------------------------
+  //---------------------------------------------------------
   // Filter
-  //---------------------------------------
+  //---------------------------------------------------------
 
   void changeFilter(
     InventoryFilter filter,
@@ -97,9 +95,9 @@ class InventoryCubit extends Cubit<InventoryState> {
     _applyFilters();
   }
 
-  //---------------------------------------
+  //---------------------------------------------------------
   // Sort
-  //---------------------------------------
+  //---------------------------------------------------------
 
   void changeSort(
     InventorySort sort,
@@ -109,41 +107,70 @@ class InventoryCubit extends Cubit<InventoryState> {
     _applyFilters();
   }
 
-  //---------------------------------------
-  // Apply Search + Filter + Sort
-  //---------------------------------------
+  //---------------------------------------------------------
+  // Delete Product
+  //---------------------------------------------------------
+
+  Future<void> deleteProduct(
+    String productId,
+  ) async {
+    emit(const InventoryDeleting());
+
+    try {
+      await _repository.deleteProduct(
+        productId,
+      );
+
+      _products.removeWhere(
+        (product) => product.id == productId,
+      );
+
+      _applyFilters();
+    } catch (e) {
+      emit(
+        InventoryFailure(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+  //---------------------------------------------------------
+  // Search + Filter + Sort
+  //---------------------------------------------------------
 
   void _applyFilters() {
-    filteredProducts =
-        List<ProductModel>.from(products);
+    filteredProducts = List<ProductModel>.from(
+      _products,
+    );
 
-    // Search
+    //---------------- Search ----------------//
 
     if (searchText.isNotEmpty) {
-      filteredProducts =
-          filteredProducts.where((product) {
-        return product.name
-                .toLowerCase()
-                .contains(
-                  searchText.toLowerCase(),
-                ) ||
-            product.category
-                .toLowerCase()
-                .contains(
-                  searchText.toLowerCase(),
-                );
-      }).toList();
+      filteredProducts = filteredProducts.where(
+        (product) {
+          return product.name
+                  .toLowerCase()
+                  .contains(
+                    searchText.toLowerCase(),
+                  ) ||
+              product.category
+                  .toLowerCase()
+                  .contains(
+                    searchText.toLowerCase(),
+                  );
+        },
+      ).toList();
     }
 
-    // Filter
+    //---------------- Filter ----------------//
 
     switch (currentFilter) {
       case InventoryFilter.all:
         break;
 
       case InventoryFilter.active:
-        filteredProducts =
-            filteredProducts.where(
+        filteredProducts = filteredProducts.where(
           (product) {
             return product.stock > 0;
           },
@@ -151,8 +178,7 @@ class InventoryCubit extends Cubit<InventoryState> {
         break;
 
       case InventoryFilter.lowStock:
-        filteredProducts =
-            filteredProducts.where(
+        filteredProducts = filteredProducts.where(
           (product) {
             return product.stock > 0 &&
                 product.stock <= 5;
@@ -161,8 +187,7 @@ class InventoryCubit extends Cubit<InventoryState> {
         break;
 
       case InventoryFilter.outOfStock:
-        filteredProducts =
-            filteredProducts.where(
+        filteredProducts = filteredProducts.where(
           (product) {
             return product.stock == 0;
           },
@@ -170,8 +195,9 @@ class InventoryCubit extends Cubit<InventoryState> {
         break;
     }
 
-    // Sort
-        switch (currentSort) {
+    //---------------- Sort ----------------//
+
+    switch (currentSort) {
       case InventorySort.newest:
         filteredProducts.sort(
           (a, b) =>
@@ -203,57 +229,22 @@ class InventoryCubit extends Cubit<InventoryState> {
       case InventorySort.nameAZ:
         filteredProducts.sort(
           (a, b) =>
-              a.name.toLowerCase().compareTo(
-                    b.name.toLowerCase(),
-                  ),
+              a.name.compareTo(b.name),
         );
         break;
 
       case InventorySort.nameZA:
         filteredProducts.sort(
           (a, b) =>
-              b.name.toLowerCase().compareTo(
-                    a.name.toLowerCase(),
-                  ),
+              b.name.compareTo(a.name),
         );
         break;
     }
 
     emit(
       InventoryLoaded(
-        products: List<ProductModel>.from(
-          filteredProducts,
-        ),
+        products: filteredProducts,
       ),
     );
-  }
-
-  //---------------------------------------
-  // Delete Product
-  //---------------------------------------
-
-  Future<void> deleteProduct(
-    String productId,
-  ) async {
-    try {
-      emit(const InventoryDeleting());
-
-      await _repository.deleteProduct(
-        productId,
-      );
-
-      products.removeWhere(
-        (product) =>
-            product.id == productId,
-      );
-
-      _applyFilters();
-    } catch (e) {
-      emit(
-        InventoryFailure(
-          e.toString(),
-        ),
-      );
-    }
   }
 }

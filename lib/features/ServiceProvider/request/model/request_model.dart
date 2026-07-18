@@ -9,7 +9,7 @@ class RequestModel {
   final String clientImage;
   final String reviews;
 
-  // Service Provider
+  // Expert
   final String expertId;
 
   // Request
@@ -21,16 +21,12 @@ class RequestModel {
   final double minBudget;
   final double maxBudget;
 
-  // Proposal Price
+  // Proposal
   final double price;
 
-  // Timeline
+  // Details
   final String timeline;
-
-  // Location
   final String location;
-
-  // Status
   final String status;
 
   // Images
@@ -38,10 +34,6 @@ class RequestModel {
 
   // Date
   final DateTime createdAt;
-
-  // UI
-  final bool isNew;
-  final String timeAgo;
 
   const RequestModel({
     required this.id,
@@ -61,8 +53,6 @@ class RequestModel {
     required this.status,
     required this.problemPhotos,
     required this.createdAt,
-    this.isNew = false,
-    this.timeAgo = '',
   });
 
   //--------------------------------------------------
@@ -74,6 +64,31 @@ class RequestModel {
 
   String get formattedPrice =>
       '\$${price.toStringAsFixed(0)}';
+
+  bool get isNew =>
+      DateTime.now().difference(createdAt).inHours < 24;
+
+  String get timeAgo {
+    final diff = DateTime.now().difference(createdAt);
+
+    if (diff.inMinutes < 1) {
+      return "Just now";
+    }
+
+    if (diff.inMinutes < 60) {
+      return "${diff.inMinutes} min ago";
+    }
+
+    if (diff.inHours < 24) {
+      return "${diff.inHours} h ago";
+    }
+
+    if (diff.inDays < 30) {
+      return "${diff.inDays} days ago";
+    }
+
+    return "${createdAt.day}/${createdAt.month}/${createdAt.year}";
+  }
 
   //--------------------------------------------------
   // CopyWith
@@ -97,8 +112,6 @@ class RequestModel {
     String? status,
     List<String>? problemPhotos,
     DateTime? createdAt,
-    bool? isNew,
-    String? timeAgo,
   }) {
     return RequestModel(
       id: id ?? this.id,
@@ -119,8 +132,6 @@ class RequestModel {
       problemPhotos:
           problemPhotos ?? this.problemPhotos,
       createdAt: createdAt ?? this.createdAt,
-      isNew: isNew ?? this.isNew,
-      timeAgo: timeAgo ?? this.timeAgo,
     );
   }
 
@@ -145,9 +156,7 @@ class RequestModel {
       'location': location,
       'status': status,
       'problemPhotos': problemPhotos,
-      'createdAt': Timestamp.fromDate(
-        createdAt,
-      ),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 
@@ -169,23 +178,17 @@ class RequestModel {
       title: map['title'] ?? '',
       summary: map['summary'] ?? '',
       description: map['description'] ?? '',
-      minBudget:
-          (map['minBudget'] ?? 0).toDouble(),
-      maxBudget:
-          (map['maxBudget'] ?? 0).toDouble(),
-      price: (map['price'] ?? 0).toDouble(),
+      minBudget: (map['minBudget'] as num?)?.toDouble() ?? 0,
+      maxBudget: (map['maxBudget'] as num?)?.toDouble() ?? 0,
+      price: (map['price'] as num?)?.toDouble() ?? 0,
       timeline: map['timeline'] ?? '',
       location: map['location'] ?? '',
       status: map['status'] ?? 'Pending',
-      problemPhotos: List<String>.from(
-        map['problemPhotos'] ?? [],
-      ),
+      problemPhotos:
+          List<String>.from(map['problemPhotos'] ?? []),
       createdAt: map['createdAt'] is Timestamp
-          ? (map['createdAt'] as Timestamp)
-              .toDate()
+          ? (map['createdAt'] as Timestamp).toDate()
           : DateTime.now(),
-      isNew: map['isNew'] ?? false,
-      timeAgo: map['timeAgo'] ?? '',
     );
   }
 }

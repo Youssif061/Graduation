@@ -15,9 +15,9 @@ class InventoryProductCard extends StatelessWidget {
     final bool isActive = product.stock > 0;
 
     return Card(
+      margin: EdgeInsets.zero,
       elevation: 0,
       color: Colors.white,
-      margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
         side: const BorderSide(
@@ -30,9 +30,9 @@ class InventoryProductCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
-            ///========================
-            /// Product Image
-            ///========================
+            //-----------------------------------
+            // Product Image
+            //-----------------------------------
 
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
@@ -42,7 +42,27 @@ class InventoryProductCard extends StatelessWidget {
                     ? Image.network(
                         product.images.first,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) {
+                        loadingBuilder:
+                            (
+                              context,
+                              child,
+                              loadingProgress,
+                            ) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+
+                          return const Center(
+                            child:
+                                CircularProgressIndicator(),
+                          );
+                        },
+                        errorBuilder:
+                            (
+                              context,
+                              error,
+                              stackTrace,
+                            ) {
                           return _imagePlaceholder();
                         },
                       )
@@ -52,9 +72,9 @@ class InventoryProductCard extends StatelessWidget {
 
             const SizedBox(height: 16),
 
-            ///========================
-            /// Name
-            ///========================
+            //-----------------------------------
+            // Product Name
+            //-----------------------------------
 
             Text(
               product.name,
@@ -67,11 +87,11 @@ class InventoryProductCard extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
 
-            ///========================
-            /// Category
-            ///========================
+            //-----------------------------------
+            // Category
+            //-----------------------------------
 
             Container(
               padding: const EdgeInsets.symmetric(
@@ -93,9 +113,9 @@ class InventoryProductCard extends StatelessWidget {
 
             const SizedBox(height: 12),
 
-            ///========================
-            /// Description
-            ///========================
+            //-----------------------------------
+            // Description
+            //-----------------------------------
 
             Text(
               product.description,
@@ -103,15 +123,15 @@ class InventoryProductCard extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: Color(0xff64748B),
-                height: 1.45,
+                height: 1.4,
               ),
             ),
 
             const SizedBox(height: 18),
 
-            ///========================
-            /// Price + Stock
-            ///========================
+            //-----------------------------------
+            // Price & Stock
+            //-----------------------------------
 
             Row(
               children: [
@@ -119,7 +139,6 @@ class InventoryProductCard extends StatelessWidget {
                 const Icon(
                   Icons.attach_money,
                   size: 18,
-                  color: Color(0xff001A2C),
                 ),
 
                 Text(
@@ -151,9 +170,9 @@ class InventoryProductCard extends StatelessWidget {
 
             const SizedBox(height: 18),
 
-            ///========================
-            /// Status + More
-            ///========================
+            //-----------------------------------
+            // Status
+            //-----------------------------------
 
             Row(
               children: [
@@ -167,7 +186,8 @@ class InventoryProductCard extends StatelessWidget {
                     color: isActive
                         ? const Color(0xffDCFCE7)
                         : const Color(0xffFEE2E2),
-                    borderRadius: BorderRadius.circular(22),
+                    borderRadius:
+                        BorderRadius.circular(22),
                   ),
                   child: Text(
                     isActive

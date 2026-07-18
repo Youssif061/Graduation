@@ -17,26 +17,17 @@ class ClientHeader extends StatelessWidget {
           tag: request.id,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
-            child: Image.asset(
-              request.clientImage,
-              width: 64,
-              height: 64,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) {
-                return Container(
-                  width: 64,
-                  height: 64,
-                  decoration: BoxDecoration(
-                    color: const Color(0xffF1F5F9),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: const Icon(
-                    Icons.person,
-                    color: Color(0xff64748B),
-                  ),
-                );
-              },
-            ),
+            child: request.clientImage.isNotEmpty
+                ? Image.network(
+                    request.clientImage,
+                    width: 64,
+                    height: 64,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) {
+                      return _placeholder();
+                    },
+                  )
+                : _placeholder(),
           ),
         ),
 
@@ -44,7 +35,8 @@ class ClientHeader extends StatelessWidget {
 
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment:
+                CrossAxisAlignment.start,
             children: [
               Text(
                 request.clientName,
@@ -87,7 +79,8 @@ class ClientHeader extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: const Color(0xffDCFCE7),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius:
+                BorderRadius.circular(12),
           ),
           child: Text(
             request.formattedPrice,
@@ -99,6 +92,21 @@ class ClientHeader extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _placeholder() {
+    return Container(
+      width: 64,
+      height: 64,
+      decoration: BoxDecoration(
+        color: const Color(0xffF1F5F9),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: const Icon(
+        Icons.person,
+        color: Color(0xff64748B),
+      ),
     );
   }
 }

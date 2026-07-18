@@ -12,104 +12,158 @@ class HomeRepository {
   final FirebaseAuth _auth =
       FirebaseAuth.instance;
 
-  CollectionReference<Map<String, dynamic>>
-      get _providers =>
-          _firestore.collection(
-            'serviceProviders',
-          );
-
-  //--------------------------------------------------
-  // Current User Id
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Current Worker
+  //----------------------------------------------------------
 
   String? get currentUserId =>
       _auth.currentUser?.uid;
 
-  //--------------------------------------------------
-  // Get Home Statistics
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Collections
+  //----------------------------------------------------------
 
-  Future<HomeStatsModel> getHomeStats() async {
+  CollectionReference<Map<String, dynamic>>
+      get _workers =>
+          _firestore.collection(
+            "workers",
+          );
+
+  CollectionReference<Map<String, dynamic>>
+      get _products =>
+          _firestore.collection(
+            "products",
+          );
+
+  CollectionReference<Map<String, dynamic>>
+      get _services =>
+          _firestore.collection(
+            "services",
+          );
+
+  //----------------------------------------------------------
+  // Load Home Statistics
+  //----------------------------------------------------------
+
+  Future<HomeStatsModel>
+      getHomeStats() async {
     try {
-      final uid = currentUserId;
-
-      // لم يتم تسجيل الدخول بعد
-      if (uid == null) {
+      if (currentUserId == null) {
         return HomeStatsModel.empty();
       }
 
-      final document =
-          await _providers.doc(uid).get();
+      //------------------------------------------------------
+      // Worker Document
+      //------------------------------------------------------
 
-      // لا توجد بيانات للمستخدم
-      if (!document.exists) {
-        return HomeStatsModel.empty();
+      final workerDoc =
+          await _workers
+              .doc(currentUserId)
+              .get();
+
+      double rating = 0;
+
+      int reviews = 0;
+
+      if (workerDoc.exists &&
+          workerDoc.data() != null) {
+        final data = workerDoc.data()!;
+
+        rating =
+            (data["rating"] ?? 0)
+                .toDouble();
+
+        reviews =
+            (data["reviews"] ?? 0)
+                as int;
       }
 
-      final data = document.data();
+      //------------------------------------------------------
+      // Products Count
+      //------------------------------------------------------
 
-      if (data == null) {
-        return HomeStatsModel.empty();
-      }
+      final productSnapshot =
+          await _products
+              .where(
+                "providerId",
+                isEqualTo: currentUserId,
+              )
+              .get();
 
-      return HomeStatsModel.fromMap(data);
-    } on FirebaseException {
-      // في حالة عدم ربط Firebase أو أي خطأ
-      return HomeStatsModel.empty();
-    } catch (_) {
+      //------------------------------------------------------
+      // Services Count
+      //------------------------------------------------------
+
+      final serviceSnapshot =
+          await _services
+              .where(
+                "providerId",
+                isEqualTo: currentUserId,
+              )
+              .get();
+
+      //------------------------------------------------------
+      // Total Jobs
+      //------------------------------------------------------
+
+      final totalJobs =
+          productSnapshot.docs.length +
+              serviceSnapshot.docs.length;
+
+      //------------------------------------------------------
+      // Return Model
+      //------------------------------------------------------
+
+      return HomeStatsModel(
+        totalJobs: totalJobs,
+        rating: rating,
+        reviews: reviews,
+      );
+    } catch (e) {
       return HomeStatsModel.empty();
     }
   }
 
-  //--------------------------------------------------
+  //----------------------------------------------------------
   // Refresh
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
-  Future<HomeStatsModel> refresh() async {
-    return await getHomeStats();
+  Future<void> refresh() async {
+    await getHomeStats();
   }
 
-  //--------------------------------------------------
-  // Update Total Jobs
-  //--------------------------------------------------
-
-  Future<void> updateTotalJobs(
-    int totalJobs,
-  ) async {
-    final uid = currentUserId;
-
-    if (uid == null) return;
-
-    await _providers.doc(uid).set(
-      {
-        'totalJobs': totalJobs,
-      },
-      SetOptions(
-        merge: true,
-      ),
-    );
-  }
-
-  //--------------------------------------------------
+  //----------------------------------------------------------
   // Update Rating
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
   Future<void> updateRating({
     required double rating,
     required int reviews,
   }) async {
-    final uid = currentUserId;
+    if (currentUserId == null) {
+      return;
+    }
 
-    if (uid == null) return;
+    await _workers
+        .doc(currentUserId)
+        .update({
+      "rating": rating,
+      "reviews": reviews,
+    });
+  }
 
-    await _providers.doc(uid).set(
-      {
-        'rating': rating,
-        'reviews': reviews,
-      },
-      SetOptions(
-        merge: true,
-      ),
-    );
+  //----------------------------------------------------------
+  // Update Total Jobs
+  //----------------------------------------------------------
+
+  Future<void> updateTotalJobs(
+    int totalJobs,
+  ) async {
+    if (currentUserId == null) {
+      return;
+    }
+
+    // يتم حسابها تلقائياً من المنتجات والخدمات
+    // لذلك لا نقوم بتخزينها داخل Firestore.
   }
 }

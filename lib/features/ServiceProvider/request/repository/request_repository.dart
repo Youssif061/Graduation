@@ -14,35 +14,28 @@ class RequestRepository {
 
   CollectionReference<Map<String, dynamic>>
       get _requests =>
-          _firestore.collection('requests');
+          _firestore.collection("requests");
 
-  //--------------------------------------------------
-  // Current Service Provider
-  //--------------------------------------------------
-
-  String? get currentProviderId =>
+  String? get _providerId =>
       _auth.currentUser?.uid;
 
   //--------------------------------------------------
-  // Get Requests
+  // Load Requests
   //--------------------------------------------------
 
   Future<List<RequestModel>> getRequests() async {
+    if (_providerId == null) {
+      throw Exception("User not logged in");
+    }
+
     try {
-      final providerId = currentProviderId;
-
-      // المستخدم غير مسجل دخول
-      if (providerId == null) {
-        return [];
-      }
-
       final snapshot = await _requests
           .where(
-            'expertId',
-            isEqualTo: providerId,
+            "providerId",
+            isEqualTo: _providerId,
           )
           .orderBy(
-            'createdAt',
+            "createdAt",
             descending: true,
           )
           .get();
@@ -55,10 +48,10 @@ class RequestRepository {
             ),
           )
           .toList();
-    } on FirebaseException {
-      return [];
-    } catch (_) {
-      return [];
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ?? "Failed to load requests",
+      );
     }
   }
 
@@ -70,16 +63,14 @@ class RequestRepository {
     String requestId,
   ) async {
     try {
-      final providerId = currentProviderId;
-
-      if (providerId == null) {
-        return;
-      }
-
       await _requests.doc(requestId).update({
-        'status': 'In Progress',
+        "status": "In Progress",
       });
-    } catch (_) {}
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ?? "Failed to accept request",
+      );
+    }
   }
 
   //--------------------------------------------------
@@ -90,16 +81,12 @@ class RequestRepository {
     String requestId,
   ) async {
     try {
-      final providerId = currentProviderId;
-
-      if (providerId == null) {
-        return;
-      }
-
-      await _requests
-          .doc(requestId)
-          .delete();
-    } catch (_) {}
+      await _requests.doc(requestId).delete();
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ?? "Failed to reject request",
+      );
+    }
   }
 
   //--------------------------------------------------
@@ -111,20 +98,19 @@ class RequestRepository {
     required double price,
   }) async {
     try {
-      final providerId = currentProviderId;
-
-      if (providerId == null) {
-        return;
-      }
-
       await _requests.doc(requestId).update({
-        'price': price,
+        "price": price,
       });
-    } catch (_) {}
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ??
+            "Failed to update proposal price",
+      );
+    }
   }
 
   //--------------------------------------------------
-  // Update Request Status
+  // Update Status
   //--------------------------------------------------
 
   Future<void> updateRequestStatus({
@@ -132,16 +118,15 @@ class RequestRepository {
     required String status,
   }) async {
     try {
-      final providerId = currentProviderId;
-
-      if (providerId == null) {
-        return;
-      }
-
       await _requests.doc(requestId).update({
-        'status': status,
+        "status": status,
       });
-    } catch (_) {}
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ??
+            "Failed to update request status",
+      );
+    }
   }
 
   //--------------------------------------------------
@@ -152,14 +137,10 @@ class RequestRepository {
     String requestId,
   ) async {
     try {
-      final providerId = currentProviderId;
-
-      if (providerId == null) {
-        return null;
-      }
-
       final document =
-          await _requests.doc(requestId).get();
+          await _requests
+              .doc(requestId)
+              .get();
 
       if (!document.exists) {
         return null;
@@ -175,10 +156,10 @@ class RequestRepository {
         data,
         document.id,
       );
-    } on FirebaseException {
-      return null;
-    } catch (_) {
-      return null;
+    } on FirebaseException catch (e) {
+      throw Exception(
+        e.message ?? "Failed to load request",
+      );
     }
   }
 }
