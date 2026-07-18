@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'auth_state.dart';
+import 'worker_signup_state.dart';
+import 'worker_signup_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -286,6 +288,66 @@ class AuthCubit extends Cubit<AuthState> {
       );
     } on FirebaseAuthException catch (e) {
       emit(AuthError(e.message ?? "Worker Sign Up Failed"));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  Future<void> completeWorkerRegistration(WorkerSignupState worker) async {
+    emit(const AuthLoading());
+
+    try {
+      User? user = _auth.currentUser;
+
+      if (worker.signupMethod == SignupMethod.email) {
+        final credential = await _auth.createUserWithEmailAndPassword(
+          email: worker.email.trim(),
+          password: worker.password.trim(),
+        );
+
+        user = credential.user;
+
+        await user!.sendEmailVerification();
+      }
+
+      if (user == null) {
+        emit(const AuthError("User not found."));
+        return;
+      }
+
+      await _firestore.collection("workers").doc(user.uid).set({
+        "uid": user.uid,
+        "name": worker.name,
+        "email": worker.email,
+        "phone": worker.phone,
+        "image": worker.imagePath,
+        "category": worker.category,
+        "experience": worker.experience,
+        "nationalId": worker.nationalId,
+        "location": GeoPoint(
+          worker.location!.latitude,
+          worker.location!.longitude,
+        ),
+        "serviceRadius": worker.radius,
+        "role": "worker",
+        "isVerified": worker.signupMethod != SignupMethod.email,
+        "createdAt": FieldValue.serverTimestamp(),
+      });
+
+      if (worker.signupMethod != SignupMethod.email) {
+        await GoogleSignIn().signOut();
+        await _auth.signOut();
+      } else {
+        await _auth.signOut();
+      }
+
+      emit(
+        const AuthNeedEmailVerification(
+          message: "Worker account created successfully.",
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(e.message ?? "Registration Failed"));
     } catch (e) {
       emit(AuthError(e.toString()));
     }

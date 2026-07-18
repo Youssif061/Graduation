@@ -110,9 +110,16 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      setState(
-                                                        () => path = null,
-                                                      );
+                                                      setState(() {
+                                                        path = null;
+                                                      });
+
+                                                      context
+                                                          .read<
+                                                            WorkerSignupCubit
+                                                          >()
+                                                          .saveImage('');
+
                                                       Navigator.pop(context);
                                                     },
                                                     child: const Text("Delete"),
@@ -182,24 +189,9 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                                       path = image.path;
                                     });
 
-                                    try {
-                                      String imageUrl =
-                                          await CloudinaryService.uploadImage(
-                                            image.path,
-                                          );
-
-                                      context
-                                          .read<WorkerSignupCubit>()
-                                          .saveImage(imageUrl);
-                                    } catch (e) {
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text("Image upload failed"),
-                                        ),
-                                      );
-                                    }
+                                    context.read<WorkerSignupCubit>().saveImage(
+                                      image.path,
+                                    );
                                   },
                                 ),
                               ),
@@ -328,7 +320,7 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                                     final workerCubit = context
                                         .read<WorkerSignupCubit>();
 
-                                    if (workerCubit.state.imageUrl.isEmpty) {
+                                    if (workerCubit.state.imagePath.isEmpty) {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(

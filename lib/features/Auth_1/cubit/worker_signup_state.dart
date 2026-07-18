@@ -8,7 +8,7 @@ class WorkerSignupState {
   final String phone;
   final String password;
 
-  final String imageUrl;
+  final String imagePath;
   final String category;
   final String experience;
   final String nationalId;
@@ -31,7 +31,7 @@ class WorkerSignupState {
     this.radius = 1000,
     this.loading = false,
     this.error,
-    this.imageUrl = '',
+    this.imagePath = '',
     this.signupMethod = SignupMethod.email,
   });
 
@@ -47,7 +47,7 @@ class WorkerSignupState {
     double? radius,
     bool? loading,
     String? error,
-    String? imageUrl,
+    String? imagePath,
     SignupMethod? signupMethod,
   }) {
     return WorkerSignupState(
@@ -56,7 +56,7 @@ class WorkerSignupState {
       phone: phone ?? this.phone,
       password: password ?? this.password,
       category: category ?? this.category,
-      imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
       experience: experience ?? this.experience,
       nationalId: nationalId ?? this.nationalId,
       location: location ?? this.location,

@@ -245,19 +245,18 @@ class _MapScreenState extends State<MapScreen> {
                             onPressed: state is AuthLoading
                                 ? null
                                 : () {
-                                    context
-                                        .read<WorkerSignupCubit>()
-                                        .saveLocation(
-                                          location: currentLocation,
-                                          radius: selectedRadius,
-                                        );
+                                    final workerCubit = context
+                                        .read<WorkerSignupCubit>();
 
-                                    final worker = context
-                                        .read<WorkerSignupCubit>()
-                                        .state;
+                                    workerCubit.saveLocation(
+                                      location: currentLocation,
+                                      radius: selectedRadius,
+                                    );
+
+                                    final worker = workerCubit.state;
 
                                     context.read<AuthCubit>().signUpWorker(
-                                      imageUrl: worker.imageUrl,
+                                      imageUrl: worker.imagePath,
                                       name: worker.name,
                                       email: worker.email,
                                       phone: worker.phone,

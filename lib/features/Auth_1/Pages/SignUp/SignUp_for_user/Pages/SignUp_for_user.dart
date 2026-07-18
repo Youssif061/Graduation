@@ -28,6 +28,7 @@ class SignUp_for_user extends StatefulWidget {
 class _SignUp_for_userState extends State<SignUp_for_user> {
   String? path;
   String imageUrl = '';
+  bool uploadingImage = false;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -48,7 +49,7 @@ class _SignUp_for_userState extends State<SignUp_for_user> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is EmailVerificationRequired) {
+        if (state is AuthNeedEmailVerification) {
           Navigator.pushReplacementNamed(context, Routers.confirmEmail);
         }
 
@@ -149,9 +150,10 @@ class _SignUp_for_userState extends State<SignUp_for_user> {
                                                     ),
                                                     TextButton(
                                                       onPressed: () {
-                                                        setState(
-                                                          () => path = null,
-                                                        );
+                                                        setState(() {
+                                                          path = null;
+                                                          imageUrl = '';
+                                                        });
                                                         Navigator.pop(context);
                                                       },
                                                       child: const Text(
@@ -187,23 +189,60 @@ class _SignUp_for_userState extends State<SignUp_for_user> {
                                     child: AppButton(
                                       title: "Camera",
                                       backgroundColor: AppColors.primaryColor,
-                                      onPressed: () async {
-                                        var image = await ImagePicker()
-                                            .pickImage(
-                                              source: ImageSource.camera,
-                                            );
+                                      onPressed: uploadingImage
+                                          ? null
+                                          : () async {
+                                              final image = await ImagePicker()
+                                                  .pickImage(
+                                                    source: ImageSource.camera,
+                                                  );
 
-                                        if (image == null) return;
+                                              if (image == null) return;
 
-                                        setState(() {
-                                          path = image.path;
-                                        });
+                                              setState(() {
+                                                path = image.path;
+                                                uploadingImage = true;
+                                              });
 
-                                        imageUrl =
-                                            await CloudinaryService.uploadImage(
-                                              image.path,
-                                            );
-                                      },
+                                              try {
+                                                imageUrl =
+                                                    await CloudinaryService.uploadImage(
+                                                      image.path,
+                                                    );
+
+                                                if (!mounted) return;
+
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Image uploaded successfully",
+                                                    ),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                imageUrl = '';
+
+                                                if (!mounted) return;
+
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Image upload failed",
+                                                    ),
+                                                  ),
+                                                );
+                                              } finally {
+                                                if (mounted) {
+                                                  setState(() {
+                                                    uploadingImage = false;
+                                                  });
+                                                }
+                                              }
+                                            },
                                     ),
                                   ),
                                 ),
@@ -215,23 +254,60 @@ class _SignUp_for_userState extends State<SignUp_for_user> {
                                     child: AppButton(
                                       title: "Gallery",
                                       backgroundColor: AppColors.primaryColor,
-                                      onPressed: () async {
-                                        var image = await ImagePicker()
-                                            .pickImage(
-                                              source: ImageSource.gallery,
-                                            );
+                                      onPressed: uploadingImage
+                                          ? null
+                                          : () async {
+                                              final image = await ImagePicker()
+                                                  .pickImage(
+                                                    source: ImageSource.gallery,
+                                                  );
 
-                                        if (image == null) return;
+                                              if (image == null) return;
 
-                                        setState(() {
-                                          path = image.path;
-                                        });
+                                              setState(() {
+                                                path = image.path;
+                                                uploadingImage = true;
+                                              });
 
-                                        imageUrl =
-                                            await CloudinaryService.uploadImage(
-                                              image.path,
-                                            );
-                                      },
+                                              try {
+                                                imageUrl =
+                                                    await CloudinaryService.uploadImage(
+                                                      image.path,
+                                                    );
+
+                                                if (!mounted) return;
+
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Image uploaded successfully",
+                                                    ),
+                                                  ),
+                                                );
+                                              } catch (e) {
+                                                imageUrl = '';
+
+                                                if (!mounted) return;
+
+                                                ScaffoldMessenger.of(
+                                                  context,
+                                                ).showSnackBar(
+                                                  const SnackBar(
+                                                    content: Text(
+                                                      "Image upload failed",
+                                                    ),
+                                                  ),
+                                                );
+                                              } finally {
+                                                if (mounted) {
+                                                  setState(() {
+                                                    uploadingImage = false;
+                                                  });
+                                                }
+                                              }
+                                            },
                                     ),
                                   ),
                                 ),
@@ -300,55 +376,72 @@ class _SignUp_for_userState extends State<SignUp_for_user> {
                                         )
                                       : AppButton(
                                           title: "Next",
-                                          onPressed: () {
-                                            if (!formKey.currentState!
-                                                .validate()) {
-                                              return;
-                                            }
+                                          onPressed: uploadingImage
+                                              ? null
+                                              : () {
+                                                  if (!formKey.currentState!
+                                                      .validate()) {
+                                                    return;
+                                                  }
 
-                                            if (passwordController.text !=
-                                                confirmPasswordController
-                                                    .text) {
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Passwords do not match",
-                                                  ),
-                                                ),
-                                              );
-                                              return;
-                                            }
+                                                  if (passwordController.text !=
+                                                      confirmPasswordController
+                                                          .text) {
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                          "Passwords do not match",
+                                                        ),
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
+                                                  if (uploadingImage) {
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                          "Please wait until image upload finishes",
+                                                        ),
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
+                                                  if (imageUrl.isEmpty) {
+                                                    ScaffoldMessenger.of(
+                                                      context,
+                                                    ).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text(
+                                                          "Please select a profile image",
+                                                        ),
+                                                      ),
+                                                    );
+                                                    return;
+                                                  }
 
-                                            if (imageUrl.isEmpty) {
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
-                                                const SnackBar(
-                                                  content: Text(
-                                                    "Please select a profile image",
-                                                  ),
-                                                ),
-                                              );
-                                              return;
-                                            }
-
-                                            context
-                                                .read<AuthCubit>()
-                                                .signUpUser(
-                                                  name: nameController.text
-                                                      .trim(),
-                                                  email: emailController.text
-                                                      .trim(),
-                                                  phone: phoneController.text
-                                                      .trim(),
-                                                  password: passwordController
-                                                      .text
-                                                      .trim(),
-                                                  imageUrl: imageUrl,
-                                                );
-                                          },
+                                                  context
+                                                      .read<AuthCubit>()
+                                                      .signUpUser(
+                                                        name: nameController
+                                                            .text
+                                                            .trim(),
+                                                        email: emailController
+                                                            .text
+                                                            .trim(),
+                                                        phone: phoneController
+                                                            .text
+                                                            .trim(),
+                                                        password:
+                                                            passwordController
+                                                                .text
+                                                                .trim(),
+                                                        imageUrl: imageUrl,
+                                                      );
+                                                },
                                           backgroundColor:
                                               AppColors.marketGreen,
                                         ),

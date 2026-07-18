@@ -36,7 +36,6 @@ class Field_Signup_Phone extends StatelessWidget {
           prefixIcon: Icon(icon),
           Text_Styles: AppColors.cardShadowColor,
           fill_color: AppColors.backgroundColor,
-          controller: controller,
 
           validator: (value) {
             if (value == null || value.trim().isEmpty) {

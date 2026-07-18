@@ -6,8 +6,8 @@ import 'worker_signup_state.dart';
 class WorkerSignupCubit extends Cubit<WorkerSignupState> {
   WorkerSignupCubit() : super(const WorkerSignupState());
 
-  void saveImage(String imageUrl) {
-    emit(state.copyWith(imageUrl: imageUrl));
+  void saveImage(String imagePath) {
+    emit(state.copyWith(imagePath: imagePath));
   }
 
   void saveStep1({

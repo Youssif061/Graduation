@@ -9,6 +9,7 @@ import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/W
 import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
 
@@ -215,8 +216,15 @@ class _SignUp_for_worker_2State extends State<SignUp_for_worker_2> {
                                     );
                                     return;
                                   }
-
                                   if (_formKey.currentState!.validate()) {
+                                    context.read<WorkerSignupCubit>().saveStep2(
+                                      category: selectedValue!,
+                                      experience: experienceController.text
+                                          .trim(),
+                                      nationalId: nationalIdController.text
+                                          .trim(),
+                                    );
+
                                     Navigator.pushNamed(
                                       context,
                                       Routers.workerSignUp3,
