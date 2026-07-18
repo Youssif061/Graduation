@@ -10,6 +10,8 @@ import 'package:expertisemarket/features/users/products/presentation/widgets/mar
 import 'package:expertisemarket/features/users/products/presentation/widgets/market_search_bar.dart';
 import 'package:expertisemarket/features/users/products/presentation/widgets/category_chip.dart';
 import 'package:expertisemarket/features/users/products/presentation/pages/search_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProductsTab extends StatefulWidget {
   const ProductsTab({super.key});
@@ -20,6 +22,17 @@ class ProductsTab extends StatefulWidget {
 
 class _ProductsTabState extends State<ProductsTab> {
   int _selectedCategory = 0;
+  late Future<DocumentSnapshot<Map<String, dynamic>>> userFuture;
+
+  @override
+  void initState() {
+    super.initState();
+
+    userFuture = FirebaseFirestore.instance
+        .collection('users') // أو clients حسب مشروعك
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,33 +85,7 @@ class _ProductsTabState extends State<ProductsTab> {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    'High performance hardware for professionals',
-                    style: MarketTextStyles.bodySmall.copyWith(
-                      color: AppColors.marketTextSub,
-                    ),
-                  ),
                 ],
-              ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Text(
-                      'View all',
-                      style: MarketTextStyles.bodySmall.copyWith(
-                        color: AppColors.marketGreenDark,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 10,
-                      color: AppColors.marketGreenDark,
-                    ),
-                  ],
-                ),
               ),
             ],
           ),
@@ -118,21 +105,28 @@ class _ProductsTabState extends State<ProductsTab> {
                   child: Center(child: Text(state.message)),
                 );
               }
-              final products = state is ProductLoaded ? state.products : <ProductModel>[];
+              final products = state is ProductLoaded
+                  ? state.products
+                  : <ProductModel>[];
               final category = DummyData.categories[_selectedCategory];
               final filtered = products.where((p) {
-                return _selectedCategory == 0 || p.category.toLowerCase() == category.toLowerCase();
+                return _selectedCategory == 0 ||
+                    p.category.toLowerCase() == category.toLowerCase();
               }).toList();
 
               if (filtered.isEmpty) {
                 return const Padding(
                   padding: EdgeInsets.symmetric(vertical: 40),
-                  child: Center(child: Text('No products found in this category')),
+                  child: Center(
+                    child: Text('No products found in this category'),
+                  ),
                 );
               }
 
               return Column(
-                children: filtered.map((p) => MarketProductCard(product: p)).toList(),
+                children: filtered
+                    .map((p) => MarketProductCard(product: p))
+                    .toList(),
               );
             },
           ),

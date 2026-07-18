@@ -19,7 +19,6 @@ Future<void> main() async {
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Seed Mock Data in Firestore asynchronously in background (non-blocking)
   FirebaseService.instance.seedDatabase();
 
   runApp(const MainApp());

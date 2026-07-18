@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
@@ -28,14 +30,45 @@ class OrderSuccessScreen extends StatelessWidget {
         title: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                color: AppColors.marketGreenBadge,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(Icons.person, color: AppColors.marketGreen, size: 20),
+            FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                  .get(),
+              builder: (context, snapshot) {
+                String image = '';
+
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  final data = snapshot.data!.data()!;
+                  image = data['image'] ?? '';
+                }
+
+                return Container(
+                  width: 32,
+                  height: 32,
+                  decoration: const BoxDecoration(
+                    color: AppColors.marketGreenBadge,
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child: image.isNotEmpty
+                        ? Image.network(
+                            image,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => const Icon(
+                              Icons.person,
+                              color: AppColors.marketGreen,
+                              size: 20,
+                            ),
+                          )
+                        : const Icon(
+                            Icons.person,
+                            color: AppColors.marketGreen,
+                            size: 20,
+                          ),
+                  ),
+                );
+              },
             ),
             const SizedBox(width: 10),
             const Text(
@@ -49,29 +82,9 @@ class OrderSuccessScreen extends StatelessWidget {
             ),
           ],
         ),
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 16),
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: AppColors.marketCardLight,
-              shape: BoxShape.circle,
-              border: Border.all(color: AppColors.marketBorder),
-            ),
-            child: const Icon(
-              Icons.person_outline,
-              color: AppColors.marketTextSub,
-              size: 20,
-            ),
-          ),
-        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(1),
-          child: Container(
-            color: AppColors.marketBorder,
-            height: 1,
-          ),
+          child: Container(color: AppColors.marketBorder, height: 1),
         ),
       ),
       body: Padding(
@@ -161,7 +174,11 @@ class OrderSuccessScreen extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.local_shipping_outlined, color: Colors.white, size: 18),
+                    const Icon(
+                      Icons.local_shipping_outlined,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Track Order',
@@ -190,12 +207,19 @@ class OrderSuccessScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: const Color(0xFFE2E8F0), width: 1.5),
+                  border: Border.all(
+                    color: const Color(0xFFE2E8F0),
+                    width: 1.5,
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.shopping_bag_outlined, color: AppColors.marketText, size: 18),
+                    const Icon(
+                      Icons.shopping_bag_outlined,
+                      color: AppColors.marketText,
+                      size: 18,
+                    ),
                     const SizedBox(width: 8),
                     Text(
                       'Continue Shopping',

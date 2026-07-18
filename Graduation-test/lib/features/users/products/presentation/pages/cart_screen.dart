@@ -6,6 +6,8 @@ import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/users/products/models/product_model.dart';
 import 'package:expertisemarket/features/users/products/presentation/pages/checkout_screen.dart';
 import 'package:expertisemarket/features/users/products/presentation/pages/main_shell_notifier.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -49,7 +51,10 @@ class _CartScreenState extends State<CartScreen> {
             automaticallyImplyLeading: false,
             leading: Navigator.canPop(context)
                 ? IconButton(
-                    icon: const Icon(Icons.arrow_back, color: AppColors.marketText),
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.marketText,
+                    ),
                     onPressed: () => Navigator.pop(context),
                   )
                 : null,
@@ -60,28 +65,44 @@ class _CartScreenState extends State<CartScreen> {
               ),
             ),
             actions: [
-              GestureDetector(
-                onTap: () {
-                  final notifier = MainShellNotifier.maybeOf(context);
-                  if (notifier != null) {
-                    notifier.switchTab(3);
+              FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                future: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                    .get(),
+                builder: (context, snapshot) {
+                  String image = '';
+
+                  if (snapshot.hasData && snapshot.data!.exists) {
+                    final data = snapshot.data!.data()!;
+                    image = data['image'] ?? '';
                   }
+
+                  return GestureDetector(
+                    onTap: () {
+                      final notifier = MainShellNotifier.maybeOf(context);
+                      if (notifier != null) {
+                        notifier.switchTab(3);
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 16),
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: AppColors.marketBorder),
+                      ),
+                      child: CircleAvatar(
+                        backgroundColor: AppColors.marketCardLight,
+                        backgroundImage: image.isNotEmpty
+                            ? NetworkImage(image)
+                            : const AssetImage("assets/images/2.png")
+                                  as ImageProvider,
+                      ),
+                    ),
+                  );
                 },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: AppColors.marketCardLight,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppColors.marketBorder),
-                  ),
-                  child: const Icon(
-                    Icons.person_outline,
-                    color: AppColors.marketTextSub,
-                    size: 20,
-                  ),
-                ),
               ),
             ],
             bottom: PreferredSize(
@@ -148,9 +169,14 @@ class _CartScreenState extends State<CartScreen> {
                       ...items.map(
                         (item) => _CartItemRow(
                           item: item,
-                          onDelete: () => context.read<CartCubit>().removeItem(item.id),
-                          onIncrement: () => context.read<CartCubit>().increaseQuantity(item.id),
-                          onDecrement: () => context.read<CartCubit>().decreaseQuantity(item.id),
+                          onDelete: () =>
+                              context.read<CartCubit>().removeItem(item.id),
+                          onIncrement: () => context
+                              .read<CartCubit>()
+                              .increaseQuantity(item.id),
+                          onDecrement: () => context
+                              .read<CartCubit>()
+                              .decreaseQuantity(item.id),
                         ),
                       ),
                     const SizedBox(height: 16),
@@ -228,13 +254,17 @@ class _CartScreenState extends State<CartScreen> {
                           : () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => const CheckoutScreen()),
+                                MaterialPageRoute(
+                                  builder: (_) => const CheckoutScreen(),
+                                ),
                               );
                             },
                       child: Container(
                         height: 52,
                         decoration: BoxDecoration(
-                          color: items.isEmpty ? Colors.grey : AppColors.marketText,
+                          color: items.isEmpty
+                              ? Colors.grey
+                              : AppColors.marketText,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         alignment: Alignment.center,

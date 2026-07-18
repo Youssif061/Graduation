@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expertisemarket/core/constants/app_images.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
@@ -40,47 +43,53 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent,
           elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: AppColors.marketText),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: const BoxDecoration(
-                  color: AppColors.marketGreenBadge,
-                  shape: BoxShape.circle,
+          leadingWidth: 220,
+
+          leading: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            future: FirebaseFirestore.instance
+                .collection('users')
+                .doc(FirebaseAuth.instance.currentUser!.uid)
+                .get(),
+            builder: (context, snapshot) {
+              String image = "";
+              String name = "ExpertiseMarket";
+
+              if (snapshot.hasData && snapshot.data!.exists) {
+                final data = snapshot.data!.data()!;
+
+                image = data["image"] ?? "";
+                name = data["name"] ?? "ExpertiseMarket";
+              }
+
+              return Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundColor: AppColors.backgroundColor,
+                      backgroundImage: image.isNotEmpty
+                          ? NetworkImage(image)
+                          : const AssetImage(AppImages.User) as ImageProvider,
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Text(
+                        name,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.marketText,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Icon(Icons.person, color: AppColors.marketGreen, size: 20),
-              ),
-              const SizedBox(width: 10),
-              const Text(
-                'ExpertiseMarket',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.marketText,
-                  fontFamily: 'Manrope',
-                ),
-              ),
-            ],
+              );
+            },
           ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 16),
-              width: 32,
-              height: 32,
-              decoration: BoxDecoration(
-                color: AppColors.marketCardLight,
-                shape: BoxShape.circle,
-                border: Border.all(color: AppColors.marketBorder),
-              ),
-              child: const Icon(Icons.person_outline, color: AppColors.marketTextSub, size: 20),
-            ),
-          ],
+          
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(1),
             child: Container(color: AppColors.marketBorder, height: 1),
@@ -96,7 +105,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 48,
+                    ),
                     const SizedBox(height: 16),
                     Text(state.message, textAlign: TextAlign.center),
                   ],
@@ -202,10 +215,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
       'Accepted',
       'Preparing',
       'Out for Delivery',
-      'Delivered'
+      'Delivered',
     ];
-    final currentIdx = statuses
-        .indexWhere((s) => s.toLowerCase() == order.status.toLowerCase());
+    final currentIdx = statuses.indexWhere(
+      (s) => s.toLowerCase() == order.status.toLowerCase(),
+    );
     final activeIdx = currentIdx >= 0 ? currentIdx : 0;
 
     final descriptions = [
@@ -260,8 +274,8 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
                         isCompleted
                             ? Icons.check
                             : isActive
-                                ? Icons.radio_button_checked
-                                : Icons.circle,
+                            ? Icons.radio_button_checked
+                            : Icons.circle,
                         color: isCompleted || isActive
                             ? Colors.white
                             : const Color(0xFF94A3B8),
@@ -346,7 +360,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
         children: [
           const Row(
             children: [
-              Icon(Icons.receipt_long_outlined, color: AppColors.marketText, size: 20),
+              Icon(
+                Icons.receipt_long_outlined,
+                color: AppColors.marketText,
+                size: 20,
+              ),
               SizedBox(width: 8),
               Text(
                 'Item Summary',
@@ -360,95 +378,109 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
             ],
           ),
           const SizedBox(height: 16),
-          ...order.items.map((item) => Padding(
-                padding: const EdgeInsets.only(bottom: 12),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFF1F5F9),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: _buildItemImage(item.imageAsset),
-                      ),
+          ...order.items.map(
+            (item) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF1F5F9),
+                      borderRadius: BorderRadius.circular(10),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item.name,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: AppColors.marketText,
-                              fontFamily: 'Inter',
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: _buildItemImage(item.imageAsset),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.name,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.marketText,
+                            fontFamily: 'Inter',
                           ),
-                          Text(
-                            'Qty: ${item.quantity}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Color(0xFF94A3B8),
-                              fontFamily: 'Inter',
-                            ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        Text(
+                          'Qty: ${item.quantity}',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: Color(0xFF94A3B8),
+                            fontFamily: 'Inter',
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      '\$${(item.price * item.quantity).toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.marketText,
-                        fontFamily: 'Inter',
-                      ),
+                  ),
+                  Text(
+                    '\$${(item.price * item.quantity).toStringAsFixed(2)}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.marketText,
+                      fontFamily: 'Inter',
                     ),
-                  ],
-                ),
-              )),
+                  ),
+                ],
+              ),
+            ),
+          ),
           const Divider(color: Color(0xFFE2E8F0)),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Taxes',
-                  style: TextStyle(
-                      fontSize: 13,
-                      color: Color(0xFF94A3B8),
-                      fontFamily: 'Inter')),
-              Text('\$${order.taxes.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.marketText,
-                      fontFamily: 'Inter')),
+              const Text(
+                'Taxes',
+                style: TextStyle(
+                  fontSize: 13,
+                  color: Color(0xFF94A3B8),
+                  fontFamily: 'Inter',
+                ),
+              ),
+              Text(
+                '\$${order.taxes.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.marketText,
+                  fontFamily: 'Inter',
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Total Paid',
-                  style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.marketText,
-                      fontFamily: 'Inter')),
-              Text('\$${order.total.toStringAsFixed(2)}',
-                  style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: AppColors.marketText,
-                      fontFamily: 'Inter')),
+              const Text(
+                'Total Paid',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.marketText,
+                  fontFamily: 'Inter',
+                ),
+              ),
+              Text(
+                '\$${order.total.toStringAsFixed(2)}',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.marketText,
+                  fontFamily: 'Inter',
+                ),
+              ),
             ],
           ),
         ],
@@ -475,8 +507,18 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
 
   String _monthName(int month) {
     const months = [
-      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
     ];
     return months[month - 1];
   }
