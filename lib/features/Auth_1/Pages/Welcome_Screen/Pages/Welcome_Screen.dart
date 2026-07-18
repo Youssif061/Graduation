@@ -140,12 +140,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           AppButton(
                             title: "LogIn",
                             onPressed: () async {
-                              // await login(
-                              //   _formKey,
-                              //   context,
-                              //   emailController,
-                              //   passwordController,
-                              // );
+                              await login(
+                                _formKey,
+                                context,
+                                emailController,
+                                passwordController,
+                              );
                             },
                             backgroundColor: AppColors.primaryColor,
                           ),
