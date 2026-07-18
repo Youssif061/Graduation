@@ -59,7 +59,7 @@ class _InventoryScreenState
             // Loading
             //-----------------------------------
 
-            if (state is InventoryLoading) {
+            if (state is InventoryLoading || state is InventoryDeleting) {
               return const Center(
                 child:
                     CircularProgressIndicator(),

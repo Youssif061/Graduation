@@ -34,13 +34,9 @@ class RequestRepository {
             "providerId",
             isEqualTo: _providerId,
           )
-          .orderBy(
-            "createdAt",
-            descending: true,
-          )
           .get();
 
-      return snapshot.docs
+      final list = snapshot.docs
           .map(
             (doc) => RequestModel.fromMap(
               doc.data(),
@@ -48,6 +44,17 @@ class RequestRepository {
             ),
           )
           .toList();
+
+      list.sort((a, b) {
+        final aTime = a.createdAt;
+        final bTime = b.createdAt;
+        if (aTime == null && bTime == null) return 0;
+        if (aTime == null) return 1;
+        if (bTime == null) return -1;
+        return bTime.compareTo(aTime);
+      });
+
+      return list;
     } on FirebaseException catch (e) {
       throw Exception(
         e.message ?? "Failed to load requests",

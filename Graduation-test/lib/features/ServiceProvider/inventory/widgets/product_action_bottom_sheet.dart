@@ -1,6 +1,8 @@
 import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/edit_product_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/delete_product_dialog.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class ProductActionBottomSheet {
@@ -47,14 +49,18 @@ class ProductActionBottomSheet {
                     ),
                     subtitle: const Text("Update product information"),
                     onTap: () async {
-                      Navigator.pop(context);
+                      final navigator = Navigator.of(context);
+                      navigator.pop();
 
-                      await Navigator.push(
-                        context,
+                      final result = await navigator.push(
                         MaterialPageRoute(
                           builder: (_) => EditProductScreen(product: product),
                         ),
                       );
+
+                      if (result == true && context.mounted) {
+                        context.read<InventoryCubit>().loadInventory();
+                      }
                     },
                   ),
 
@@ -79,7 +85,7 @@ class ProductActionBottomSheet {
                     onTap: () {
                       Navigator.pop(context);
 
-                      DeleteProductDialog.show(context, product as dynamic);
+                      DeleteProductDialog.show(context, product);
                     },
                   ),
 

@@ -34,18 +34,25 @@ class InventoryRepositoryImpl implements InventoryRepository {
           "providerId",
           isEqualTo: providerId,
         )
-        .orderBy(
-          "createdAt",
-          descending: true,
-        )
         .get();
 
-    return snapshot.docs.map((doc) {
+    final list = snapshot.docs.map((doc) {
       return ProductModel.fromJson(
         doc.data(),
         doc.id,
       );
     }).toList();
+
+    list.sort((a, b) {
+      final aTime = a.createdAt;
+      final bTime = b.createdAt;
+      if (aTime == null && bTime == null) return 0;
+      if (aTime == null) return 1;
+      if (bTime == null) return -1;
+      return bTime.compareTo(aTime);
+    });
+
+    return list;
   }
 
   //----------------------------------------------------------

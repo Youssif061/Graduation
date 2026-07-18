@@ -1,3 +1,4 @@
+import 'package:expertisemarket/core/routes/routers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expertisemarket/features/ServiceProvider/profile/page/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -85,19 +86,9 @@ class _MainAppScreenState extends State<MainAppScreen> {
     super.dispose();
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>> _loadWorkerData() async {
-    final user = FirebaseAuth.instance.currentUser;
-
-    if (user == null) {
-      throw Exception("User is not logged in");
-    }
-
-    final uid = user.uid;
-    return FirebaseFirestore.instance.collection('workers').doc(uid).get();
-  }
-
   @override
   Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     return MultiBlocProvider(
       providers: [
         BlocProvider<HomeCubit>.value(value: _homeCubit),
@@ -107,120 +98,137 @@ class _MainAppScreenState extends State<MainAppScreen> {
         BlocProvider<RequestCubit>.value(value: _requestCubit),
       ],
 
-      child: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-        future: _loadWorkerData(),
+      child: uid == null
+          ? const Scaffold(body: Center(child: Text("Not logged in")))
+          : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: FirebaseFirestore.instance
+                  .collection('workers')
+                  .doc(uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                String workerName = "CraftMarket";
+                String imageUrl = "";
 
-        builder: (context, snapshot) {
-          String workerName = "CraftMarket";
+                if (snapshot.hasData && snapshot.data!.exists) {
+                  final data = snapshot.data!.data();
+                  workerName = data?["name"] ?? "name";
+                  imageUrl = data?["image"] ?? "";
+                }
 
-          String imageUrl = "";
+                return Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: Colors.white,
 
-          if (snapshot.hasData && snapshot.data!.exists) {
-            final data = snapshot.data!.data();
+                    foregroundColor: Colors.black,
 
-            workerName = data?["name"] ?? "name";
+                    surfaceTintColor: Colors.white,
 
-            imageUrl = data?["image"] ?? "";
-          }
+                    elevation: 0,
 
-          return Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
+                    scrolledUnderElevation: 0,
 
-              foregroundColor: Colors.black,
+                    leadingWidth: 60,
 
-              surfaceTintColor: Colors.white,
+                    leading: Padding(
+                      padding: const EdgeInsets.only(left: 16),
 
-              elevation: 0,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, Routers.profile);
+                        },
+                        child: MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: CircleAvatar(
+                            radius: 22,
 
-              scrolledUnderElevation: 0,
+                            backgroundColor: AppColors.backgroundColor,
 
-              leadingWidth: 60,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
 
-              leading: Padding(
-                padding: const EdgeInsets.only(left: 16),
+                              child: imageUrl.isEmpty
+                                  ? Image.asset(
+                                      AppImages.User,
 
-                child: CircleAvatar(
-                  radius: 22,
+                                      width: 40,
 
-                  backgroundColor: AppColors.backgroundColor,
+                                      height: 40,
 
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      imageUrl,
 
-                    child: imageUrl.isEmpty
-                        ? Image.asset(
-                            AppImages.User,
+                                      width: 40,
 
-                            width: 40,
+                                      height: 40,
 
-                            height: 40,
+                                      fit: BoxFit.cover,
 
-                            fit: BoxFit.cover,
-                          )
-                        : Image.network(
-                            imageUrl,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          AppImages.User,
 
-                            width: 40,
+                                          width: 40,
 
-                            height: 40,
+                                          height: 40,
 
-                            fit: BoxFit.cover,
-
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                AppImages.User,
-
-                                width: 40,
-
-                                height: 40,
-
-                                fit: BoxFit.cover,
-                              );
-                            },
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    ),
+                            ),
                           ),
-                  ),
-                ),
-              ),
-
-              title: Text(
-                workerName,
-
-                style: Theme.of(
-                  context,
-                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-              ),
-
-              actions: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-
-                      MaterialPageRoute(
-                        builder: (_) => const NotificationScreen(),
+                        ),
                       ),
-                    );
-                  },
+                    ),
 
-                  icon: SvgPicture.asset(
-                    AppImages.notificationsSvg,
+                    title: GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, Routers.profile);
+                      },
+                      child: MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Text(
+                          workerName,
 
-                    width: 26,
+                          style: Theme.of(
+                            context,
+                          ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
 
-                    height: 26,
+                    actions: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+
+                            MaterialPageRoute(
+                              builder: (_) => const NotificationScreen(),
+                            ),
+                          );
+                        },
+
+                        icon: SvgPicture.asset(
+                          AppImages.notificationsSvg,
+
+                          width: 26,
+
+                          height: 26,
+                        ),
+                      ),
+
+                      const SizedBox(width: 8),
+                    ],
+
+                    bottom: PreferredSize(
+                      preferredSize: const Size.fromHeight(1),
+
+                      child: Container(height: 1, color: Colors.grey.shade200),
+                    ),
                   ),
-                ),
-
-                const SizedBox(width: 8),
-              ],
-
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(1),
-
-                child: Container(height: 1, color: Colors.grey.shade200),
-              ),
-            ),
             body: _screens[currentIndex],
 
             bottomNavigationBar: Container(

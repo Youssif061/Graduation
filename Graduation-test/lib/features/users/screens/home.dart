@@ -4,6 +4,7 @@ import 'package:expertisemarket/features/users/screens/pro_details.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expertisemarket/core/routes/routers.dart';
 import '../data/firebase_service.dart';
 import '../data/models/category_model.dart';
 import '../data/models/pro_model.dart';
@@ -21,7 +22,6 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Future<List<CategoryModel>> categoriesFuture;
   late Future<List<ProModel>> prosFuture;
-  late Future<DocumentSnapshot<Map<String, dynamic>>> userFuture;
 
   @override
   void initState() {
@@ -29,15 +29,11 @@ class _HomeState extends State<Home> {
 
     categoriesFuture = FirebaseService.instance.getCategories();
     prosFuture = FirebaseService.instance.getProfessionals();
-
-    userFuture = FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
   }
 
   @override
   Widget build(BuildContext context) {
+    final uid = FirebaseAuth.instance.currentUser?.uid;
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
 
@@ -45,64 +41,87 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         elevation: 0,
         titleSpacing: 12,
-        title: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          future: userFuture,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const SizedBox();
-            }
-
-            if (!snapshot.hasData || !snapshot.data!.exists) {
-              return const Text(
+        title: uid == null
+            ? const Text(
                 "ExpertiseMarket",
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
-              );
-            }
+              )
+            : StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                stream: FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(uid)
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox();
+                  }
 
-            final data = snapshot.data!.data()!;
+                  if (!snapshot.hasData || !snapshot.data!.exists) {
+                    return const Text(
+                      "ExpertiseMarket",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  }
 
-            final String name = data['name'] ?? '';
-            final String image = data['image'] ?? '';
-            debugPrint("Image URL: ${data['imageUrl']}");
-            return Row(
-              children: [
-                CircleAvatar(
-                  radius: 18,
-                  child: ClipOval(
-                    child: Image.network(
-                      image,
-                      width: 36,
-                      height: 36,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        print(error);
-                        return Image.asset(
-                          "assets/images/2.png",
-                          fit: BoxFit.cover,
-                        );
-                      },
+                  final data = snapshot.data!.data()!;
+                  final String name = data['name'] ?? '';
+                  final String image = data['image'] ?? '';
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, Routers.profile);
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.grey.shade200,
+                            child: ClipOval(
+                              child: image.isNotEmpty
+                                  ? Image.network(
+                                      image,
+                                      width: 36,
+                                      height: 36,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        return Image.asset(
+                                          "assets/images/2.png",
+                                          fit: BoxFit.cover,
+                                        );
+                                      },
+                                    )
+                                  : Image.asset(
+                                      "assets/images/2.png",
+                                      fit: BoxFit.cover,
+                                    ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              name,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    name,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ],
-            );
-          },
-        ),
+                  );
+                },
+              ),
         actions: const [
           Padding(
             padding: EdgeInsets.only(right: 12),

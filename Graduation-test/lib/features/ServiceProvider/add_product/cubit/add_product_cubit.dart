@@ -140,6 +140,11 @@ class AddProductCubit extends Cubit<AddProductState> {
   Future<void> publishProduct() async {
     if (!formKey.currentState!.validate()) return;
 
+    if (images.isEmpty) {
+      emit(const AddProductFailure("Please upload at least one image"));
+      return;
+    }
+
     try {
       emit(const AddProductLoading());
 
@@ -175,6 +180,11 @@ class AddProductCubit extends Cubit<AddProductState> {
     if (!formKey.currentState!.validate()) return;
 
     if (currentProduct == null) return;
+
+    if (images.isEmpty && existingImages.isEmpty) {
+      emit(const AddProductFailure("Please upload at least one image"));
+      return;
+    }
 
     try {
       emit(const AddProductLoading());
