@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:cloudinary_public/cloudinary_public.dart';
 
 class CloudinaryService {
   static final cloudinary = CloudinaryPublic(
@@ -7,10 +10,25 @@ class CloudinaryService {
   );
 
   static Future<String> uploadImage(String imagePath) async {
-    CloudinaryResponse response = await cloudinary.uploadFile(
-      CloudinaryFile.fromFile(imagePath),
-    );
+    final file = File(imagePath);
 
-    return response.secureUrl;
+    if (!await file.exists()) {
+      throw Exception("Image not found");
+    }
+
+    try {
+      final response = await cloudinary
+          .uploadFile(
+            CloudinaryFile.fromFile(
+              imagePath,
+              folder: "expertise_market/profile_images",
+            ),
+          )
+          .timeout(const Duration(seconds: 30));
+
+      return response.secureUrl;
+    } catch (e) {
+      throw Exception("Failed to upload image");
+    }
   }
 }
