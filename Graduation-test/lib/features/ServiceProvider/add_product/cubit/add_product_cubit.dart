@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:expertisemarket/features/ServiceProvider/add_product/data/add_product_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
-import 'package:expertisemarket/features/ServiceProvider/add_product/repository/add_product_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';

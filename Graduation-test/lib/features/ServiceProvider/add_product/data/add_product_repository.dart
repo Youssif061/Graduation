@@ -2,93 +2,89 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
-import '../model/product_model.dart';
+import 'package:expertisemarket/core/services/cloudinary_service.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
 
 class AddProductRepository {
-  AddProductRepository();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+  String get providerId => _auth.currentUser!.uid;
 
-  final FirebaseStorage _storage =
-      FirebaseStorage.instance;
+  //==========================================================
+  // Upload Images To Cloudinary
+  //==========================================================
 
-  final FirebaseAuth _auth =
-      FirebaseAuth.instance;
-
-  CollectionReference<Map<String, dynamic>>
-      get _products =>
-          _firestore.collection("products");
-
-  String get providerId {
-    final user = _auth.currentUser;
-
-    if (user == null) {
-      throw Exception("User not authenticated.");
-    }
-
-    return user.uid;
-  }
-
-  //==========================================
-  // Upload Images
-  //==========================================
-
-  Future<List<String>> uploadImages(
-    List<File> images,
-  ) async {
-    final List<String> urls = [];
+  Future<List<String>> uploadImages(List<File> images) async {
+    List<String> imageUrls = [];
 
     for (final image in images) {
-      final fileName =
-          "${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}";
-
-      final ref = _storage
-          .ref()
-          .child("products")
-          .child(providerId)
-          .child(fileName);
-
-      final uploadTask =
-          await ref.putFile(image);
-
-      if (uploadTask.state ==
-          TaskState.success) {
-        final url =
-            await ref.getDownloadURL();
-
-        urls.add(url);
-      }
+      final imageUrl = await CloudinaryService.uploadImage(image.path);
+      imageUrls.add(imageUrl);
     }
 
-    return urls;
+    return imageUrls;
   }
 
-  //==========================================
+  //==========================================================
   // Add Product
-  //==========================================
+  //==========================================================
 
-  Future<void> addProduct(
-    ProductModel product,
-  ) async {
-    await _products.add(
-      product.toJson(),
-    );
+  Future<void> addProduct(ProductModel product) async {
+    final doc = _firestore.collection('products').doc();
+
+    await doc.set({
+      "id": doc.id,
+      "providerId": providerId,
+      "name": product.name,
+      "category": product.category,
+      "description": product.description,
+      "price": product.price,
+      "stock": product.stock,
+      "images": product.images,
+      "createdAt": FieldValue.serverTimestamp(),
+    });
   }
 
-  //==========================================
+  //==========================================================
   // Update Product
-  //==========================================
+  //==========================================================
 
-  Future<void> updateProduct(
-    ProductModel product,
-  ) async {
-    await _products
-        .doc(product.id)
-        .update(
-          product.toJson(),
+  Future<void> updateProduct(ProductModel product) async {
+    await _firestore.collection('products').doc(product.id).update({
+      "name": product.name,
+      "category": product.category,
+      "description": product.description,
+      "price": product.price,
+      "stock": product.stock,
+      "images": product.images,
+      "updatedAt": FieldValue.serverTimestamp(),
+    });
+  }
+
+  //==========================================================
+  // Delete Product
+  //==========================================================
+
+  Future<void> deleteProduct(String productId) async {
+    await _firestore.collection('products').doc(productId).delete();
+  }
+
+  //==========================================================
+  // Get My Products
+  //==========================================================
+
+  Stream<List<ProductModel>> getProducts() {
+    return _firestore
+        .collection('products')
+        .where('providerId', isEqualTo: providerId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => ProductModel.fromFirestore(doc))
+              .toList(),
         );
   }
 }
