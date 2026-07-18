@@ -4,6 +4,7 @@ import 'package:expertisemarket/core/widgets/app_button.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class confirmEmail extends StatelessWidget {
   const confirmEmail({super.key});
@@ -20,12 +21,22 @@ class confirmEmail extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text("Verified Your Email", style: TextStyles.title),
+              Gap(20),
+
               Text(
-                "Ceck Your Email and Verified Your Account ",
-                style: TextStyles.title,
+                "Verified Your Email",
+                style: TextStyles.title.copyWith(
+                  color: AppColors.darkColor,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-              Icon(Icons.verified),
+              Gap(30),
+
+              Text(
+                "Ceck Your Email and Verified Your Account then return to login",
+                style: TextStyles.title.copyWith(color: AppColors.darkColor),
+              ),
+              Gap(50),
               AppButton(
                 title: "Resend Email",
 
