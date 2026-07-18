@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expertisemarket/features/products/data/cart_repository.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/data/cart_repository.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 
 part 'cart_state.dart';
 

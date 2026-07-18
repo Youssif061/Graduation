@@ -275,8 +275,9 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                               email: user.email ?? '',
                               phone: '',
                               password: '',
+                              uid: user.uid,
                             );
-
+                            context.read<WorkerSignupCubit>().saveUid(user.uid);
                             context.read<WorkerSignupCubit>().saveImage(
                               user.photoURL ?? '',
                             );
@@ -298,8 +299,9 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                               email: user.email ?? '',
                               phone: '',
                               password: '',
+                              uid: user.uid,
                             );
-
+                            context.read<WorkerSignupCubit>().saveUid(user.uid);
                             context.read<WorkerSignupCubit>().saveImage(
                               user.photoURL ?? '',
                             );
@@ -320,7 +322,9 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
                                     final workerCubit = context
                                         .read<WorkerSignupCubit>();
 
-                                    if (workerCubit.state.imagePath.isEmpty) {
+                                    if (workerCubit.state.imagePath.isEmpty &&
+                                        workerCubit.state.signupMethod ==
+                                            SignupMethod.email) {
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(

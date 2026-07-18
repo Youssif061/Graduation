@@ -1,5 +1,5 @@
 import 'package:expertisemarket/core/styles/colors.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/primary_button.dart';
+import 'package:expertisemarket/features/users/products/presentation/widgets/primary_button.dart';
 import 'package:expertisemarket/features/users/widgets/booking_widget.dart'
     hide AppColors, PrimaryButton;
 import 'package:flutter/material.dart';

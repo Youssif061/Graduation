@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/features/wishlist/presentation/widgets/wishlist_product_card.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell_notifier.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/main_shell_notifier.dart';
 
 class WishlistPage extends StatefulWidget {
   const WishlistPage({super.key});

@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/features/users/screens/home.dart';
 import 'package:expertisemarket/features/users/screens/pros.dart';
-import 'package:expertisemarket/features/products/presentation/pages/products_tab.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/products_tab.dart';
 import 'package:expertisemarket/features/request/presentation/pages/request_page.dart';
 import 'package:expertisemarket/features/chats/presentation/pages/chats_list_screen.dart';
 
 class MainShell extends StatefulWidget {
   final int initialIndex;
-  const MainShell({super.key, this.initialIndex = 2}); // Start on Products tab as requested!
+  const MainShell({
+    super.key,
+    this.initialIndex = 0,
+  }); // Start on Products tab as requested!
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -35,10 +38,7 @@ class _MainShellState extends State<MainShell> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.marketBg,
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _tabs,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _tabs),
       bottomNavigationBar: _buildBottomNav(),
     );
   }

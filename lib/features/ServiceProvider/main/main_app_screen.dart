@@ -293,6 +293,7 @@
 // }
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:expertisemarket/features/ServiceProvider/profile/page/profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:expertisemarket/core/constants/app_images.dart';
@@ -313,7 +314,6 @@ import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_c
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/repository/request_repository.dart';
 
-import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
-import 'package:expertisemarket/features/products/models/order_model.dart';
-import 'package:expertisemarket/features/products/presentation/pages/track_order_screen.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/main_shell.dart';
+import 'package:expertisemarket/features/users/products/models/order_model.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/track_order_screen.dart';
 
 class OrderSuccessScreen extends StatelessWidget {
   final OrderModel order;

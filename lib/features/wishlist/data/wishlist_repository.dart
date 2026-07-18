@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 
 class WishlistRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

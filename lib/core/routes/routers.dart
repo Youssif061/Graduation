@@ -2,8 +2,8 @@ class Routers {
   Routers._();
 
   //  Splash 
-  static const String splash = '/';
-
+  // static const String splash = '/';
+  static const String main = '/';
   //  Auth 
   static const String welcomeScreen = '/welcome';
   static const String mainSignUp = '/mainSignUp';
@@ -18,6 +18,7 @@ class Routers {
 
   //  User 
   static const String home = '/home';
+  static const String homeScreen = '/home';
 
   //  Worker 
   static const String workerHome = '/workerHome';

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/users/products/presentation/cubit/cart_cubit.dart';
 import 'package:expertisemarket/features/wishlist/presentation/cubit/wishlist_cubit.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
-import 'package:expertisemarket/features/products/presentation/pages/product_details_screen.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/product_details_screen.dart';
 
 class SearchProductCard extends StatefulWidget {
   final ProductModel product;

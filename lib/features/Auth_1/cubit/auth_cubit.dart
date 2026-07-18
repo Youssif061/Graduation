@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'auth_state.dart';
 import 'worker_signup_state.dart';
-import 'worker_signup_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(AuthInitial());
@@ -384,6 +383,64 @@ class AuthCubit extends Cubit<AuthState> {
     } catch (e) {
       emit(AuthError(e.toString()));
       return null;
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    emit(const AuthLoading());
+
+    try {
+      final googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        emit(const AuthInitial());
+        return;
+      }
+
+      final googleAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      final role = await getUserRole(userCredential.user!.uid);
+
+      emit(AuthSuccess(role: role));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(e.message ?? "Google Login Failed"));
+    } catch (e) {
+      emit(AuthError(e.toString()));
+    }
+  }
+
+  Future<void> loginWithApple() async {
+    emit(const AuthLoading());
+
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      final credential = OAuthProvider("apple.com").credential(
+        idToken: appleCredential.identityToken,
+        accessToken: appleCredential.authorizationCode,
+      );
+
+      final userCredential = await _auth.signInWithCredential(credential);
+
+      final role = await getUserRole(userCredential.user!.uid);
+
+      emit(AuthSuccess(role: role));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthError(e.message ?? "Apple Login Failed"));
+    } catch (e) {
+      emit(AuthError(e.toString()));
     }
   }
 }

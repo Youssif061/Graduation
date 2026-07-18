@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expertisemarket/features/products/models/order_model.dart';
+import 'package:expertisemarket/features/users/products/models/order_model.dart';
 
 class OrderRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
