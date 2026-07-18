@@ -14,10 +14,7 @@ class _SignUp_for_worker_2 extends State<SignUp_for_worker_3> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.lightBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.lightBackgroundColor,
-        title: const Text("ExpertiseMarket"),
-      ),
+
       body: MapScreen(),
     );
   }

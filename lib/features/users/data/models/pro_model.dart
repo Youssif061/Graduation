@@ -1,4 +1,5 @@
 class ProModel {
+  final String uid;
   final String name;
   final String job;
   final String image;
@@ -9,6 +10,7 @@ class ProModel {
   final bool isVerified;
 
   ProModel({
+    required this.uid,
     required this.name,
     required this.job,
     required this.image,
@@ -19,14 +21,15 @@ class ProModel {
     required this.isVerified,
   });
 
-  factory ProModel.fromMap(Map<String, dynamic> map) {
+  factory ProModel.fromMap(Map<String, dynamic> map, [String? docId]) {
     return ProModel(
+      uid: map['uid'] ?? docId ?? '',
       name: map['name'] ?? '',
       job: map['job'] ?? '',
       image: map['image'] ?? '',
       category: map['category'] ?? '',
-      rating: (map['rating'] as num).toDouble(),
-      price: (map['price'] as num).toDouble(),
+      rating: (map['rating'] as num?)?.toDouble() ?? 0.0,
+      price: (map['price'] as num?)?.toDouble() ?? 0.0,
       isVerified: map['verified'] ?? false,
 
       // في Firestore انتي مخزنة "10 years"

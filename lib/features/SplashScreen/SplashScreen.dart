@@ -10,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
 import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -21,8 +22,16 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    super.initState();
     Future.delayed(const Duration(seconds: 4), () async {
       if (!mounted) return;
+
+      final prefs = await SharedPreferences.getInstance();
+      final stayLogged = prefs.getBool('stayLogged') ?? false;
+      if (!stayLogged) {
+        await FirebaseAuth.instance.signOut();
+      }
+
       final currentUser = FirebaseAuth.instance.currentUser;
       if (currentUser != null) {
         try {
@@ -54,7 +63,6 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       }
     });
-    super.initState();
   }
 
   @override

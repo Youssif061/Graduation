@@ -1,5 +1,6 @@
 import 'package:expertisemarket/features/users/screens/booking.dart';
 import 'package:expertisemarket/features/users/screens/pros.dart';
+import 'package:expertisemarket/features/users/screens/pro_details.dart';
 import 'package:flutter/material.dart';
 
 import '../data/firebase_service.dart';
@@ -178,7 +179,14 @@ class _HomeState extends State<Home> {
                             ),
                           );
                         },
-                        onDetails: () {},
+                        onDetails: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ProDetailsScreen(pro: pros[index]),
+                            ),
+                          );
+                        },
                       );
                     },
                   );

@@ -1,4 +1,5 @@
 import 'package:expertisemarket/core/constants/app_images.dart';
+import 'package:expertisemarket/core/routes/routers.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/app_button.dart';
@@ -7,11 +8,9 @@ import 'package:expertisemarket/core/widgets/custom_text_form_field_password.dar
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/Main_SignUp.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/Welcome_Screen/widgets/login__with.dart';
-import 'package:expertisemarket/features/Auth_1/cubit/cubit_Auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
-// تعديل اسم الكلاس لاتباع معايير Dart (UpperCamelCase)
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -131,7 +130,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                               ),
                               const Text(
                                 "Stay logged in for 30 days",
-                                style: TextStyle(fontSize: 12), // تعديل بسيط لضمان حجم النص
+                                style: TextStyle(
+                                  fontSize: 12,
+                                ), // تعديل بسيط لضمان حجم النص
                               ),
                             ],
                           ),
@@ -167,7 +168,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Login_With(
                             Image: AppImages.googleSvg,
                             label: "Continue with Google",
-                            ontap: () {}, // تم إبقاء اسم الخاصية كما هو معرف في الـ Widget لديك
+                            ontap:
+                                () {}, // تم إبقاء اسم الخاصية كما هو معرف في الـ Widget لديك
                           ),
                           const Gap(15),
                           Login_With(
@@ -186,10 +188,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       const Text("Don't have an account?"),
                       TextButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Sign_up()),
-                          );
+                          Navigator.pushNamed(context, Routers.mainSignUp);
                         },
                         child: const Text(
                           "Sign Up",

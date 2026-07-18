@@ -1,15 +1,25 @@
 import 'dart:io';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart' hide FirebaseService;
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/routes/app_router.dart';
 import 'core/routes/routers.dart';
 import 'core/styles/themes.dart';
 import 'firebase_options.dart';
 
+import 'features/products/presentation/cubit/product_cubit.dart';
+import 'features/products/presentation/cubit/cart_cubit.dart';
+import 'features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'features/products/presentation/cubit/order_cubit.dart';
+import 'features/users/data/firebase_service.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Seed Mock Data in Firestore
+  await FirebaseService.instance.seedDatabase();
 
   runApp(const MainApp());
 }
@@ -19,24 +29,32 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'CraftMarket',
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => ProductCubit()),
+        BlocProvider(create: (_) => CartCubit()..loadCart()),
+        BlocProvider(create: (_) => WishlistCubit()..loadWishlist()),
+        BlocProvider(create: (_) => OrderCubit()),
+      ],
+      child: MaterialApp(
+        title: 'CraftMarket',
 
-      debugShowCheckedModeBanner: false,
+        debugShowCheckedModeBanner: false,
 
-      theme: AppThemes.lightTheme,
+        theme: AppThemes.lightTheme,
 
-      initialRoute: Routers.products,
+        initialRoute: Routers.splash,
 
-      onGenerateRoute: AppRouter.generateRoute,
+        onGenerateRoute: AppRouter.generateRoute,
 
-      builder: (context, child) {
-        return SafeArea(
-          top: false,
-          bottom: Platform.isAndroid,
-          child: child ?? const SizedBox.shrink(),
-        );
-      },
+        builder: (context, child) {
+          return SafeArea(
+            top: false,
+            bottom: Platform.isAndroid,
+            child: child ?? const SizedBox.shrink(),
+          );
+        },
+      ),
     );
   }
 }

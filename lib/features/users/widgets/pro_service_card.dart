@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/models/pro_model.dart';
+import '../screens/pro_details.dart';
 
 class ProServiceCard extends StatelessWidget {
   final ProModel pro;
@@ -13,7 +14,16 @@ class ProServiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ProDetailsScreen(pro: pro),
+          ),
+        );
+      },
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -182,6 +192,7 @@ class ProServiceCard extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+   );
   }
 }

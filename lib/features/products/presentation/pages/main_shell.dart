@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
-import 'package:expertisemarket/features/home/presentation/pages/home_page.dart';
-import 'package:expertisemarket/features/pros/presentation/pages/pros_page.dart';
+import 'package:expertisemarket/features/users/screens/home.dart';
+import 'package:expertisemarket/features/users/screens/pros.dart';
 import 'package:expertisemarket/features/products/presentation/pages/products_tab.dart';
 import 'package:expertisemarket/features/request/presentation/pages/request_page.dart';
-import 'package:expertisemarket/features/chats/presentation/pages/chats_page.dart';
+import 'package:expertisemarket/features/chats/presentation/pages/chats_list_screen.dart';
 
 class MainShell extends StatefulWidget {
   final int initialIndex;
@@ -24,11 +24,11 @@ class _MainShellState extends State<MainShell> {
   }
 
   final List<Widget> _tabs = const [
-    HomePage(),
-    ProsPage(),
+    Home(),
+    ProsScreen(),
     ProductsTab(),
     RequestPage(),
-    ChatsPage(),
+    ChatsListScreen(),
   ];
 
   @override

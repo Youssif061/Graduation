@@ -90,7 +90,7 @@ class CheckoutScreen extends StatelessWidget {
                   PrimaryButton(
                     label: 'Confirm Booking',
                     icon: Icons.lock_outline,
-                    color: AppColors.emeraldColor ?? Colors.green,
+                    color: AppColors.emeraldColor,
                     height: 56,
                     onTap: () {
                       pushScreen(

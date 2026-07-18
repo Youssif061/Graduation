@@ -9,23 +9,29 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
   google_fonts: ^6.2.1
   gap: ^3.0.1
   flutter_bloc: ^9.1.1
   flutter_svg: ^2.3.0
   equatable: ^2.0.7
   firebase_core: ^4.0.0
-  lottie: ^3.3.2
-  shared_preferences: ^2.5.5
-  image_picker: ^1.2.1
-  dropdown_button2: ^2.3.9  
-  flutter_map: ^8.2.1
-  latlong2: ^0.9.1
-  geolocator: ^14.0.2
   firebase_auth: ^6.5.6
   cloud_firestore: ^6.7.1
   firebase_storage: ^13.4.5
+  google_sign_in: ^6.3.0
+  sign_in_with_apple: ^7.0.1
+  cloudinary_public: ^0.23.1
+  image_picker: ^1.2.1
+  dropdown_button2: ^2.3.9
+  flutter_map: ^8.2.1
+  latlong2: ^0.9.1
+  geolocator: ^14.0.2
+  shared_preferences: ^2.5.5
+  lottie: ^3.3.2
   dartz: ^0.10.1
+
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

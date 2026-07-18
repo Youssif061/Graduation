@@ -1,12 +1,27 @@
 class Routers {
   Routers._();
 
-  static const String main = '/';
-  static const String Screens = '/Screens ';
+  //  Splash 
+  static const String splash = '/';
 
-  static const String mainSignUp = '/Main_SignUp ';
-  static const String splash = '/splash';
+  //  Auth 
+  static const String welcomeScreen = '/welcome';
+  static const String mainSignUp = '/mainSignUp';
+
+  static const String userSignUp = '/userSignUp';
+
+  static const String workerSignUp1 = '/workerSignUp1';
+  static const String workerSignUp2 = '/workerSignUp2';
+  static const String workerSignUp3 = '/workerSignUp3';
+
+  static const String confirmEmail = '/confirmEmail';
+
+  //  User 
   static const String home = '/home';
+
+  //  Worker 
+  static const String workerHome = '/workerHome';
+
   static const String requests = '/requests';
   static const String inventory = '/inventory';
   static const String chat = '/chat';
@@ -15,9 +30,9 @@ class Routers {
   static const String publishService = '/publishService';
   static const String publishProposal = '/publishProposal';
   static const String addProduct = '/addProduct';
-  static const String wishlist = '/wishlist';
+
+  //  Common 
   static const String products = '/products';
+  static const String wishlist = '/wishlist';
   static const String cart = '/cart';
-  static const String signUp = '/SignUp';
-  static const String welcomeScreen = '/Welcome_Screen';
 }

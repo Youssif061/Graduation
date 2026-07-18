@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
+import 'package:expertisemarket/features/auth/change_password_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -137,7 +137,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _InputField(controller: _fullNameCtrl),
                 const SizedBox(height: 16),
                 GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const ChangePasswordScreen(),
+                      ),
+                    );
+                  },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

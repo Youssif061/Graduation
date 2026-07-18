@@ -3,10 +3,10 @@ import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/widgets/my body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_user/Pages/SignUp_for_user.dart';
-import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/container__sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:expertisemarket/core/routes/routers.dart';
 
 class Sign_up extends StatelessWidget {
   const Sign_up({super.key});
@@ -59,12 +59,7 @@ class Sign_up extends StatelessWidget {
                   Text_for_button: "Start As a Worker",
                   Title: "I Offer Services",
                   ontap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const SignUp_for_worker(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, Routers.workerSignUp1);
                   },
                 ),
               ],
