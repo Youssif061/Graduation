@@ -39,7 +39,7 @@ class ProblemPhotos extends StatelessWidget {
               return ClipRRect(
                 borderRadius:
                     BorderRadius.circular(16),
-                child: Image.asset(
+                child: Image.network(
                   images[index],
                   width: 95,
                   height: 95,
@@ -49,14 +49,12 @@ class ProblemPhotos extends StatelessWidget {
                     return Container(
                       width: 95,
                       height: 95,
-                      decoration:
-                          BoxDecoration(
+                      decoration: BoxDecoration(
                         color: const Color(
                           0xffF1F5F9,
                         ),
                         borderRadius:
-                            BorderRadius
-                                .circular(
+                            BorderRadius.circular(
                           16,
                         ),
                         border: Border.all(
@@ -72,6 +70,35 @@ class ProblemPhotos extends StatelessWidget {
                           0xff64748B,
                         ),
                         size: 32,
+                      ),
+                    );
+                  },
+                  loadingBuilder: (
+                    context,
+                    child,
+                    progress,
+                  ) {
+                    if (progress == null) {
+                      return child;
+                    }
+
+                    return Container(
+                      width: 95,
+                      height: 95,
+                      decoration: BoxDecoration(
+                        color: const Color(
+                          0xffF8FAFC,
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(
+                          16,
+                        ),
+                      ),
+                      child: const Center(
+                        child:
+                            CircularProgressIndicator(
+                          strokeWidth: 2,
+                        ),
                       ),
                     );
                   },

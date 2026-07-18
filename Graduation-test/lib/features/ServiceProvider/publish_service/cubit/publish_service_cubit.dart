@@ -18,31 +18,39 @@ class PublishServiceCubit extends Cubit<PublishServiceState> {
 
   final ImagePicker _picker = ImagePicker();
 
+  //----------------------------------------------------------
+  // Images
+  //----------------------------------------------------------
+
   final List<File> images = [];
 
-  //--------------------------------------------------
+  final List<String> existingImages = [];
+
+  ServiceModel? currentService;
+
+  //----------------------------------------------------------
   // Pick Images
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
   Future<void> pickImages() async {
     try {
-      final List<XFile> pickedImages =
-          await _picker.pickMultiImage(
+      final pickedImages = await _picker.pickMultiImage(
         imageQuality: 80,
       );
 
-      if (pickedImages.isEmpty) {
-        return;
-      }
+      if (pickedImages.isEmpty) return;
 
       images.addAll(
         pickedImages.map(
-          (image) => File(image.path),
+          (e) => File(e.path),
         ),
       );
 
       emit(
-        const PublishServiceImagesChanged(),
+        PublishServiceImagesChanged(
+          images: List.from(images),
+          existingImages: List.from(existingImages),
+        ),
       );
     } catch (e) {
       emit(
@@ -53,25 +61,66 @@ class PublishServiceCubit extends Cubit<PublishServiceState> {
     }
   }
 
-  //--------------------------------------------------
-  // Remove Image
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Load Service
+  //----------------------------------------------------------
 
-  void removeImage(int index) {
-    if (index < 0 || index >= images.length) {
-      return;
-    }
+  void loadService(
+    ServiceModel service,
+  ) {
+    currentService = service;
 
-    images.removeAt(index);
+    images.clear();
+
+    existingImages
+      ..clear()
+      ..addAll(service.images);
 
     emit(
-      const PublishServiceImagesChanged(),
+      PublishServiceImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
     );
   }
 
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Remove New Image
+  //----------------------------------------------------------
+
+  void removeImage(
+    int index,
+  ) {
+    images.removeAt(index);
+
+    emit(
+      PublishServiceImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
+    );
+  }
+
+  //----------------------------------------------------------
+  // Remove Old Image
+  //----------------------------------------------------------
+
+  void removeExistingImage(
+    int index,
+  ) {
+    existingImages.removeAt(index);
+
+    emit(
+      PublishServiceImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
+    );
+  }
+
+  //----------------------------------------------------------
   // Publish Service
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
   Future<void> publishService({
     required String title,
@@ -86,17 +135,17 @@ class PublishServiceCubit extends Cubit<PublishServiceState> {
         const PublishServiceLoading(),
       );
 
-      final List<String> imageUrls =
+      final uploadedImages =
           await repository.uploadImages(
         images,
       );
 
-      final ServiceModel service = ServiceModel(
-        id: '',
+      final service = ServiceModel(
+        id: "",
         providerId: repository.providerId,
         title: title.trim(),
         description: description.trim(),
-        images: imageUrls,
+        images: uploadedImages,
         price: double.parse(price),
         delivery: delivery,
         transportation: transportation,
@@ -109,7 +158,7 @@ class PublishServiceCubit extends Cubit<PublishServiceState> {
         service,
       );
 
-      images.clear();
+      clear();
 
       emit(
         const PublishServiceSuccess(),
@@ -123,15 +172,110 @@ class PublishServiceCubit extends Cubit<PublishServiceState> {
     }
   }
 
-  //--------------------------------------------------
-  // Clear Images
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Update Service
+  //----------------------------------------------------------
 
-  void clearImages() {
+  Future<void> updateService({
+    required String title,
+    required String description,
+    required String delivery,
+    required String price,
+    required bool transportation,
+    required bool negotiate,
+  }) async {
+    if (currentService == null) return;
+
+    try {
+      emit(
+        const PublishServiceLoading(),
+      );
+
+      List<String> imageUrls =
+          List.from(existingImages);
+
+      if (images.isNotEmpty) {
+        final uploaded =
+            await repository.uploadImages(
+          images,
+        );
+
+        imageUrls.addAll(uploaded);
+      }
+
+      final service =
+          currentService!.copyWith(
+        title: title.trim(),
+        description: description.trim(),
+        images: imageUrls,
+        price: double.parse(price),
+        delivery: delivery,
+        transportation: transportation,
+        negotiate: negotiate,
+      );
+
+      await repository.updateService(
+        service,
+      );
+
+      emit(
+        const PublishServiceUpdated(),
+      );
+    } catch (e) {
+      emit(
+        PublishServiceFailure(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+  //----------------------------------------------------------
+  // Delete Service
+  //----------------------------------------------------------
+
+  Future<void> deleteService() async {
+    if (currentService == null) return;
+
+    try {
+      emit(
+        const PublishServiceLoading(),
+      );
+
+      await repository.deleteService(
+        currentService!.id,
+      );
+
+      clear();
+
+      emit(
+        const PublishServiceDeleted(),
+      );
+    } catch (e) {
+      emit(
+        PublishServiceFailure(
+          e.toString(),
+        ),
+      );
+    }
+  }
+
+  //----------------------------------------------------------
+  // Clear
+  //----------------------------------------------------------
+
+  void clear() {
+    currentService = null;
+
     images.clear();
 
+    existingImages.clear();
+
     emit(
-      const PublishServiceImagesChanged(),
+      PublishServiceImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
     );
   }
 }

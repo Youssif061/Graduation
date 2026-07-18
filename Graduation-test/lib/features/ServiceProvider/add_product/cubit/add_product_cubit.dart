@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:expertisemarket/features/ServiceProvider/add_product/data/add_product_repository.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/add_product/repository/add_product_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,7 +13,15 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   final AddProductRepository repository = AddProductRepository();
 
-  //================ Controllers =================//
+  //==========================================================
+  // Form
+  //==========================================================
+
+  final formKey = GlobalKey<FormState>();
+
+  //==========================================================
+  // Controllers
+  //==========================================================
 
   final nameController = TextEditingController();
 
@@ -25,11 +33,9 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   final stockController = TextEditingController();
 
-  //================ Form =================//
-
-  final formKey = GlobalKey<FormState>();
-
-  //================ Images =================//
+  //==========================================================
+  // Images
+  //==========================================================
 
   final ImagePicker picker = ImagePicker();
 
@@ -39,7 +45,9 @@ class AddProductCubit extends Cubit<AddProductState> {
 
   ProductModel? currentProduct;
 
-  //================ Load Product =================//
+  //==========================================================
+  // Load Product
+  //==========================================================
 
   void loadProduct(ProductModel product) {
     currentProduct = product;
@@ -60,44 +68,74 @@ class AddProductCubit extends Cubit<AddProductState> {
 
     images.clear();
 
-    emit(ProductImagesChanged(List.from(images)));
+    emit(
+      ProductImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
+    );
   }
 
-  //================ Pick Images =================//
+  //==========================================================
+  // Pick Images
+  //==========================================================
 
   Future<void> pickImages() async {
     try {
-      final picked = await picker.pickMultiImage();
+      final pickedImages = await picker.pickMultiImage();
 
-      if (picked.isEmpty) return;
+      if (pickedImages.isEmpty) return;
 
       images.addAll(
-        picked.map(
+        pickedImages.map(
           (e) => File(e.path),
         ),
       );
 
-      emit(ProductImagesChanged(List.from(images)));
+      emit(
+        ProductImagesChanged(
+          images: List.from(images),
+          existingImages: List.from(existingImages),
+        ),
+      );
     } catch (e) {
       emit(AddProductFailure(e.toString()));
     }
   }
 
-  //================ Remove Image =================//
+  //==========================================================
+  // Remove New Image
+  //==========================================================
 
   void removeImage(int index) {
     images.removeAt(index);
 
-    emit(ProductImagesChanged(List.from(images)));
+    emit(
+      ProductImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
+    );
   }
+
+  //==========================================================
+  // Remove Existing Image
+  //==========================================================
 
   void removeExistingImage(int index) {
     existingImages.removeAt(index);
 
-    emit(ProductImagesChanged(List.from(images)));
+    emit(
+      ProductImagesChanged(
+        images: List.from(images),
+        existingImages: List.from(existingImages),
+      ),
+    );
   }
 
-  //================ Add Product =================//
+  //==========================================================
+  // Publish Product
+  //==========================================================
 
   Future<void> publishProduct() async {
     if (!formKey.currentState!.validate()) return;
@@ -105,8 +143,7 @@ class AddProductCubit extends Cubit<AddProductState> {
     try {
       emit(const AddProductLoading());
 
-      final imageUrls =
-          await repository.uploadImages(images);
+      final imageUrls = await repository.uploadImages(images);
 
       final product = ProductModel(
         id: "",
@@ -130,7 +167,9 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  //================ Update Product =================//
+  //==========================================================
+  // Update Product
+  //==========================================================
 
   Future<void> updateProduct() async {
     if (!formKey.currentState!.validate()) return;
@@ -143,13 +182,13 @@ class AddProductCubit extends Cubit<AddProductState> {
       List<String> imageUrls = List.from(existingImages);
 
       if (images.isNotEmpty) {
-        final uploaded =
+        final uploadedImages =
             await repository.uploadImages(images);
 
-        imageUrls.addAll(uploaded);
+        imageUrls.addAll(uploadedImages);
       }
 
-      final product = currentProduct!.copyWith(
+      final updatedProduct = currentProduct!.copyWith(
         providerId: repository.providerId,
         name: nameController.text.trim(),
         category: categoryController.text.trim(),
@@ -159,7 +198,9 @@ class AddProductCubit extends Cubit<AddProductState> {
         images: imageUrls,
       );
 
-      await repository.updateProduct(product);
+      await repository.updateProduct(updatedProduct);
+
+      clearForm();
 
       emit(const UpdateProductSuccess());
     } catch (e) {
@@ -167,7 +208,25 @@ class AddProductCubit extends Cubit<AddProductState> {
     }
   }
 
-  //================ Clear =================//
+  //==========================================================
+  // Delete Product
+  //==========================================================
+
+  Future<void> deleteProduct(String productId) async {
+    try {
+      emit(const AddProductLoading());
+
+      await repository.deleteProduct(productId);
+
+      emit(const DeleteProductSuccess());
+    } catch (e) {
+      emit(AddProductFailure(e.toString()));
+    }
+  }
+
+  //==========================================================
+  // Clear
+  //==========================================================
 
   void clearForm() {
     currentProduct = null;

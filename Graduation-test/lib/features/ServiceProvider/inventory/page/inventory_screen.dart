@@ -7,7 +7,6 @@ import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inven
 import 'package:expertisemarket/features/ServiceProvider/inventory/widgets/inventory_stats_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class InventoryScreen extends StatefulWidget {
   const InventoryScreen({
@@ -25,61 +24,56 @@ class _InventoryScreenState
   void initState() {
     super.initState();
 
-    Future.microtask(() {
-      context
-          .read<InventoryCubit>()
-          .loadInventory();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<InventoryCubit>().loadInventory();
     });
   }
 
   Future<void> _refresh() async {
-    await context
-        .read<InventoryCubit>()
-        .refresh();
+    await context.read<InventoryCubit>().refresh();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color(0xffF8FAFC),
+      backgroundColor: const Color(0xffF8FAFC),
 
       body: SafeArea(
-        child: BlocBuilder<
+        child: BlocConsumer<
             InventoryCubit,
             InventoryState>(
+          listener: (context, state) {
+            if (state is InventoryFailure) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(
+                SnackBar(
+                  content: Text(
+                    state.message,
+                  ),
+                ),
+              );
+            }
+          },
           builder: (context, state) {
-            if (state
-                is InventoryLoading) {
+            //-----------------------------------
+            // Loading
+            //-----------------------------------
+
+            if (state is InventoryLoading) {
               return const Center(
                 child:
                     CircularProgressIndicator(),
               );
             }
 
-            if (state
-                is InventoryFailure) {
-              return Center(
-                child: Padding(
-                  padding:
-                      const EdgeInsets.all(
-                    20,
-                  ),
-                  child: Text(
-                    state.message,
-                    textAlign:
-                        TextAlign.center,
-                  ),
-                ),
-              );
-            }
+            //-----------------------------------
+            // Loaded
+            //-----------------------------------
 
-            if (state
-                is InventoryLoaded) {
+            if (state is InventoryLoaded) {
               return RefreshIndicator(
                 onRefresh: _refresh,
-                child:
-                    SingleChildScrollView(
+                child: SingleChildScrollView(
                   physics:
                       const AlwaysScrollableScrollPhysics(),
                   padding:
@@ -89,13 +83,12 @@ class _InventoryScreenState
                   ),
                   child: Column(
                     crossAxisAlignment:
-                        CrossAxisAlignment
-                            .start,
+                        CrossAxisAlignment.start,
                     children: [
                       const InventoryHeader(),
 
                       const SizedBox(
-                        height: 24,
+                        height: 22,
                       ),
 
                       InventoryStatsGrid(
@@ -125,7 +118,53 @@ class _InventoryScreenState
                       ),
 
                       const SizedBox(
-                        height: 90,
+                        height: 100,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            //-----------------------------------
+            // Error لأول مرة
+            //-----------------------------------
+
+            if (state is InventoryFailure) {
+              return Center(
+                child: Padding(
+                  padding:
+                      const EdgeInsets.all(24),
+                  child: Column(
+                    mainAxisAlignment:
+                        MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.inventory_2_outlined,
+                        size: 70,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        state.message,
+                        textAlign:
+                            TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          context
+                              .read<
+                                  InventoryCubit>()
+                              .loadInventory();
+                        },
+                        child: const Text(
+                          "Try Again",
+                        ),
                       ),
                     ],
                   ),
@@ -159,7 +198,7 @@ class _InventoryScreenState
           );
 
           if (result == true &&
-              context.mounted) {
+              mounted) {
             context
                 .read<InventoryCubit>()
                 .refresh();

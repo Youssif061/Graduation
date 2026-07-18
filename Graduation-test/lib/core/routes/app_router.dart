@@ -1,4 +1,5 @@
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_user/Pages/SignUp_for_user.dart';
+import 'package:expertisemarket/features/ServiceProvider/home/page/home_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/profile/page/profile_screen.dart'
     show ProfileScreen;
 import 'package:flutter/material.dart';
@@ -29,11 +30,18 @@ import 'package:expertisemarket/features/ServiceProvider/publish_service/reposit
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      case Routers.splash:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+      // case Routers.splash:
+      //   return MaterialPageRoute(builder: (_) => const SplashScreen());
+
+      case Routers.main:
+        return MaterialPageRoute(builder: (_) => const MainAppScreen());  
 
       case Routers.welcomeScreen:
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
+
+      case Routers.homeScreen:
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
+  
 
       case Routers.mainSignUp:
         return MaterialPageRoute(builder: (_) => const Sign_up());

@@ -1,91 +1,70 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
-import 'package:expertisemarket/features/ServiceProvider/inventory/repository/inventory_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class InventoryRepositoryImpl
-    implements InventoryRepository {
-  InventoryRepositoryImpl();
+import 'package:expertisemarket/features/ServiceProvider/add_product/model/product_model.dart';
+import 'package:expertisemarket/features/ServiceProvider/inventory/repository/inventory_repository.dart';
 
-  final FirebaseFirestore _firestore =
-      FirebaseFirestore.instance;
+class InventoryRepositoryImpl implements InventoryRepository {
+  InventoryRepositoryImpl({
+    FirebaseFirestore? firestore,
+    FirebaseAuth? auth,
+  })  : _firestore = firestore ?? FirebaseFirestore.instance,
+        _auth = auth ?? FirebaseAuth.instance;
 
-  final FirebaseAuth _auth =
-      FirebaseAuth.instance;
+  final FirebaseFirestore _firestore;
+  final FirebaseAuth _auth;
 
-  CollectionReference<Map<String, dynamic>>
-      get _products =>
-          _firestore.collection("products");
+  CollectionReference<Map<String, dynamic>> get _products =>
+      _firestore.collection("products");
 
-  //--------------------------------------------------
-  // Current Provider
-  //--------------------------------------------------
+  //----------------------------------------------------------
+  // Current Worker
+  //----------------------------------------------------------
 
-  String? get currentProviderId =>
-      _auth.currentUser?.uid;
+  String get providerId => _auth.currentUser!.uid;
 
-  //--------------------------------------------------
+  //----------------------------------------------------------
   // Load Inventory
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
   @override
   Future<List<ProductModel>> loadInventory() async {
-    try {
-      final providerId =
-          currentProviderId;
+    final snapshot = await _products
+        .where(
+          "providerId",
+          isEqualTo: providerId,
+        )
+        .orderBy(
+          "createdAt",
+          descending: true,
+        )
+        .get();
 
-      // المستخدم لم يسجل دخول بعد
-      if (providerId == null) {
-        return [];
-      }
-
-      final snapshot = await _products
-          .where(
-            "providerId",
-            isEqualTo: providerId,
-          )
-          .orderBy(
-            "createdAt",
-            descending: true,
-          )
-          .get();
-
-      return snapshot.docs
-          .map(
-            (doc) => ProductModel.fromJson(
-              doc.data(),
-              doc.id,
-            ),
-          )
-          .toList();
-    } on FirebaseException {
-      return [];
-    } catch (_) {
-      return [];
-    }
+    return snapshot.docs.map((doc) {
+      return ProductModel.fromJson(
+        doc.data(),
+        doc.id,
+      );
+    }).toList();
   }
 
-  //--------------------------------------------------
+  //----------------------------------------------------------
   // Delete Product
-  //--------------------------------------------------
+  //----------------------------------------------------------
 
   @override
   Future<void> deleteProduct(
     String productId,
   ) async {
-    try {
-      final providerId =
-          currentProviderId;
+    await _products.doc(productId).delete();
+  }
 
-      if (providerId == null) {
-        return;
-      }
+  //----------------------------------------------------------
+  // Refresh
+  //----------------------------------------------------------
 
-      await _products
-          .doc(productId)
-          .delete();
-    } catch (_) {
-      // Ignore
-    }
+  @override
+  Future<List<ProductModel>> refreshInventory() {
+    return loadInventory();
   }
 }

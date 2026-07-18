@@ -1,18 +1,18 @@
 import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart' hide FirebaseService;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/routes/app_router.dart';
-import 'core/routes/routers.dart';
-import 'core/styles/themes.dart';
-import 'firebase_options.dart';
 
-import 'features/users/products/presentation/cubit/product_cubit.dart';
-import 'features/users/products/presentation/cubit/cart_cubit.dart';
-import 'features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'features/users/products/presentation/cubit/order_cubit.dart';
-import 'features/users/data/firebase_service.dart';
+import 'core/routes/app_router.dart';
+import 'core/styles/themes.dart';
 import 'features/Auth_1/cubit/auth_cubit.dart';
+import 'features/users/data/firebase_service.dart';
+import 'features/users/products/presentation/cubit/cart_cubit.dart';
+import 'features/users/products/presentation/cubit/order_cubit.dart';
+import 'features/users/products/presentation/cubit/product_cubit.dart';
+import 'features/wishlist/presentation/cubit/wishlist_cubit.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,7 @@ class MainApp extends StatelessWidget {
 
         theme: AppThemes.lightTheme,
 
-        initialRoute: Routers.splash,
+        initialRoute: '/',
 
         onGenerateRoute: AppRouter.generateRoute,
 

@@ -18,10 +18,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -29,15 +26,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -57,13 +48,44 @@ class DefaultFirebaseOptions {
     projectId: 'expertisemarket-67626',
     storageBucket: 'expertisemarket-67626.firebasestorage.app',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDxFfaIcXS8Okv3QfvJpx1Y6vzBLymoLgU',
     appId: '1:720084397751:ios:b7a05d84df4fc3923ee732',
     messagingSenderId: '720084397751',
     projectId: 'expertisemarket-67626',
     storageBucket: 'expertisemarket-67626.firebasestorage.app',
+    androidClientId: '720084397751-tqvodt2vcr45mb573ejlut7an5m99905.apps.googleusercontent.com',
+    iosClientId: '720084397751-ab750duk107tv6a7p4a5ocmqaiqrgs67.apps.googleusercontent.com',
     iosBundleId: 'com.CraftMarket',
+  );
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDRTpvx0vM0_xhsEWJOKvSeDzo5das18NM',
+    appId: '1:720084397751:web:7e95a7066f05fac43ee732',
+    messagingSenderId: '720084397751',
+    projectId: 'expertisemarket-67626',
+    authDomain: 'expertisemarket-67626.firebaseapp.com',
+    storageBucket: 'expertisemarket-67626.firebasestorage.app',
+    measurementId: 'G-YH0PXLZ9X3',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyDxFfaIcXS8Okv3QfvJpx1Y6vzBLymoLgU',
+    appId: '1:720084397751:ios:b7a05d84df4fc3923ee732',
+    messagingSenderId: '720084397751',
+    projectId: 'expertisemarket-67626',
+    storageBucket: 'expertisemarket-67626.firebasestorage.app',
+    androidClientId: '720084397751-tqvodt2vcr45mb573ejlut7an5m99905.apps.googleusercontent.com',
+    iosClientId: '720084397751-ab750duk107tv6a7p4a5ocmqaiqrgs67.apps.googleusercontent.com',
+    iosBundleId: 'com.CraftMarket',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDRTpvx0vM0_xhsEWJOKvSeDzo5das18NM',
+    appId: '1:720084397751:web:a01067066cff4c753ee732',
+    messagingSenderId: '720084397751',
+    projectId: 'expertisemarket-67626',
+    authDomain: 'expertisemarket-67626.firebaseapp.com',
+    storageBucket: 'expertisemarket-67626.firebasestorage.app',
+    measurementId: 'G-DZ570ZWMY8',
   );
 }

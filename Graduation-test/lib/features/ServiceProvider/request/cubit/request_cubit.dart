@@ -23,9 +23,9 @@ class RequestCubit extends Cubit<RequestState> {
   //--------------------------------------------------
 
   Future<void> loadRequests() async {
-    try {
-      emit(const RequestLoading());
+    emit(const RequestLoading());
 
+    try {
       final result =
           await _repository.getRequests();
 
@@ -62,9 +62,9 @@ class RequestCubit extends Cubit<RequestState> {
   Future<void> acceptRequest(
     String requestId,
   ) async {
-    try {
-      emit(const RequestUpdating());
+    emit(const RequestUpdating());
 
+    try {
       await _repository.acceptRequest(
         requestId,
       );
@@ -76,7 +76,7 @@ class RequestCubit extends Cubit<RequestState> {
       if (index != -1) {
         _requests[index] =
             _requests[index].copyWith(
-          status: 'In Progress',
+          status: "In Progress",
         );
       }
 
@@ -101,9 +101,9 @@ class RequestCubit extends Cubit<RequestState> {
   Future<void> rejectRequest(
     String requestId,
   ) async {
-    try {
-      emit(const RequestUpdating());
+    emit(const RequestUpdating());
 
+    try {
       await _repository.rejectRequest(
         requestId,
       );
@@ -134,11 +134,10 @@ class RequestCubit extends Cubit<RequestState> {
     required String requestId,
     required double price,
   }) async {
-    try {
-      emit(const RequestUpdating());
+    emit(const RequestUpdating());
 
-      await _repository
-          .updateProposalPrice(
+    try {
+      await _repository.updateProposalPrice(
         requestId: requestId,
         price: price,
       );
@@ -176,9 +175,9 @@ class RequestCubit extends Cubit<RequestState> {
     required String requestId,
     required String status,
   }) async {
-    try {
-      emit(const RequestUpdating());
+    emit(const RequestUpdating());
 
+    try {
       await _repository.updateRequestStatus(
         requestId: requestId,
         status: status,
@@ -210,7 +209,7 @@ class RequestCubit extends Cubit<RequestState> {
   }
 
   //--------------------------------------------------
-  // Get Request
+  // Get Request By Id
   //--------------------------------------------------
 
   RequestModel? getRequestById(
