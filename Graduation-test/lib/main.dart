@@ -1,9 +1,8 @@
 import 'dart:io';
-
 import 'package:firebase_core/firebase_core.dart' hide FirebaseService;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'features/Auth_1/cubit/worker_signup_cubit.dart';
 import 'core/routes/app_router.dart';
 import 'core/styles/themes.dart';
 import 'features/Auth_1/cubit/auth_cubit.dart';
@@ -32,6 +31,7 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => WorkerSignupCubit()),
         BlocProvider(create: (_) => ProductCubit()),
         BlocProvider(create: (_) => CartCubit()..loadCart()),
         BlocProvider(create: (_) => WishlistCubit()..loadWishlist()),

@@ -12,7 +12,6 @@ import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/P
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker_2.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Pages/SignUp_for_worker_3.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/confirmEmail.dart';
-import 'package:expertisemarket/features/users/screens/home.dart';
 import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
@@ -30,18 +29,17 @@ import 'package:expertisemarket/features/ServiceProvider/publish_service/reposit
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case Routers.splash:
-      //   return MaterialPageRoute(builder: (_) => const SplashScreen());
+      case Routers.splash:
+        return MaterialPageRoute(builder: (_) => const SplashScreen());
 
       case Routers.main:
-        return MaterialPageRoute(builder: (_) => const MainAppScreen());  
+        return MaterialPageRoute(builder: (_) => const MainAppScreen());
 
       case Routers.welcomeScreen:
         return MaterialPageRoute(builder: (_) => const WelcomeScreen());
 
       case Routers.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
-  
 
       case Routers.mainSignUp:
         return MaterialPageRoute(builder: (_) => const Sign_up());
