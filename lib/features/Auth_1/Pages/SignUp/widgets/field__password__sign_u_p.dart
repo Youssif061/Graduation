@@ -8,11 +8,13 @@ class Field_Password_SignUP extends StatelessWidget {
   const Field_Password_SignUP({
     super.key,
     required this.Title,
+    this.validator,
     this.controller,
   });
 
   final String Title;
   final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {

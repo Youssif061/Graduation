@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:expertisemarket/core/services/cloudinary_service.dart';
 import 'package:expertisemarket/features/Auth_1/cubit/auth_cubit.dart';
 import 'package:expertisemarket/features/Auth_1/cubit/auth_state.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
@@ -41,393 +40,332 @@ class _SignUp_for_worker_1State extends State<SignUp_for_worker_1> {
   String? selectedValue;
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is AuthSuccess) {
-          final user = FirebaseAuth.instance.currentUser;
-
-          if (user != null) {
-            context.read<WorkerSignupCubit>().saveStep1(
-              name: user.displayName ?? '',
-              email: user.email ?? '',
-              phone: '',
-              password: '',
-            );
-
-            context.read<WorkerSignupCubit>().saveSignupMethod(
-              SignupMethod.google,
-            );
-
-            Navigator.pushNamed(context, Routers.workerSignUp2);
-          }
-        }
-
-        if (state is AuthError) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text(state.message)));
-        }
-      },
-
-      child: Scaffold(
+    return Scaffold(
+      backgroundColor: AppColors.lightBackgroundColor,
+      appBar: AppBar(
         backgroundColor: AppColors.lightBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: AppColors.lightBackgroundColor,
-          title: const Text("ExpertiseMarket"),
-        ),
-        body: MyBodyView(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    Container(
-                      width: 360,
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: AppColors.backgroundColor,
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 8,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Center(
-                                child: Stack(
-                                  children: [
-                                    ClipOval(
-                                      child: path != null
-                                          ? Image.file(
-                                              File(path!),
-                                              height: 150,
-                                              width: 150,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.asset(
-                                              AppImages.User,
-                                              height: 150,
-                                              width: 150,
-                                              fit: BoxFit.cover,
-                                            ),
-                                    ),
-                                    if (path != null)
-                                      Positioned(
-                                        right: 5,
-                                        bottom: 5,
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog.adaptive(
-                                                  title: Text("Are you Sure"),
-                                                  actions: [
-                                                    TextButton(
-                                                      onPressed: () =>
-                                                          Navigator.pop(
-                                                            context,
-                                                          ),
-                                                      child: const Text(
-                                                        "Cancel",
-                                                      ),
-                                                    ),
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        setState(
-                                                          () => path = null,
-                                                        );
-                                                        Navigator.pop(context);
-                                                      },
-                                                      child: const Text(
-                                                        "Delete",
-                                                      ),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-                                          },
-                                          child: CircleAvatar(
-                                            radius: 15,
-                                            backgroundColor:
-                                                AppColors.emeraldColor,
-                                            child: Icon(
-                                              Icons.delete_forever,
-                                              color: AppColors.backgroundColor,
-                                            ),
+        title: const Text("ExpertiseMarket"),
+      ),
+      body: MyBodyView(
+        child: Center(
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Container(
+                    width: 360,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: AppColors.backgroundColor,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Center(
+                              child: Stack(
+                                children: [
+                                  ClipOval(
+                                    child: path != null
+                                        ? Image.file(
+                                            File(path!),
+                                            height: 150,
+                                            width: 150,
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Image.asset(
+                                            AppImages.User,
+                                            height: 150,
+                                            width: 150,
+                                            fit: BoxFit.cover,
+                                          ),
+                                  ),
+                                  if (path != null)
+                                    Positioned(
+                                      right: 5,
+                                      bottom: 5,
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog.adaptive(
+                                                title: Text("Are you Sure"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const Text("Cancel"),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      setState(
+                                                        () => path = null,
+                                                      );
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text("Delete"),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: CircleAvatar(
+                                          radius: 15,
+                                          backgroundColor:
+                                              AppColors.emeraldColor,
+                                          child: Icon(
+                                            Icons.delete_forever,
+                                            color: AppColors.backgroundColor,
                                           ),
                                         ),
                                       ),
-                                  ],
-                                ),
+                                    ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Gap(10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: AppButton(
-                                    title: "Camera",
-                                    backgroundColor: AppColors.primaryColor,
-                                    onPressed: () async {
-                                      var image = await ImagePicker().pickImage(
-                                        source: ImageSource.camera,
-                                      );
-
-                                      if (image == null) return;
-
-                                      setState(() {
-                                        path = image.path;
-                                      });
-
-                                      try {
-                                        String imageUrl =
-                                            await CloudinaryService.uploadImage(
-                                              image.path,
-                                            );
-
-                                        context
-                                            .read<WorkerSignupCubit>()
-                                            .saveImage(imageUrl);
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Image upload failed",
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                              const Gap(15),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: AppButton(
-                                    title: "Gallery",
-                                    backgroundColor: AppColors.primaryColor,
-                                    onPressed: () async {
-                                      var image = await ImagePicker().pickImage(
-                                        source: ImageSource.gallery,
-                                      );
-
-                                      if (image == null) return;
-
-                                      setState(() {
-                                        path = image.path;
-                                      });
-
-                                      try {
-                                        String imageUrl =
-                                            await CloudinaryService.uploadImage(
-                                              image.path,
-                                            );
-
-                                        context
-                                            .read<WorkerSignupCubit>()
-                                            .saveImage(imageUrl);
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              "Image upload failed",
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Gap(25),
-                          Text(
-                            "Full Name",
-                            style: TextStyles.subtitle2.copyWith(
-                              fontWeight: FontWeight.w700,
                             ),
-                          ),
-                          const Gap(7),
-                          CustomTextFormField(
-                            text: "Enter your full name",
-                            controller: nameController,
-                            prefixIcon: Icon(Icons.perm_identity_rounded),
-                            Text_Styles: AppColors.cardShadowColor,
-                            fill_color: AppColors.backgroundColor,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please Enter your Name";
-                              }
-                              return null;
-                            },
-                          ),
-
-                          Field_Signup(
-                            Title: "Email Address",
-                            Description: "Enter your email address",
-                            icon: Icons.email_outlined,
-                            controller: emailController,
-                          ),
-                          Field_Signup_Phone(
-                            Title: "Phone Number",
-                            Description: "+02 (01) 0000-00000 ",
-                            icon: Icons.add_ic_call,
-                            controller: phoneController,
-                          ),
-                          Field_Password_SignUP(
-                            Title: "Password",
-                            controller: passwordController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please your password";
-                              }
-                              return null;
-                            },
-                          ),
-                          Field_Password_SignUP(
-                            Title: "Confirm Password",
-                            controller: confirmPasswordController,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return "Please confirm your password";
-                              }
-
-                              if (value != passwordController.text) {
-                                return "Passwords do not match";
-                              }
-
-                              return null;
-                            },
-                          ),
-                          Gap(25),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [Expanded(child: Divider())],
-                          ),
-                          SignWithGoogleOrApple(
-                            onGoogleTap: () async {
-                              final user = await context
-                                  .read<AuthCubit>()
-                                  .signUpWorkerWithGoogle();
-
-                              if (user == null) return;
-
-                              context.read<WorkerSignupCubit>().saveStep1(
-                                name: user.displayName ?? '',
-                                email: user.email ?? '',
-                                phone: '',
-                                password: '',
-                              );
-
-                              context.read<WorkerSignupCubit>().saveImage(
-                                user.photoURL ?? '',
-                              );
-                              context
-                                  .read<WorkerSignupCubit>()
-                                  .saveSignupMethod(SignupMethod.google);
-                              Navigator.pushNamed(
-                                context,
-                                Routers.workerSignUp2,
-                              );
-                            },
-
-                            onAppleTap: () async {
-                              final user = await context
-                                  .read<AuthCubit>()
-                                  .signUpWorkerWithApple();
-
-                              if (user == null) return;
-
-                              context.read<WorkerSignupCubit>().saveStep1(
-                                name: user.displayName ?? '',
-                                email: user.email ?? '',
-                                phone: '',
-                                password: '',
-                              );
-
-                              context.read<WorkerSignupCubit>().saveImage(
-                                user.photoURL ?? '',
-                              );
-
-                              Navigator.pushNamed(
-                                context,
-                                Routers.workerSignUp2,
-                              );
-                            },
-                          ),
-                          Gap(25),
-                          Row(
-                            children: [
-                              Expanded(
+                          ],
+                        ),
+                        Gap(10),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
                                 child: AppButton(
-                                  title: "Continue to Step 2",
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                                      context.read<WorkerSignupCubit>();
-                                      final workerCubit = context
-                                          .read<WorkerSignupCubit>();
+                                  title: "Camera",
+                                  backgroundColor: AppColors.primaryColor,
+                                  onPressed: () async {
+                                    var image = await ImagePicker().pickImage(
+                                      source: ImageSource.camera,
+                                    );
 
-                                      if (workerCubit.state.imageUrl.isEmpty) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              "Please upload your profile image",
-                                            ),
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      workerCubit.saveStep1(
-                                        name: nameController.text.trim(),
-                                        email: emailController.text.trim(),
-                                        phone: phoneController.text.trim(),
-                                        password: passwordController.text
-                                            .trim(),
-                                      );
-                                      workerCubit.saveSignupMethod(
-                                        SignupMethod.email,
-                                      );
-                                      Navigator.pushNamed(
+                                    if (image == null) return;
+
+                                    setState(() {
+                                      path = image.path;
+                                    });
+                                    context.read<WorkerSignupCubit>().saveImage(
+                                      image.path,
+                                    );
+                                  },
+                                ),
+                              ),
+                            ),
+                            const Gap(15),
+                            Expanded(
+                              child: SizedBox(
+                                height: 50,
+                                child: AppButton(
+                                  title: "Gallery",
+                                  backgroundColor: AppColors.primaryColor,
+                                  onPressed: () async {
+                                    var image = await ImagePicker().pickImage(
+                                      source: ImageSource.gallery,
+                                    );
+
+                                    if (image == null) return;
+
+                                    setState(() {
+                                      path = image.path;
+                                    });
+
+                                    try {
+                                      String imageUrl =
+                                          await CloudinaryService.uploadImage(
+                                            image.path,
+                                          );
+
+                                      context
+                                          .read<WorkerSignupCubit>()
+                                          .saveImage(imageUrl);
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(
                                         context,
-                                        Routers.workerSignUp2,
+                                      ).showSnackBar(
+                                        SnackBar(
+                                          content: Text("Image upload failed"),
+                                        ),
                                       );
                                     }
                                   },
-                                  backgroundColor: AppColors.marketGreen,
                                 ),
                               ),
-                            ],
+                            ),
+                          ],
+                        ),
+                        Gap(25),
+                        Text(
+                          "Full Name",
+                          style: TextStyles.subtitle2.copyWith(
+                            fontWeight: FontWeight.w700,
                           ),
-                        ],
-                      ),
+                        ),
+                        const Gap(7),
+                        CustomTextFormField(
+                          text: "Enter your full name",
+                          controller: nameController,
+                          prefixIcon: Icon(Icons.perm_identity_rounded),
+                          Text_Styles: AppColors.cardShadowColor,
+                          fill_color: AppColors.backgroundColor,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please Enter your Name";
+                            }
+                            return null;
+                          },
+                        ),
+
+                        Field_Signup(
+                          Title: "Email Address",
+                          Description: "Enter your email address",
+                          icon: Icons.email_outlined,
+                          controller: emailController,
+                        ),
+                        Field_Signup_Phone(
+                          Title: "Phone Number",
+                          Description: "+02 (01) 0000-00000 ",
+                          icon: Icons.add_ic_call,
+                          controller: phoneController,
+                        ),
+                        Field_Password_SignUP(
+                          Title: "Password",
+                          controller: passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please your password";
+                            }
+                            return null;
+                          },
+                        ),
+                        Field_Password_SignUP(
+                          Title: "Confirm Password",
+                          controller: confirmPasswordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Please confirm your password";
+                            }
+
+                            if (value != passwordController.text) {
+                              return "Passwords do not match";
+                            }
+
+                            return null;
+                          },
+                        ),
+                        Gap(25),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [Expanded(child: Divider())],
+                        ),
+                        SignWithGoogleOrApple(
+                          onGoogleTap: () async {
+                            final user = await context
+                                .read<AuthCubit>()
+                                .signUpWorkerWithGoogle();
+
+                            if (user == null) return;
+
+                            context.read<WorkerSignupCubit>().saveStep1(
+                              name: user.displayName ?? '',
+                              email: user.email ?? '',
+                              phone: '',
+                              password: '',
+                            );
+
+                            context.read<WorkerSignupCubit>().saveImage(
+                              user.photoURL ?? '',
+                            );
+                            context.read<WorkerSignupCubit>().saveSignupMethod(
+                              SignupMethod.google,
+                            );
+                            Navigator.pushNamed(context, Routers.workerSignUp2);
+                          },
+
+                          onAppleTap: () async {
+                            final user = await context
+                                .read<AuthCubit>()
+                                .signUpWorkerWithApple();
+
+                            if (user == null) return;
+
+                            context.read<WorkerSignupCubit>().saveStep1(
+                              name: user.displayName ?? '',
+                              email: user.email ?? '',
+                              phone: '',
+                              password: '',
+                            );
+
+                            context.read<WorkerSignupCubit>().saveImage(
+                              user.photoURL ?? '',
+                            );
+                            context.read<WorkerSignupCubit>().saveSignupMethod(
+                              SignupMethod.apple,
+                            );
+                            Navigator.pushNamed(context, Routers.workerSignUp2);
+                          },
+                        ),
+                        Gap(25),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: AppButton(
+                                title: "Continue to Step 2",
+                                onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    final workerCubit = context
+                                        .read<WorkerSignupCubit>();
+
+                                    if (workerCubit.state.imageUrl.isEmpty) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Please upload your profile image",
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
+                                    workerCubit.saveStep1(
+                                      name: nameController.text.trim(),
+                                      email: emailController.text.trim(),
+                                      phone: phoneController.text.trim(),
+                                      password: passwordController.text.trim(),
+                                    );
+                                    workerCubit.saveSignupMethod(
+                                      SignupMethod.email,
+                                    );
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routers.workerSignUp2,
+                                    );
+                                  }
+                                },
+                                backgroundColor: AppColors.marketGreen,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                    Gap(25),
-                    Trust_Matters(),
-                  ],
-                ),
+                  ),
+                  Gap(25),
+                  Trust_Matters(),
+                ],
               ),
             ),
           ),
