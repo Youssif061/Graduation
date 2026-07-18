@@ -7,19 +7,20 @@ import 'core/routes/routers.dart';
 import 'core/styles/themes.dart';
 import 'firebase_options.dart';
 
-import 'features/products/presentation/cubit/product_cubit.dart';
-import 'features/products/presentation/cubit/cart_cubit.dart';
+import 'features/users/products/presentation/cubit/product_cubit.dart';
+import 'features/users/products/presentation/cubit/cart_cubit.dart';
 import 'features/wishlist/presentation/cubit/wishlist_cubit.dart';
-import 'features/products/presentation/cubit/order_cubit.dart';
+import 'features/users/products/presentation/cubit/order_cubit.dart';
 import 'features/users/data/firebase_service.dart';
+import 'features/Auth_1/cubit/auth_cubit.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  // Seed Mock Data in Firestore
-  await FirebaseService.instance.seedDatabase();
+  // Seed Mock Data in Firestore asynchronously in background (non-blocking)
+  FirebaseService.instance.seedDatabase();
 
   runApp(const MainApp());
 }
@@ -31,6 +32,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => AuthCubit()),
         BlocProvider(create: (_) => ProductCubit()),
         BlocProvider(create: (_) => CartCubit()..loadCart()),
         BlocProvider(create: (_) => WishlistCubit()..loadWishlist()),

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expertisemarket/features/products/presentation/cubit/cart_cubit.dart';
-import 'package:expertisemarket/features/products/presentation/cubit/order_cubit.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/presentation/cubit/cart_cubit.dart';
+import 'package:expertisemarket/features/users/products/presentation/cubit/order_cubit.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/presentation/pages/order_success_screen.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/order_success_screen.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});

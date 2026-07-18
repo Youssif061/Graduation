@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../core/functions/validations.dart';
 import 'change_password_state.dart';
@@ -47,54 +46,14 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
       ),
     );
 
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        throw FirebaseAuthException(
-          code: 'no-current-user',
-          message: 'User is not currently authenticated.',
-        );
-      }
+    await Future<void>.delayed(const Duration(milliseconds: 700));
 
-      final email = user.email;
-      if (email == null) {
-        throw FirebaseAuthException(
-          code: 'no-email',
-          message: 'User email is not found.',
-        );
-      }
-
-      // Reauthenticate user before changing password
-      final AuthCredential credential = EmailAuthProvider.credential(
-        email: email,
-        password: currentPassword,
-      );
-      await user.reauthenticateWithCredential(credential);
-
-      // Update password
-      await user.updatePassword(newPassword);
-
-      emit(
-        state.copyWith(
-          status: ChangePasswordStatus.success,
-          clearErrorMessage: true,
-        ),
-      );
-    } on FirebaseAuthException catch (e) {
-      emit(
-        state.copyWith(
-          status: ChangePasswordStatus.failure,
-          errorMessage: e.message ?? 'Authentication error occurred.',
-        ),
-      );
-    } catch (e) {
-      emit(
-        state.copyWith(
-          status: ChangePasswordStatus.failure,
-          errorMessage: e.toString(),
-        ),
-      );
-    }
+    emit(
+      state.copyWith(
+        status: ChangePasswordStatus.success,
+        clearErrorMessage: true,
+      ),
+    );
   }
 
   void resetStatus() {

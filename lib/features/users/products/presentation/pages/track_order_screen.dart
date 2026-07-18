@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
-import 'package:expertisemarket/features/products/presentation/cubit/track_order_cubit.dart';
-import 'package:expertisemarket/features/products/models/order_model.dart';
+import 'package:expertisemarket/features/users/products/presentation/cubit/track_order_cubit.dart';
+import 'package:expertisemarket/features/users/products/models/order_model.dart';
 
 class TrackOrderScreen extends StatefulWidget {
   final String orderId;

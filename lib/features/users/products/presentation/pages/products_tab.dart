@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:expertisemarket/features/products/presentation/cubit/product_cubit.dart';
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/presentation/cubit/product_cubit.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
-import 'package:expertisemarket/features/products/data/dummy_data.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_app_bar.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_product_card.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/market_search_bar.dart';
-import 'package:expertisemarket/features/products/presentation/widgets/category_chip.dart';
-import 'package:expertisemarket/features/products/presentation/pages/search_screen.dart';
+import 'package:expertisemarket/features/users/products/data/dummy_data.dart';
+import 'package:expertisemarket/features/users/products/presentation/widgets/market_app_bar.dart';
+import 'package:expertisemarket/features/users/products/presentation/widgets/market_product_card.dart';
+import 'package:expertisemarket/features/users/products/presentation/widgets/market_search_bar.dart';
+import 'package:expertisemarket/features/users/products/presentation/widgets/category_chip.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/search_screen.dart';
 
 class ProductsTab extends StatefulWidget {
   const ProductsTab({super.key});

@@ -1,4 +1,4 @@
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 import 'package:expertisemarket/features/ServiceProvider/inventory/cubit/inventory_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

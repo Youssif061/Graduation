@@ -7,7 +7,7 @@ class WorkerSignupState {
   final String email;
   final String phone;
   final String password;
-
+  final String uid;
   final String imagePath;
   final String category;
   final String experience;
@@ -21,6 +21,7 @@ class WorkerSignupState {
 
   const WorkerSignupState({
     this.name = '',
+    this.uid = '',
     this.email = '',
     this.phone = '',
     this.password = '',
@@ -39,6 +40,7 @@ class WorkerSignupState {
     String? name,
     String? email,
     String? phone,
+    String? uid,
     String? password,
     String? category,
     String? experience,
@@ -49,11 +51,13 @@ class WorkerSignupState {
     String? error,
     String? imagePath,
     SignupMethod? signupMethod,
+    bool clearError = false,
   }) {
     return WorkerSignupState(
       name: name ?? this.name,
       email: email ?? this.email,
       phone: phone ?? this.phone,
+      uid: uid ?? this.uid,
       password: password ?? this.password,
       category: category ?? this.category,
       imagePath: imagePath ?? this.imagePath,
@@ -63,7 +67,7 @@ class WorkerSignupState {
       radius: radius ?? this.radius,
       loading: loading ?? this.loading,
       signupMethod: signupMethod ?? this.signupMethod,
-      error: error,
+      error: clearError ? null : error ?? this.error,
     );
   }
 }

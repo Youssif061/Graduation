@@ -15,6 +15,7 @@ class WorkerSignupCubit extends Cubit<WorkerSignupState> {
     required String email,
     required String phone,
     required String password,
+    String? uid,
   }) {
     emit(
       state.copyWith(
@@ -22,6 +23,7 @@ class WorkerSignupCubit extends Cubit<WorkerSignupState> {
         email: email,
         phone: phone,
         password: password,
+        uid: uid,
       ),
     );
   }
@@ -50,5 +52,9 @@ class WorkerSignupCubit extends Cubit<WorkerSignupState> {
 
   void saveSignupMethod(SignupMethod method) {
     emit(state.copyWith(signupMethod: method));
+  }
+
+  void saveUid(String uid) {
+    emit(state.copyWith(uid: uid));
   }
 }

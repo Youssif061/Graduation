@@ -1,4 +1,4 @@
-import 'package:expertisemarket/features/products/presentation/pages/search_screen.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/search_screen.dart';
 import 'package:expertisemarket/features/users/screens/booking.dart';
 import 'package:expertisemarket/features/users/screens/filter.dart';
 import 'package:flutter/material.dart';

@@ -1,4 +1,6 @@
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_user/Pages/SignUp_for_user.dart';
+import 'package:expertisemarket/features/ServiceProvider/profile/page/profile_screen.dart'
+    show ProfileScreen;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'routers.dart';
@@ -15,9 +17,8 @@ import 'package:expertisemarket/features/ServiceProvider/request/page/requests_s
 import 'package:expertisemarket/features/ServiceProvider/inventory/page/inventory_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/chat/page/chat_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/notification/page/notification_screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
-import 'package:expertisemarket/features/products/presentation/pages/cart_screen.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/main_shell.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/cart_screen.dart';
 import 'package:expertisemarket/features/wishlist/presentation/pages/wishlist_page.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/page/add_product_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/add_product/cubit/add_product_cubit.dart';
@@ -53,7 +54,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const confirmEmail());
 
       case Routers.home:
-        return MaterialPageRoute(builder: (_) => const Home());
+        return MaterialPageRoute(builder: (_) => const MainShell());
 
       case Routers.workerHome:
         return MaterialPageRoute(builder: (_) => const MainAppScreen());
@@ -76,9 +77,7 @@ class AppRouter {
       case Routers.publishService:
         return MaterialPageRoute(
           builder: (_) => BlocProvider(
-            create: (_) => PublishServiceCubit(
-              PublishServiceRepository(),
-            ),
+            create: (_) => PublishServiceCubit(PublishServiceRepository()),
             child: const PublishServiceScreen(),
           ),
         );
@@ -102,11 +101,8 @@ class AppRouter {
 
       default:
         return MaterialPageRoute(
-          builder: (_) => const Scaffold(
-            body: Center(
-              child: Text('No Route Found'),
-            ),
-          ),
+          builder: (_) =>
+              const Scaffold(body: Center(child: Text('No Route Found'))),
         );
     }
   }

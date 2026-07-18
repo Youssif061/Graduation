@@ -4,6 +4,7 @@ import 'package:expertisemarket/features/Auth_1/Pages/SignUp/widgets/confirmEmai
 import 'package:expertisemarket/features/Auth_1/cubit/auth_cubit.dart';
 import 'package:expertisemarket/features/Auth_1/cubit/auth_state.dart';
 import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_cubit.dart';
+import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -255,19 +256,9 @@ class _MapScreenState extends State<MapScreen> {
 
                                     final worker = workerCubit.state;
 
-                                    context.read<AuthCubit>().signUpWorker(
-                                      imageUrl: worker.imagePath,
-                                      name: worker.name,
-                                      email: worker.email,
-                                      phone: worker.phone,
-                                      password: worker.password,
-                                      category: worker.category,
-                                      experience: worker.experience,
-                                      nationalId: worker.nationalId,
-                                      latitude: worker.location!.latitude,
-                                      longitude: worker.location!.longitude,
-                                      radius: worker.radius,
-                                    );
+                                    context
+                                        .read<AuthCubit>()
+                                        .completeWorkerRegistration(worker);
                                   },
                             icon: const Icon(Icons.check_circle),
                             label: state is AuthLoading

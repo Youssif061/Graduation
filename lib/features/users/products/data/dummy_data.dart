@@ -1,4 +1,4 @@
-import 'package:expertisemarket/features/products/models/product_model.dart';
+import 'package:expertisemarket/features/users/products/models/product_model.dart';
 
 abstract class DummyData {
   // ─── Categories ────────────────────────────────────────────────

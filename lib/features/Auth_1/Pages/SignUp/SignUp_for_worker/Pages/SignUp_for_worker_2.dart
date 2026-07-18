@@ -7,16 +7,13 @@ import 'package:expertisemarket/core/widgets/custom_text_form_field.dart';
 import 'package:expertisemarket/core/widgets/my%20body.dart';
 import 'package:expertisemarket/features/Auth_1/Pages/SignUp/SignUp_for_worker/Widgets/Trust_Matters.dart';
 import 'package:expertisemarket/features/Auth_1/cubit/worker_signup_cubit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
 
 class SignUp_for_worker_2 extends StatefulWidget {
-  final User? user;
-
-  const SignUp_for_worker_2({super.key, this.user});
+  const SignUp_for_worker_2({super.key});
 
   @override
   State<SignUp_for_worker_2> createState() => _SignUp_for_worker_2State();

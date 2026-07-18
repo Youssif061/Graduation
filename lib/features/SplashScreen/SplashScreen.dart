@@ -9,7 +9,7 @@ import 'package:gap/gap.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:expertisemarket/features/ServiceProvider/main/main_app_screen.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/main_shell.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,19 +26,20 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 4), () async {
       if (!mounted) return;
 
-      final prefs = await SharedPreferences.getInstance();
-      final stayLogged = prefs.getBool('stayLogged') ?? false;
-      if (!stayLogged) {
-        await FirebaseAuth.instance.signOut();
-      }
+      try {
+        final prefs = await SharedPreferences.getInstance().timeout(const Duration(seconds: 2));
+        final stayLogged = prefs.getBool('stayLogged') ?? false;
+        if (!stayLogged) {
+          await FirebaseAuth.instance.signOut().timeout(const Duration(seconds: 2));
+        }
 
-      final currentUser = FirebaseAuth.instance.currentUser;
-      if (currentUser != null) {
-        try {
+        final currentUser = FirebaseAuth.instance.currentUser;
+        if (currentUser != null) {
           final doc = await FirebaseFirestore.instance
               .collection('users')
               .doc(currentUser.uid)
-              .get();
+              .get()
+              .timeout(const Duration(seconds: 3));
           final role = doc.data()?['role'] ?? 'user';
           if (mounted) {
             if (role == 'worker') {
@@ -54,8 +55,11 @@ class _SplashScreenState extends State<SplashScreen> {
             }
             return;
           }
-        } catch (_) {}
+        }
+      } catch (e) {
+        debugPrint("Splash initialization error: $e");
       }
+
       if (mounted) {
         Navigator.pushReplacement(
           context,

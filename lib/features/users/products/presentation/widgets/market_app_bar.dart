@@ -3,7 +3,7 @@ import 'package:expertisemarket/core/styles/colors.dart';
 import 'package:expertisemarket/core/styles/text_styles.dart';
 import 'package:expertisemarket/core/routes/routers.dart';
 import 'package:expertisemarket/core/constants/app_images.dart';
-import 'package:expertisemarket/features/products/presentation/pages/main_shell_notifier.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/main_shell_notifier.dart';
 
 class MarketAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showHeart;

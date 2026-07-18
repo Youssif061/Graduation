@@ -10,7 +10,7 @@ import 'package:expertisemarket/features/ServiceProvider/notification/page/notif
 import 'package:expertisemarket/features/ServiceProvider/request/cubit/request_cubit.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/page/requests_screen.dart';
 import 'package:expertisemarket/features/ServiceProvider/request/repository/request_repository.dart';
-import 'package:expertisemarket/features/products/presentation/pages/profile_screen.dart';
+import 'package:expertisemarket/features/users/products/presentation/pages/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
